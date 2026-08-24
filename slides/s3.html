@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S3 — ¿Cómo se diseña una página que convierte?</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --surface: #24283b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 8vw; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
+  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
+  li { margin-bottom: .55em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
+  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
+  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  th { color: var(--blue); background: var(--surface); }
+  pre { background: var(--surface); padding: 1.2rem 1.5rem; border-radius: 10px; font-size: clamp(.8rem, 1.5vw, 1rem); line-height: 1.5; overflow-x: auto; color: var(--muted); max-width: 70ch; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  .analogy b { color: var(--green); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 1 · UX/UI · Sesión 3</p>
+  <h1>¿Cómo se diseña una página <b>que convierte?</b></h1>
+  <p>Hoy diseñas la sección de noticias de glud.org. En S13 se construye de verdad.</p>
+</section>
+
+<section class="slide">
+  <h2>Pregunta guía</h2>
+  <ol>
+    <li>Un sitio donde te perdiste. Uno donde no.</li>
+    <li>¿Qué era diferente entre ellos?</li>
+    <li>Hoy lo nombramos técnicamente.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Anatomía de una landing</h2>
+<pre>
+NAV          quien eres y donde navego
+HERO         que me ofreces + por que importa
+             + QUE HAGO AHORA (CTA)
+PRUEBA       quien mas confia
+FEATURES     que gano exactamente
+CTA FINAL    ultima llamada
+FOOTER       lo que busco cuando ya decidi
+</pre>
+  <div class="analogy"><b>Comida:</b> fachada y carta del restaurante: pizarra destacada, mesas llenas visibles, descripción de ingredientes, el mesero que vuelve a preguntar.</div>
+</section>
+
+<section class="slide">
+  <h2>El hero: los primeros 5 segundos</h2>
+  <ol>
+    <li>Propuesta de valor en UNA frase.</li>
+    <li>Un verbo de acción ("Únete", nunca "Click aquí").</li>
+    <li>UN solo foco visual.</li>
+  </ol>
+  <div class="analogy"><b>Minecraft:</b> el hero es tu hotbar: máximo 9 slots, siempre visibles. La restricción ES el diseño.</div>
+  <p style="margin-top:1rem"><b>glud.org:</b> dos botones (primario + secundario) NO viola la regla: una acción PRIMARIA sí es obligatoria.</p>
+</section>
+
+<section class="slide">
+  <h2>Navegación: barra vs hamburguesa</h2>
+  <table>
+    <tr><th>Patrón</th><th>Ventaja</th><th>Costo</th></tr>
+    <tr><td>Barra completa</td><td>Todo visible</td><td>Ocupa espacio</td></tr>
+    <tr><td>Hamburguesa</td><td>Compacta</td><td>Fuera de vista, fuera de mente</td></tr>
+  </table>
+  <div class="analogy"><b>Minecraft:</b> la hotbar guarda lo frecuente a la vista; el inventario completo es el cajón. Lo que usas seguido NO va al cajón.</div>
+  <p style="margin-top:1rem"><b>glud.org:</b> ambos patrones según pantalla, con hamburguesa bien hecha (targets grandes, aria completo).</p>
+</section>
+
+<section class="slide">
+  <h2>Estados de interacción</h2>
+  <ul>
+    <li>Reposo · Hover · Focus · Active</li>
+    <li>Loading · Error · Disabled</li>
+  </ul>
+  <div class="analogy"><b>Comida:</b> tibio = recién servido, humeante = cómelo ya, plato frío en mesa = algo salió mal.</div>
+  <p style="margin-top:1rem"><b>Pecado confeso:</b> glud.org no define :focus-visible. Quien navega con teclado depende del outline por defecto. Reto futuro: arreglarlo.</p>
+</section>
+
+<section class="slide">
+  <h2>Mobile-first</h2>
+  <ol>
+    <li>Diseña primero donde CABE POCO: obliga a priorizar.</li>
+    <li>Expandir es fácil; recortar duele.</li>
+    <li>La mayoría del tráfico real llega desde el celular.</li>
+  </ol>
+  <div class="analogy"><b>Minecraft:</b> primera noche = refugio de tierra (lo esencial). El castillo viene después, sobre base segura.</div>
+</section>
+
+<section class="slide">
+  <h2>Wireframe: plano antes de bloques</h2>
+  <ul>
+    <li>Cajas y jerarquía. Sin colores, sin tipografías bonitas.</li>
+    <li>Responde: qué va, dónde va, por qué ahí.</li>
+    <li>Herramientas: papel, Excalidraw, Figma.</li>
+  </ul>
+  <div class="analogy"><b>Minecraft:</b> trazas con lana antes de construir en piedra. Si el plano está mal, cambias lana, no piedra. En S13 llega la piedra.</div>
+</section>
+
+<section class="slide">
+  <h2>Reto: noticias/blog para glud.org</h2>
+  <ol>
+    <li><b>Nivel base:</b> wireframe mobile-first de la lista de noticias + vista de detalle + cómo llega desde la nav.</li>
+    <li><b>Nivel reto:</b> justificación escrita: clics hasta leer una noticia completa, estados definidos, qué sacrificaste de desktop a móvil y por qué.</li>
+  </ol>
+  <p style="margin-top:1rem"><b>Este wireframe se implementa en S13 como MR real.</b> Diseña como si fuera producción: lo va a estar.</p>
+</section>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD</span>
+  <span id="counter"></span>
+  <span>Flechas o clic para navegar</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
+    if (e.key === "ArrowLeft") show(i - 1);
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

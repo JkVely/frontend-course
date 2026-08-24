@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Malo — demo de clase</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #2b2d42;
+    font-family: "Comic Sans MS", cursive;
+    color: #6b7a8f;
+  }
+  .nav { display: flex; gap: 11px; padding: 9px 23px; }
+  .nav a { color: #5c6b7f; text-decoration: none; font-size: 13px; }
+  .nav a:hover { color: #3d4f63; }
+  .hero { padding: 37px 12px; text-align: center; }
+  .badge {
+    display: inline-block;
+    background: #34395e;
+    color: #49506b;
+    padding: 4px;
+    font-size: 10px;
+    margin-bottom: 13px;
+  }
+  h1 {
+    font-size: 28px;
+    color: #55617a;
+    line-height: 1.9;
+    letter-spacing: 0px;
+    margin-bottom: 7px;
+  }
+  .sub {
+    font-family: Georgia, serif;
+    font-size: 24px;
+    color: #606c85;
+    margin-bottom: 31px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  p.desc {
+    font-size: 15px;
+    color: #59657c;
+    max-width: 900px;
+    margin: 0 auto 40px;
+    line-height: 1.2;
+  }
+  .actions { display: flex; gap: 9px; justify-content: center; margin-bottom: 44px; }
+  .btn-a {
+    background: #454b73;
+    color: #585f86;
+    border: none;
+    padding: 8px 14px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .btn-b {
+    background: transparent;
+    color: #50587d;
+    border: 3px dotted #454b73;
+    padding: 11px 9px;
+    font-size: 16px;
+  }
+  .stats { display: flex; justify-content: center; gap: 5px; }
+  .stat { padding: 3px; }
+  .num { font-family: Impact, sans-serif; font-size: 21px; color: #4d5771; }
+  .lbl { font-size: 12px; color: #47536b; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="#">Inicio</a>
+  <a href="#">Quiénes somos y toda nuestra historia desde 2015 hasta hoy</a>
+  <a href="#">Agenda de eventos y actividades culturales del semestre</a>
+  <a href="#">Más</a>
+</nav>
+
+<main class="hero">
+  <span class="badge">Bienvenido a nuestro sitio web oficial</span>
+  <h1>GRUPO DE ESTUDIANTES DE SOFTWARE LIBRE Y TECNOLOGÍAS ABIERTAS DE LA UNIVERSIDAD DISTRITAL</h1>
+  <div class="sub">También conocido por sus siglas, organizamos eventos, talleres y actividades durante todo el año académico para todos los estudiantes interesados en tecnología.</div>
+  <p class="desc">Nuestro grupo se fundó hace varios años con la misión de promover el software libre entre la comunidad académica universitaria, realizando diferentes tipos de actividades como charlas, talleres, hackathons, cursos de extensión, jornadas de instalación de software libre y muchos otros eventos relacionados con las tecnologías libres y abiertas que pueden consultar en las diferentes secciones de este sitio web.</p>
+
+  <div class="actions">
+    <button class="btn-a">Click aquí</button>
+    <button class="btn-b">Enviar formulario de registro para participar</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">+200</div><div class="lbl">miembros historicos</div></div>
+    <div class="stat"><div class="num">30</div><div class="lbl">eventos realizados por nosotros</div></div>
+    <div class="stat"><div class="num">10 años</div><div class="lbl">de trayectoria recorrida</div></div>
+  </div>
+</main>
+
+</body>
+</html>

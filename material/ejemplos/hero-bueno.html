@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Bueno — demo de clase</title>
+<style>
+  :root {
+    --bg: #1c1e1e;
+    --surface: #212121;
+    --cyan: #1affff;
+    --white: #ededed;
+    --muted: #b8bec9;
+    --space-2: 8px;
+    --space-3: 16px;
+    --space-4: 24px;
+    --space-6: 48px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-3) var(--space-4);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .brand { font-weight: 700; letter-spacing: .1em; color: var(--cyan); }
+  .nav ul { display: flex; gap: var(--space-4); list-style: none; }
+  .nav a { color: var(--white); text-decoration: none; }
+  .nav a:hover { color: var(--cyan); text-decoration: underline; text-underline-offset: 4px; }
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  .hero {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: var(--space-6) var(--space-4);
+  }
+  .badge {
+    display: inline-block;
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    border-radius: 999px;
+    padding: 2px 12px;
+    font-size: .8rem;
+    letter-spacing: .08em;
+    margin-bottom: var(--space-3);
+  }
+  h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: -.02em;
+    margin-bottom: var(--space-3);
+  }
+  h1 span { color: var(--cyan); }
+  .lead {
+    font-size: 1.125rem;
+    color: var(--muted);
+    max-width: 56ch;
+    margin-bottom: var(--space-4);
+  }
+  .actions { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-6); }
+  button { cursor: pointer; font: inherit; }
+  .btn-primary {
+    background: var(--cyan);
+    color: #0d1117;
+    border: none;
+    padding: 12px 28px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: transform .15s ease;
+  }
+  .btn-primary:hover { transform: translateY(-2px); }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid var(--muted);
+    padding: 12px 28px;
+    border-radius: 8px;
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+    max-width: 560px;
+  }
+  .stat { border-left: 3px solid var(--cyan); padding-left: var(--space-2); }
+  .num { font-size: 1.75rem; font-weight: 700; line-height: 1.1; }
+  .lbl { font-size: .875rem; color: var(--muted); }
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" aria-label="Principal">
+  <span class="brand">GLUD</span>
+  <ul>
+    <li><a href="#">Agenda</a></li>
+    <li><a href="#">Cursos</a></li>
+    <li><a href="#">Contacto</a></li>
+  </ul>
+</nav>
+
+<main class="hero">
+  <span class="badge">Comunidad GNU/Linux</span>
+  <h1>Software libre que se <span>aprende haciendo</span></h1>
+  <p class="lead">Somos el grupo GNU/Linux de la Universidad Distrital. Talleres, eventos y una comunidad que programa en público desde hace más de diez años.</p>
+
+  <div class="actions">
+    <button class="btn-primary">Únete al grupo</button>
+    <button class="btn-secondary">Ver agenda</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num">+200</div><div class="lbl">miembros históricos</div></div>
+    <div class="stat"><div class="num">30+</div><div class="lbl">eventos realizados</div></div>
+    <div class="stat"><div class="num">10 años</div><div class="lbl">de trayectoria</div></div>
+  </div>
+</main>
+
+</body>
+</html>

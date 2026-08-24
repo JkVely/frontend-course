@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S1 — ¿Cómo piensa un usuario cuando usa tu sitio?</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --surface: #24283b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 8vw; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
+  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
+  li { margin-bottom: .55em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
+  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
+  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  th { color: var(--blue); background: var(--surface); }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  .analogy b { color: var(--green); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 1 · UX/UI · Sesión 1</p>
+  <h1>¿Cómo piensa un usuario cuando <b>usa tu sitio?</b></h1>
+  <p>Hoy no hay código. Hay navegador abierto en glud.org y criterio por construir.</p>
+</section>
+
+<section class="slide">
+  <h2>Pregunta guía</h2>
+  <ol>
+    <li>Piensa en el último sitio donde te perdiste.</li>
+    <li>No era feo: no encontrabas lo que buscabas.</li>
+    <li>¿Qué fallaba EXACTAMENTE?</li>
+    <li>La respuesta casi nunca son los colores.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>UX vs UI</h2>
+  <table>
+    <tr><th></th><th>UX</th><th>UI</th></tr>
+    <tr><td>Pregunta</td><td>¿Logré lo que vine a hacer?</td><td>¿Qué veo y toco?</td></tr>
+    <tr><td>Falla</td><td>"No encontré cómo inscribirme"</td><td>"Esto no parece botón"</td></tr>
+    <tr><td>Mide</td><td>Clics, tiempo, frustración</td><td>Contraste, escala, alineación</td></tr>
+  </table>
+  <div class="analogy"><b>Minecraft:</b> UX = game design (progresión, controles). UI = hotbar e inventarios. Nadie juega por los menús.</div>
+</section>
+
+<section class="slide">
+  <h2>Jerarquía visual: dirigir el ojo</h2>
+  <ul>
+    <li><b>Tamaño</b> — lo grande primero</li>
+    <li><b>Contraste</b> — lo que resalta llama</li>
+    <li><b>Posición</b> — arriba/izquierda antes</li>
+    <li><b>Espacio</b> — lo aislado parece importante</li>
+  </ul>
+  <p style="margin-top:1rem">Patrón F (lectura) vs patrón Z (landings).</p>
+  <div class="analogy"><b>Minecraft:</b> vida arriba SIEMPRE (crítico), chat abajo pequeño (secundario). Miles de decisiones de jerarquía fijadas para nunca buscarlas.</div>
+</section>
+
+<section class="slide">
+  <h2>Arquitectura de información</h2>
+  <ol>
+    <li>Agrupa como entiende el USUARIO, no como organiza tu equipo.</li>
+    <li>Cada página responde a un propósito único.</li>
+    <li>Todo alcanzable desde la home por camino obvio.</li>
+    <li>Nombres descriptivos ("Agenda"), no ingeniosos ("Nuestro mundo").</li>
+  </ol>
+  <div class="analogy"><b>Comida:</b> la carta se agrupa en entradas/platos/postres según el comensal... jamás por orden de llegada de recetas a la cocina.</div>
+</section>
+
+<section class="slide">
+  <h2>La regla de los 3 clics</h2>
+  <ul>
+    <li>Leyenda popular de los años 90.</li>
+    <li>Los usuarios toleran más clics si CADA paso da confianza.</li>
+    <li>Lo que importa: saber dónde estoy, qué puedo hacer aquí, cuál es el siguiente paso.</li>
+  </ul>
+  <div class="analogy"><b>Minecraft:</b> llegar al diamante toma decenas de pasos y nadie abandona: las coordenadas siempre te orientan. Seis clics claros vencen a tres confusos.</div>
+</section>
+
+<section class="slide">
+  <h2>El caso real: glud.org</h2>
+  <ul>
+    <li>SLUD destacada en home sin clics: lo urgente no se busca.</li>
+    <li>Barra completa en desktop, panel inferior táctil en móvil.</li>
+    <li>Contacto directo en footer: correo + 6 redes accesibles.</li>
+  </ul>
+  <p style="margin-top:1rem">¿Es tan fácil como suena? Eso lo decides TU ahora.</p>
+</section>
+
+<section class="slide">
+  <h2>Reto: auditoría de flujos de tarea</h2>
+  <ol>
+    <li><b>Nivel base:</b> mide 3 tareas (cuándo es la SLUD / correo oficial / cómo entrar a cursos GNUBIES) en desktop Y móvil: tabla con clics, tiempo y fricciones.</li>
+    <li><b>Nivel reto:</b> 3 mejoras justificadas con tus datos + matriz impacto/esfuerzo.</li>
+  </ol>
+  <div class="analogy">Fricción descrita con causa ("no vi el enlace X"), no con sentimiento ("era confuso").</div>
+</section>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD</span>
+  <span id="counter"></span>
+  <span>Flechas o clic para navegar</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
+    if (e.key === "ArrowLeft") show(i - 1);
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

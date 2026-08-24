@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S2 — ¿Por qué esto se ve bien y esto otro no?</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --surface: #24283b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 8vw; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
+  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
+  li { margin-bottom: .55em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
+  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
+  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  th { color: var(--blue); background: var(--surface); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .95em; color: var(--green); }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  .analogy b { color: var(--green); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 1 · UX/UI · Sesión 2</p>
+  <h1>¿Por qué esto se ve bien <b>y esto otro no?</b></h1>
+  <p>Hoy convertimos sensaciones en criterios medibles.</p>
+</section>
+
+<section class="slide">
+  <h2>Pregunta guía</h2>
+  <ol>
+    <li>Mira dos sitios cualquiera, 10 segundos cada uno.</li>
+    <li>¿Cuál te pareció más "limpio"?</li>
+    <li>Ahora justifícalo SIN decir "bonito", "feo" ni "limpio".</li>
+    <li>Ese es el músculo de hoy.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Tipografía y escala</h2>
+  <ul>
+    <li>Máximo 2 familias: display (títulos) + cuerpo (lectura).</li>
+    <li>Escala con ratio constante: 16 → 20 → 25 → 31px (x1.25).</li>
+    <li>Line-height: cuerpo 1.5-1.8, títulos 1.1.</li>
+  </ul>
+  <div class="analogy"><b>Comida:</b> nombre del plato GRANDE, descripción PEQUEÑA. Si todo mide igual, la carta es inútil.</div>
+  <p style="margin-top:1rem"><b>glud.org:</b> Exo 2 Variable + Fira Sans. Pareja clásica display + cuerpo.</p>
+</section>
+
+<section class="slide">
+  <h2>Espaciado como sistema</h2>
+  <ul>
+    <li>Múltiplos constantes: 8, 16, 24, 32, 48px. Nunca 7, 13 o 22.</li>
+    <li>El espacio AGRUPA: título pegado a su párrafo = pertenecen.</li>
+    <li>El espacio SEPARA: aire alrededor del botón principal.</li>
+  </ul>
+  <div class="analogy"><b>Minecraft:</b> los slots del inventario tienen padding idéntico SIEMPRE. Ese ritmo te deja encontrar tu pico en medio segundo.</div>
+</section>
+
+<section class="slide">
+  <h2>Contraste: la regla medible</h2>
+  <table>
+    <tr><th>Combinación real en glud.org</th><th>Ratio</th><th>Veredicto</th></tr>
+    <tr><td>Cian neón sobre oscuro</td><td>~14:1</td><td>Excelente</td></tr>
+    <tr><td>Gris soporte sobre fondo base</td><td>~5.5:1</td><td>Pasa justo</td></tr>
+    <tr><td>Blanco al 80% opacidad</td><td>variable</td><td>Frágil: medir siempre</td></tr>
+  </table>
+  <p style="margin-top:1rem">AA exige <code>4.5:1</code> texto normal, <code>3:1</code> texto grande. Se mide con WebAIM, nunca a ojo.</p>
+  <div class="analogy"><b>Comida:</b> arroz blanco en plato blanco vs plato negro. Mismo contenido, presencia distinta.</div>
+</section>
+
+<section class="slide">
+  <h2>Grillas y alineación</h2>
+  <ul>
+    <li>El ojo detecta lo torcido al instante, aunque no lo nombre.</li>
+    <li>Todo cuelga de un sistema: columnas, bordes compartidos.</li>
+    <li>Tres tarjetas iguales = orden. Tres distintas = descuido.</li>
+  </ul>
+  <div class="analogy"><b>Minecraft:</b> el inventario ES una grilla perfecta. Y las góndolas alineadas comunican confianza; nadie compra leche de un estante torcido.</div>
+</section>
+
+<section class="slide">
+  <h2>Método de crítica (6 pasos)</h2>
+  <ol>
+    <li>10 segundos sin analizar: primera impresión.</li>
+    <li>Evalúa tipografía, espaciado, contraste, alineación.</li>
+    <li>MIDE el contraste con herramienta. Sin número, no hay veredicto.</li>
+    <li>UN cambio concreto por criterio ("subir gris a #X").</li>
+    <li>Compara contra un sitio que haga bien ese criterio.</li>
+    <li>Repite hasta que puedas hacerlo rápido.</li>
+  </ol>
+  <p style="margin-top:1rem"><b>Demo en vivo:</b> material/ejemplos/hero-malo.html vs hero-bueno.html — misma info, decisiones opuestas.</p>
+</section>
+
+<section class="slide">
+  <h2>Reto: crítica con evidencia</h2>
+  <ol>
+    <li><b>Nivel base:</b> crítica completa de una sección de glud.org (footer, sponsors o SLUD) con ratios medidos de 3 combinaciones.</li>
+    <li><b>Nivel reto:</b> rediseñala en HTML/CSS estático suelto + tabla antes/después de contrastes.</li>
+  </ol>
+</section>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD</span>
+  <span id="counter"></span>
+  <span>Flechas o clic para navegar</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  let i = 0;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
+    if (e.key === "ArrowLeft") show(i - 1);
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>
