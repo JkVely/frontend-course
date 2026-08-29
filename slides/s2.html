@@ -12,29 +12,65 @@
     --blue: #7aa2f7;
     --purple: #bb9af7;
     --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
     --surface: #24283b;
+    --surface2: #2f3549;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
-  .slide { display: none; height: 100vh; padding: 6vh 8vw; flex-direction: column; justify-content: center; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
   .slide.active { display: flex; }
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
   h1 b { color: var(--blue); font-weight: inherit; }
-  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
-  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
-  li { margin-bottom: .55em; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
   li::marker { color: var(--blue); }
-  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
-  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
-  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
   th { color: var(--blue); background: var(--surface); }
-  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .95em; color: var(--green); }
-  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
-  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
   .analogy b { color: var(--green); }
-  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
-  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .good { color: var(--green); }
+  .bad { color: var(--red); }
+  .ratio { font-weight: 700; color: var(--green); }
+  .ratio.fail { color: var(--red); }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
   .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  .swatch { display: inline-block; width: .9em; height: .9em; border-radius: 3px; vertical-align: -2px; margin-right: .35em; border: 1px solid rgba(255,255,255,.25); }
 </style>
 </head>
 <body>
@@ -42,103 +78,280 @@
 <div class="progress"><div class="bar" id="bar"></div></div>
 
 <section class="slide active">
-  <p class="kicker">Bloque 1 · UX/UI · Sesión 2</p>
-  <h1>¿Por qué esto se ve bien <b>y esto otro no?</b></h1>
-  <p>Hoy convertimos sensaciones en criterios medibles.</p>
+  <p class="kicker">Bloque 1 · Diseño UI · Sesión 2</p>
+  <h1>¿Por qué esto se ve bien y <b>esto otro no?</b></h1>
+  <p>Abre dos sitios cualesquiera, mira cada uno 10 segundos. ¿Cuál te pareció más "limpio"? Ahora justifícalo <b>sin usar las palabras "bonito", "feo" ni "limpio"</b> — casi no se puede, ¿verdad?</p>
+  <p style="margin-top:.8rem">Nivel de entrada: solo puedes decir "me gusta / no me gusta". Nivel de salida: conviertes sensaciones en <b>criterios medibles</b> (ratios, escalas, alineaciones).</p>
+  <div class="speaker">RETO DE APERTURA y ENCUADRE del día. Cero código — se entrena el ojo con casos reales, INCLUIDOS los defectos del propio sitio del grupo.
+Arrancar con el juego de los 10 segundos: pedir 3 voluntarios, cada uno describe "qué se veía primero" del sitio que eligió y POR QUÉ, sin usar adjetivos estéticos. Vas a notar que describen con emociones; ese es el músculo a entrenar.
+META del día: que al terminar la clase, una crítica de diseño suene así: "el color X no cumple el contraste, la tipografía Y no tiene escala, el espaciado Z rompe la grilla" — y no así: "está feo".
+Esta sesión prepara la mecánica de la próxima (S3): el método de crítica de S2 es lo que se aplica para construir S3.</div>
 </section>
 
 <section class="slide">
-  <h2>Pregunta guía</h2>
-  <ol>
-    <li>Mira dos sitios cualquiera, 10 segundos cada uno.</li>
-    <li>¿Cuál te pareció más "limpio"?</li>
-    <li>Ahora justifícalo SIN decir "bonito", "feo" ni "limpio".</li>
-    <li>Ese es el músculo de hoy.</li>
-  </ol>
-</section>
-
-<section class="slide">
-  <h2>Tipografía y escala</h2>
-  <ul>
-    <li>Máximo 2 familias: display (títulos) + cuerpo (lectura).</li>
-    <li>Escala con ratio constante: 16 → 20 → 25 → 31px (x1.25).</li>
-    <li>Line-height: cuerpo 1.5-1.8, títulos 1.1.</li>
-  </ul>
-  <div class="analogy"><b>Comida:</b> nombre del plato GRANDE, descripción PEQUEÑA. Si todo mide igual, la carta es inútil.</div>
-  <p style="margin-top:1rem"><b>glud.org:</b> Exo 2 Variable + Fira Sans. Pareja clásica display + cuerpo.</p>
-</section>
-
-<section class="slide">
-  <h2>Espaciado como sistema</h2>
-  <ul>
-    <li>Múltiplos constantes: 8, 16, 24, 32, 48px. Nunca 7, 13 o 22.</li>
-    <li>El espacio AGRUPA: título pegado a su párrafo = pertenecen.</li>
-    <li>El espacio SEPARA: aire alrededor del botón principal.</li>
-  </ul>
-  <div class="analogy"><b>Minecraft:</b> los slots del inventario tienen padding idéntico SIEMPRE. Ese ritmo te deja encontrar tu pico en medio segundo.</div>
-</section>
-
-<section class="slide">
-  <h2>Contraste: la regla medible</h2>
+  <p class="kicker">Tipografía · primero lo medible</p>
+  <h2>Máximo 2 familias: <b>una trabaja, la otra descansa</b></h2>
   <table>
-    <tr><th>Combinación real en glud.org</th><th>Ratio</th><th>Veredicto</th></tr>
-    <tr><td>Cian neón sobre oscuro</td><td>~14:1</td><td>Excelente</td></tr>
-    <tr><td>Gris soporte sobre fondo base</td><td>~5.5:1</td><td>Pasa justo</td></tr>
-    <tr><td>Blanco al 80% opacidad</td><td>variable</td><td>Frágil: medir siempre</td></tr>
+    <tr><th>Rol</th><th>Familia típica</th><th>Qué hace</th><th>Cómo se usa</th></tr>
+    <tr><td><b>Display</b></td><td>Geométrica, con carácter</td><td>Da personalidad: los títulos son la voz del sitio</td><td>Títulos y destacados: el nombre en la puerta</td></tr>
+    <tr><td><b>Cuerpo</b></td><td>Humanista, muy legible</td><td>Se lee cómodo en pantalla: los párrafos son el pan diario</td><td>Textos largos: nadie cuenta calorías al leer</td></tr>
   </table>
-  <p style="margin-top:1rem">AA exige <code>4.5:1</code> texto normal, <code>3:1</code> texto grande. Se mide con WebAIM, nunca a ojo.</p>
-  <div class="analogy"><b>Comida:</b> arroz blanco en plato blanco vs plato negro. Mismo contenido, presencia distinta.</div>
+  <p style="margin-top:1rem">Tres familias juntas ya es <b>bazar</b>: sin rol definido, cada una pelea por llamar la atención y la jerarquía se hunde.</p>
+  <div class="speaker">Concepto rector: cada fuente tiene un trabajo, y se las mezcla como en un mesón: el cuchillo no corta el pan tostado y la espátula no filetea. Si todo usa una sola fuente (el cuchillo) se vuelve texto plano; si tres fuentes compiten por protagonismo, es ruido.
+La palabra clave para el GLUD: "la tipografía es la primera impresión de una marca: escribe la palabra GLUD con 5 fuentes distintas y observa cómo cambia la sensación de la marca solo con el lettering."
+Punto avanzado (lo desarrolla S9): las familias hoy se cargan como "variable fonts" (una sola fuente con ejes de peso y ancho) — se vera al lavorar con Astro. Mencionarlo solo para aclarar que "2 familias" no significa "2 archivos forzosamente".
+Pregunta para la sala: "¿cuál creen que debe cargar MÁS rápido de las dos? — la de cuerpo, porque sin ella NO se puede leer nada" (respuesta: se optimiza la carga de la de cuerpo; retomamos en S11 performance).</div>
 </section>
 
 <section class="slide">
-  <h2>Grillas y alineación</h2>
+  <p class="kicker">Tipografía · la escala</p>
+  <h2>Los tamaños no son aleatorios: <b>crecen por un multiplicador</b></h2>
+  <ol>
+    <li><b>Escala con ratio constante</b> — punto de partida práctico: <code>1.25</code> ("major third"): <code>16 → 20 → 25 → 31 → 39px</code>…</li>
+    <li><b>Line-height según tamaño</b> — cuerpo cómodo (1.5–1.8), títulos apretados (1.1). El texto grande necesita menos aire entre líneas.</li>
+    <li><b>Máximo 2-3 escalones por página</b> — título, subtítulo, cuerpo. Más escalones = babel.</li>
+  </ol>
+  <div class="analogy"><b>Comida:</b> la carta del restaurante: nombre del plato GRANDE, descripción PEQUEÑA. Primero escaneo qué hay (tamaño codifica jerarquía), luego leo el detalle de lo que me interesó. Si todo tuviera el mismo tamaño, la carta sería una lista inútil de texto plano.</div>
+  <div class="speaker">La escala es el "dólar" del diseño: es lo que permite que ojos de 50 centímetros y de 5 metros cuadrados lean la misma jerarquía sin que tengan que adivinar.
+Mostrar cómo se calcula: base 16px × 1.25 = 20px, ×1.25 = 25px, etc. El concepto de "ratio" (multiplicador constante) es lo que la distingue de "tamaño que me pareció lindo".
+¿Por qué no 18, 24, 28? Porque la escala constante crea RITMO — si en una web los tamaños pasan por 18, 24, 28, se percibe desorden, aunque cada uno en solitario se vea bien. El ritmo es lo que el ojo ayuda a llevar.
+Ejercicio de confirmación con glud.org: mirar el hero y el footer y detectar cuántos escalones de texto hay (el website usa una escala tipográfica; buen ejemplo de ritmo).
+Mencionar que herramientas de diseño (Figma) traen escalas tipográficas predefinidas — no para imponerlas, sino para que sepan que es una decisión DE DISEÑO estándar.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tipografía · el caso real</p>
+  <h2>glud.org usa exactamente la pareja clásica</h2>
+  <table>
+    <tr><th>Rol</th><th>Fuente</th><th>Por qué funciona para el grupo</th></tr>
+    <tr><td>Display (títulos)</td><td><b>Exo 2 Variable</b></td><td>Geométrica, futurista — coherente con la identidad neón del grupo</td></tr>
+    <tr><td>Cuerpo (párrafos)</td><td><b>Fira Sans</b></td><td>Humanista, de las más legibles en pantalla</td></tr>
+  </table>
+  <p style="margin-top:1rem">Detalle técnico: ambas se precargan como <b>woff2 subseteadas</b> — solo los caracteres que el sitio usa. Decisión de performance que retomamos en S11.</p>
+  <div class="industry"><b>En la industria:</b> elegir una fuente "display" para marca y una "de cuerpo" para lectura es el estándar de los sistemas de diseño serios (Google, GitHub, Shopify lo hacen). Si alguien te dice "usé 5 fuentes porque cada una se ve linda" — está diseñando por gusto simple.</div>
+  <div class="speaker">Revelar el caso con datos de verdad de la web: las familias EXACTAS están en el CSS (plan font-family). En el material tecleo las que se verificaron; si en la sesión los fonts cambian, revisar el archivo fonte del sitio (.fonts en el CSS) para confirmar.
+Subrayar "subactea" en 2 minutos: un .woff2 subactaea guarda SOLO los glifos que el texto usa (ej. sin la "Ÿ" si no aparece). Eso reduce el peso de fuentes de un archivo de 1 MB a decenas de KB — es una decisión de velocidad PERCIBIDA (S11).
+La relación con la marca: la tipografía no decora — comunica personalidad. Un GLUD con fuente manuscrita sería OTRĂ marca. Preguntar: "¿qué sensación transmite Exo 2 en comparación con, digamos, una serif clásica?"
+Reservar la parte de "woff2 subseteadas" como dato para volver en S11 (performance); hoy solo se nombra.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Espaciado · el sistema invisible</p>
+  <h2>El espacio no es "dejar aire": <b>es información</b></h2>
   <ul>
-    <li>El ojo detecta lo torcido al instante, aunque no lo nombre.</li>
-    <li>Todo cuelga de un sistema: columnas, bordes compartidos.</li>
-    <li>Tres tarjetas iguales = orden. Tres distintas = descuido.</li>
+    <li>La <b>ley de proximidad</b>: lo cercano parece relacionado; lo lejano parece independiente.</li>
+    <li>Usa <b>múltiplos constantes</b>: <code>4px u 8px</code> (8, 16, 24, 32, 48…). Nada de 7, 13 o 22px arbitrarios.</li>
+    <li>El espacio <b>AGRUPA</b>: título pegado a su párrafo = pertenecen juntos.</li>
+    <li>El espacio <b>SEPARA</b>: mucho aire alrededor de un botón = acción principal.</li>
   </ul>
-  <div class="analogy"><b>Minecraft:</b> el inventario ES una grilla perfecta. Y las góndolas alineadas comunican confianza; nadie compra leche de un estante torcido.</div>
+  <p style="margin-top:1rem">Espaciado inconsistente = <b>jerarquía rota</b>, aunque nadie pueda nombrar por qué.</p>
+  <div class="speaker">Este es uno de los conceptos que más cambia la percepción en el primer año de diseño: el espacio NO es vacío, es significado.
+Explicar la escala 8: elijo "8" y todo es ese número multiplicado (8, 16, 24, 32...). ¿Por qué 4 u 8? Porque son números divisibles y redondos que mantienen coherencia visual; 7 o 13 introducen micro-desalineaciones que el ojo nota aunque la mente no las nombre.
+Demostración en vivo: con un elemento de la home de glud.org, mostrar (con DevTools editando un padding a mano) que pasar un espaciado de 16 a 13px hace que "algo se note raro" aunque nadie sepa decir qué. Esa es la clave de la lección.
+Término que pueden compartir: "spacing scale" / "espaciado-sistema" vs "espaciado-aleatorio". Si un diseño usa valores arbitrarios, rompe el sistema y se siente (el ojo lo nota, la mente no lo nombra).
+Frase para el cuaderno: "El espaciado de tu UI es tu sistema de puntuación: define si un título y su texto son una frase o dos ideas."</div>
 </section>
 
 <section class="slide">
-  <h2>Método de crítica (6 pasos)</h2>
-  <ol>
-    <li>10 segundos sin analizar: primera impresión.</li>
-    <li>Evalúa tipografía, espaciado, contraste, alineación.</li>
-    <li>MIDE el contraste con herramienta. Sin número, no hay veredicto.</li>
-    <li>UN cambio concreto por criterio ("subir gris a #X").</li>
-    <li>Compara contra un sitio que haga bien ese criterio.</li>
-    <li>Repite hasta que puedas hacerlo rápido.</li>
-  </ol>
-  <p style="margin-top:1rem"><b>Demo en vivo:</b> material/ejemplos/hero-malo.html vs hero-bueno.html — misma info, decisiones opuestas.</p>
+  <p class="kicker">Espaciado · la analogía</p>
+  <h2>Minecraft: el inventario tiene <b>siempre el mismo padding</b></h2>
+  <ul>
+    <li>Abre cualquier inventario del juego: todos los slots tienen <b>padding idéntico</b>, siempre.</li>
+    <li>Ese ritmo constante es lo que permite encontrar tu pico <b>en medio segundo, sin leer nada</b>.</li>
+    <li>Imagina slots con márgenes distintos: funcionaría, pero encontrarías todo más lento sin saber la causa.</li>
+  </ul>
+  <div class="analogy"><b>Esa es la diferencia:</b> espaciado-sistema (jugabas sin pensarlo) vs espaciado-aleatorio (todo "se ve raro" sin explicación).</div>
+  <div class="speaker">Cerrar la idea con el "experimento mental" del inventario: pedirles cerrar los ojos e imaginar el inventario de Minecraft; recordar lo consistente que es; ahora imaginar uno con slots de distinto tamaño. Eso ya convenció.
+Transición: así como TODO elemento de la UI se espacia con sistema, TODO se colorea con sistema. El contraste es la REGLA medible más importante del semestre — ahora sí van a usar números, no sensaciones.
+El cierre docente: pedir a alguien que explique la diferencia en una frase propia y corregirla si hace falta. Si sale "es dejar tener coherencia" no está mal; reforzar con "es un sistema de valores, no decisiones sueltas".</div>
 </section>
 
 <section class="slide">
-  <h2>Reto: crítica con evidencia</h2>
-  <ol>
-    <li><b>Nivel base:</b> crítica completa de una sección de glud.org (footer, sponsors o SLUD) con ratios medidos de 3 combinaciones.</li>
-    <li><b>Nivel reto:</b> rediseñala en HTML/CSS estático suelto + tabla antes/después de contrastes.</li>
-  </ol>
+  <p class="kicker">Color · la regla medible</p>
+  <h2>Contraste: la regla más medible de <b>toda la sesión</b></h2>
+  <table>
+    <tr><th>Contenido</th><th>Ratio mínimo (WCAG AA)</th></tr>
+    <tr><td>Texto normal</td><td class="ratio">4.5 : 1</td></tr>
+    <tr><td>Texto grande (18pt+, o 14pt bold+)</td><td class="ratio">3 : 1</td></tr>
+  </table>
+  <p style="margin-top:1rem">El contraste se <b>MIDE con herramienta</b> — <a style="color:var(--green)" href="https://webaim.org/resources/contrastchecker/">WebAIM Contrast Checker</a> — nunca a ojo: el ojo se adapta y engaña.</p>
+  <div class="industry"><b>Por qué importa en la industria:</b> las pautas WCAG (Web Content Accessibility Guidelines) son el estándar legal y técnico de accesibilidad. No cumplirlas = dejar fuera a personas con baja visión y, en muchos países, arriesgar una demanda. No es estética: es inclusión y cumplimiento.</div>
+  <div class="speaker">La regla se vuelve SIMPLE de memorizar si se plantea lógica: 4.5:1 es el mínimo para el texto común; 3:1 se permite solo para textos grandes porque el tamaño compensa la pérdida de contraste (un letrero gigante se lee con menos contraste). Punto CLAVE: la tabla completa define los niveles AA/AAA de WCAG (AA = mínimo legal de facto; AAA = más exigente, no siempre alcanzable).
+La regla numérica es para el texto, las imágines y los iconos también tienen contraste propio (los iconos piden 3:1 contra fondo). No meterse en detalles: solo mencionar.
+Demostración técnica en vivo: abrir dos colores en el checker y mostrar que el ojo no alcanza a predecir el ratio: "este verde se ve más fuerte que este azul..." — el checador es el veredicto, no la vista.
+Nota organizativa: este número (4.5:1) es el que vuelve en S11 cuando usemos Lighthouse (que mide contraste automáticamente en a11y audit).</div>
 </section>
+
+<section class="slide">
+  <p class="kicker">Color · el caso real</p>
+  <h2>Contrastes MEDIDOS de glud.org</h2>
+  <table>
+    <tr><th>Combinación</th><th>Ratio aprox.</th><th>Veredicto</th></tr>
+    <tr><td>Cian neón <span class="swatch" style="background:#1affff"></span>sobre fondo oscuro</td><td class="ratio">≈ 14:1</td><td>Excelente, sobra margen</td></tr>
+    <tr><td>Gris soporte <span class="swatch" style="background:#8e95a1"></span>sobre <span class="swatch" style="background:#1c1e1e"></span>oscuro</td><td class="ratio">≈ 5.5:1</td><td>Pasa AA, margen fino</td></tr>
+    <tr><td>Blanco al 80% de opacidad</td><td>variable</td><td class="ratio fail">Patrón frágil: medir caso por caso</td></tr>
+    <tr><td>Colores hardcodeados fuera de paleta (sección SLUD)</td><td>—</td><td class="ratio fail">Deuda de diseño: rompe el sistema de tokens</td></tr>
+  </table>
+  <div class="speaker">Esta slide es EJEMPLO VIVO del tipo de evidencia que se entrega en una auditoría: combinar veredicto CALIFICABLE con medida NUMÉRICA. Cada fila es un riesgo real documentado del propio sitio.
+Leer fila por fila:
+- Cian neón: 14:1 — el motivo de que la marca GLUD use neón sobre oscuro: contraste altísimo casi sin esfuerzo.
+- Gris soporte: 5.5:1 — pasa AA pero flojo: si el CSS se toca y el gris baja una opacidad, deja de pasar. Documentado para recontrastar en S11.
+- Blanco al 80%: "patrón frágil" = el ratio de un blanco con opacidad depende de lo que tenga detrás (una imagen transmite luz distinta en cada zona). No es "malo por sí": es "quién se acuerda de medir SOBRE la imagen real".
+- Hardcodeados en la sección SLUD: se diseñó una sección con un color fuera de paleta "porque quedaba bonito" → se rompe el token. La moraleja: los tokens (variables de color) existen para evitar exactamente esto; se ve en S9 (Tailwind).
+Cierre de la tabla: el grupo ahora puede criticar con datos. El próximo paso del método (S3) usa ESTA manera de criticar para construir el diseño.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Color · los avisos del mundo real</p>
+  <h2>El contraste matemático <b>no siempre gana</b></h2>
+  <ol>
+    <li><b>El glow difumina:</b> los brillos <code>text-shadow</code> desenfocan el borde de las letras; el ratio pasa la matemática pero la legibilidad PERCIBIDA baja.</li>
+    <li><b>El color no existe solo:</b> un color puede pasar sobre un fondo y fallar sobre otro. Mide SIEMPRE la combinación final, no el color en abstracto.</li>
+    <li><b>Ratio ≠ percepción:</b> lo medido es el piso; el ojo (y el contexto) ponen el techo.</li>
+  </ol>
+  <div class="analogy"><b>Comida:</b> arroz blanco en plato blanco — existe, pero no lo ves. El mismo arroz en plato negro — idéntico sabor, presencia total. Y leer sin contraste es cocinar en la cueva sin antorcha: técnicamente posible, miserablemente lento.</div>
+  <div class="speaker">Introducir el concepto de "medir la combinación FINAL": si el texto está sobre una imagen semi-transparente, el contraste real depende de lo que haya detrás. La frase guía: "mide sobre lo que el usuario ve, no sobre el color de tu paleta".
+Explicar el glow en 30 segundos: el texto con glow es como escribir con resaltador recargado: el resaltador (glow) crea un halo que JUEGA contra el contraste del fondo; el ratio en teoría pasa pero la letra pierde nitidez. Es un ejemplo clásico de cómo el contexto rompe la regla — por eso AAA es solo el punto de inicio, no el veredicto.
+Ejercicio tipo: poner dos textos con y sin glow sobre el mismo fondo y que el grupo diga cuál lee más rápido. Spoiler: el sin glow casi siempre vence.
+Ciérrale con el propósito: estos avisos existen para que aprendan el juicio de diseño real: las reglas miden; los diseñadores detectan cuándo la regla no alcanza (cuando el borde de un glow arruina el ratio). "La regla es el piso, no la meta final."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Grillas · el sistema invisible</p>
+  <h2>Lo torcido se siente, aunque nadie lo nombre</h2>
+  <ol>
+    <li>Todo elemento cuelga del mismo sistema: <b>columnas consistentes</b>, bordes compartidos.</li>
+    <li><b>Consistencia &gt; variedad:</b> tres tarjetas iguales comunican orden; tres tarjetas distintas comunican descuido.</li>
+    <li>Grid y Flexbox se ven en S9: hoy solo existe el <b>concepto</b> — detrás de toda página que "se ve ordenada" hay una grilla invisible.</li>
+  </ol>
+  <div class="analogy"><b>Minecraft:</b> el inventario ES una grilla perfecta — 9 columnas, celdas iguales, alineado a milímetro virtual. Y el supermercado: productos alineados = confianza; estantes caóticos = abandono. Nadie confía en comprar leche de un estante torcido.</div>
+  <div class="speaker">La idea central: "lo que alinea, genera confianza". El cerebro del usuario premia el orden con calma visual; el desorden sin alinear produce micro-ansiedad no consciente.
+Explicar que la alineación viene de un sistema de columnas invisible (típicamente 12 columnas en mobile-first frameworks): los diseñadores no alinean "a la vista", les aúpan el marco → esa es la grilla.
+Analogía clave del inventario de Minecraft (mantener el mismo universo): como jugador NUNCA tienes que buscar un slot "que se salió" de la grilla (porque nunca pasa). En diseño se persigue lo mismo: que nada desentone.
+En glud.org: pedir que observen la sección de features/tarjetas y verifiquen si las tarjetas comparten bordes verticales (en general la grilla está sana por usar Tailwind). Retomamos en S9 como hacerlo en código.
+Frase del día: "La grilla es la ley que mantiene la calma en la página. No se ve por excepción; se ve por ausencia — cuando falta, todo se percibe desordenado."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Método de crítica</p>
+  <h2>El método reproducible: <b>de la sensación al veredicto</b></h2>
+  <ol>
+    <li><b>Una mirada de 10 segundos</b> sin analizar. Anota la primera impresión.</li>
+    <li>Evalúa los 4 criterios de hoy <b>uno por uno</b>: tipografía, espaciado, contraste, alineación.</li>
+    <li><b>MIDE el contraste</b> con la herramienta. Nunca declares "bajo contraste" sin número.</li>
+    <li>Propón <b>un cambio concreto por criterio</b>: no "mejorar", sino "subir el gris X a #Y".</li>
+    <li>Compara contra un sitio que consideres bueno <b>en el mismo criterio</b>: la referencia calibra el juicio.</li>
+  </ol>
+  <p style="margin-top:1rem">Se usa para toda la sesión y todo el semestre.</p>
+  <div class="speaker">Cerebro del método: la secuencia va de lo SUPRACONSCIENTE (primera impresión) a lo CONSCIENTE (criterios) a lo NUMÉRICO (contraste) y termina en el APRENDIZAJE (referencia). Cada paso elimina un sesgo: la primera impresión no se juzga; el criterio se llena con técnica; la medida no discute; la propuesta es accionable.
+Explicar cuándo NO sirve: cuando se aplica a una persona ("me gusta tu casa") — sirve solo para artefactos (páginas, posters, interfaces) y para puntos específicos, no para juzgar una página entera de una sola mirada.
+Importancia del paso 5 (referencia calibradora): sin lineal de lo "bien hecho", el juicio se ancla en el mismo sitio que estás criticando. La referencia es lo que evitó que "se vea bien" relativo se confunda con "se ve bien" real.
+Comparación con el flujo de usuario: el paso 2 es "jerarquía y espaciado" (lo que vimos en S1); el paso 3 es el "contraste medible" (lo que vimos hoy). El método une toda la sesión.
+Para la clase: recorrer el método sobre UNA sección en vivo — en la demo de hero-malo/hero-bueno (siguiente slide) lo van a ver aplicar completo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Demo en vivo</p>
+  <h2>La MISMA información, decisiones OPUESTAS</h2>
+  <p><a style="color:var(--green)" href="../material/ejemplos/hero-malo.html" target="_blank">hero-malo.html</a> vs <a style="color:var(--green)" href="../material/ejemplos/hero-bueno.html" target="_blank">hero-bueno.html</a> — ábrelos lado a lado ya. Contenido casi idéntico; el diseño es lo que cambia todo.</p>
+  <p style="margin-top:1rem">Lista antes de mirar: intenta encontrar <b>6 diferencias</b> y clasificarlas por criterio (tipografía / espaciado / contraste / alineación).</p>
+  <div class="analogy"><b>Regla:</b> no se critica al autor ni la intención — se critica la página con el método de 6 pasos, contra los 4 criterios, con la evidencia medida.</div>
+  <div class="speaker">Esta es la DEMO CENTRAL de la sesión. Instrucción clara para la clase: abrir los dos HTML en pestañas separadas (los archivos viven en /material/ejemplos/) y que cada uno escriba 6 diferencias antes de darlas en voz alta.
+Mecánica recomendada: una ronda de "diferencias detectadas", anotarlas en el tablero sin categorías aún; luego clasificar cada una en alguno de los 4 criterios; luego adjudicar al criterio el veredicto (bueno/malo) y pedir evidencia. Si algo no se puede clasificar en los 4, es otro criterio (y se anota como "hallazgo extra").
+El objetivo no es ganar la discusión ni "confirmar que malo=bien": el objetivo es que una página de un lado diga cosas y del otro diga otras, y que cada vez que alguien hable, hable con criterio y con medida.
+Cierre: "esto es lo que habilita hacer crítica sin pelearse": los desacuerdos se resuelven midiendo y comparando con contraste/referencia.
+Ritual para las próximas sesiones: cualquier sección que critique será con este método.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Manos a la obra</p>
+  <h2>Reto base: crítica con evidencia</h2>
+  <ol>
+    <li>Elige UNA sección real de glud.org (footer, sponsors o la sección del evento SLUD).</li>
+    <li>Primera impresión en una frase.</li>
+    <li>Evaluación criterio por criterio (tipografía, espaciado, contraste, alineación).</li>
+    <li>Ratios <b>MEDIDOS</b> de al menos 3 combinaciones texto/fondo de esa sección.</li>
+    <li>Un cambio concreto por cada criterio (valores, no adjetivos).</li>
+  </ol>
+  <p style="margin-top:1rem">Los cambios dicen <code>"subir el gris X a #Y"</code> — nunca <code>"más claro"</code>.</p>
+  <div class="speaker">Abrir la sesión de preguntas típicas ANTES de que entreguen:
+- ¿"una sección" = cuál? Cualquiera de las tres sugeridas; elegir una sola y hacerla COMPLETA vale 100 más que tres a medias.
+- ¿La herramienta? WebAIM Contrast Checker (oficial del curso); o DevTools del navegador (muestra el ratio del elemento en el color picker). Ambas válidas — exigir número.
+- ¿El "cambio por criterio" puede ser "no tocar"? Sí — la crítica honesta también incluye "esto ya está bien". Pero si dicen "no tocar" deben tener el número que lo respalda.
+Insistir en el formato: la entrega ES una tabla/sitio corto con # valores. Cero adjetivos sin número. Es el estándar de calidad del semestre.
+El reto de hoy retoma la S1 (metodología), la S2 (criterios) y lo conecta con la vida real: esto mismo se hace en reuniones de producto.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Reto · nivel reto</p>
+  <h2>Reto (stretch): rediseña esa misma sección</h2>
+  <p>En un <b>HTML/CSS estático suelto</b> — sin frameworks, doble clic y se abre — aplica tus propias correcciones:</p>
+  <ol>
+    <li>Rediseña la sección que criticaste.</li>
+    <li>Entrega una tabla <b>antes / después</b> con los ratios mejorados.</li>
+    <li>Mantén el contenido original: cambia DÓNDE, TAMAÑO, CONTRASTE y ALINEACIÓN, no el texto.</li>
+  </ol>
+  <div class="industry"><b>Por qué vale la pena:</b> este es el ensayo general del proyecto final — mismo formato de entrega, mismo estándar. Quien domine criticar-con-números y arreglar-con-html está listo para S3 y para S13.</div>
+  <div class="speaker">Marco mental del reto: NO se pide "hacer una página bonita" — se pide "aplicar las correcciones justificadas". Rediseñar no es recopilar colores; es aplicar las mismas decisiones que antes criticaste, ahora en positivo.
+Se exige el HTML suelto por dos razones: (1) fuerza a que el primer contacto con CSS sea con el mínimo absoluto (y por tanto comprensible); (2) da experiencia en abrir un archivo local — la base del flujo real que usaremos con Astro.
+El "antes/después con ratios" es el entregable que demuestra que el rediseño mejoró algo medible, no solo "se ve más lindo".
+Prevenir el error típico: muchos intentarán "cambiar de color a un degradado" en vez de buscar el ratio. Reafirmar: primero se manda la combinación de usu (la que corrige la medida), y el look viene después.
+Mención para los que vienen de Frameworks: "estático suelto" es intencionalmente sin bundle: es la fase 0 del curso antes de tocar Astro.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>Lo que te llevas</h2>
+  <ul>
+    <li><b>Tipografía:</b> máximo 2 familias, escala con ratio y line-height según tamaño.</li>
+    <li><b>Espaciado:</b> múltiplos de un sistema (4/8), nunca valores arbitrarios.</li>
+    <li><b>Contraste:</b> 4.5:1 texto normal, 3:1 texto grande — SIEMPRE con herramienta.</li>
+    <li><b>Grilla:</b> lo alineado genera confianza; lo torcido se deja sentir.</li>
+    <li><b>Crítica:</b> 6 pasos reproducible, propuestas con valores, no con adjetivos.</li>
+  </ul>
+  <div class="analogy"><b>Próxima sesión:</b> S3 — con este ojo entrenado diseñas tu primera sección de verdad y aprendes la anatomía de una landing que convierte.</div>
+  <div class="speaker">Cierre de 2 minutos: resumir con las 5 líneas y dejar bien explícito el puente hacia S3 (con el método que acaban de entrenar, la próxima clase se DISEÑA).
+Recordar la tarea de S1 (tabla de flujos) y la tarea de S2 (crítica con evidencia): la próxima sesión se abre con "traigan las dos".
+Si el tiempo alcanza: mini-concurso de "criticar la sección del compañero con el método". Es una excelente práctica para afinar el juicio sin presión.
+Cierre emocional breve: "miren lo que ya pueden hacer: nombrar con números lo que antes era 'está bonito'. La próxima clase nos volvemos aún más exigentes."</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
 
 <div class="footer">
-  <span>Frontend 101 · GLUD</span>
+  <span>Frontend 101 · GLUD · S2 Diseño UI</span>
   <span id="counter"></span>
-  <span>Flechas o clic para navegar</span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
 </div>
 
 <script>
   const slides = document.querySelectorAll(".slide");
-  let i = 0;
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle("active", k === i));
-    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
     document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
   }
   document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
-    if (e.key === "ArrowLeft") show(i - 1);
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
   });
   document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
   show(0);

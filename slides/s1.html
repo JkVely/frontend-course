@@ -12,28 +12,66 @@
     --blue: #7aa2f7;
     --purple: #bb9af7;
     --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
     --surface: #24283b;
+    --surface2: #2f3549;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
-  .slide { display: none; height: 100vh; padding: 6vh 8vw; flex-direction: column; justify-content: center; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
   .slide.active { display: flex; }
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
   h1 b { color: var(--blue); font-weight: inherit; }
-  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
-  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
-  li { margin-bottom: .55em; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
   li::marker { color: var(--blue); }
-  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
-  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
-  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
   th { color: var(--blue); background: var(--surface); }
-  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
-  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
   .analogy b { color: var(--green); }
-  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
-  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .timeline { display: flex; gap: 0; margin-top: 1.4rem; max-width: 100%; }
+  .era { flex: 1; background: var(--surface); border-radius: 10px; padding: .8rem .7rem; font-size: clamp(.75rem, 1.3vw, .95rem); line-height: 1.5; border-top: 3px solid var(--blue); }
+  .era + .era { margin-left: .6rem; }
+  .era b { color: var(--fg); font-size: 1.02em; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .good { color: var(--green); }
+  .bad { color: var(--red); }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
   .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
 </style>
 </head>
 <body>
@@ -41,102 +79,340 @@
 <div class="progress"><div class="bar" id="bar"></div></div>
 
 <section class="slide active">
-  <p class="kicker">Bloque 1 · UX/UI · Sesión 1</p>
+  <p class="kicker">Bloque 1 · Fundamentos UX · Sesión 1</p>
   <h1>¿Cómo piensa un usuario cuando <b>usa tu sitio?</b></h1>
-  <p>Hoy no hay código. Hay navegador abierto en glud.org y criterio por construir.</p>
+  <p>Piensa en el último sitio donde te perdiste y terminaste cerrando la pestaña. No era feo necesariamente: <b>no encontrabas lo que viniste a buscar</b>. Hoy aprendemos a nombrar exactamente qué falla ahí.</p>
+  <p style="margin-top:.8rem">Nivel de entrada: sabes que un sitio te gusta o te frustra. Nivel de salida: sabes <b>por qué</b>, con palabras técnicas y mediciones.</p>
+  <div class="speaker">PREGUNTA GUÍA y ENCUADRE. Sesión SIN código: se entrena el criterio mirando, midiendo y discutiendo. Traer glud.org abierto toda la clase.
+Ritual de apertura: pedir 2 o 3 voluntarios que cuenten su "último sitio donde me perdí" en una frase. Anotar las palabras que usan: lo más común es decir "estaba confuso", "no sabía qué hacer". El objetivo del día: convertir esas sensaciones en diagnósticos concretos ("no vi el enlace X", "no entendí que esto era clicable").
+Advertir: el día es de MUCHA conversación en grupo. Si al final alguien no se equivocó nunca, no estuvo participando.</div>
 </section>
 
 <section class="slide">
-  <h2>Pregunta guía</h2>
-  <ol>
-    <li>Piensa en el último sitio donde te perdiste.</li>
-    <li>No era feo: no encontrabas lo que buscabas.</li>
-    <li>¿Qué fallaba EXACTAMENTE?</li>
-    <li>La respuesta casi nunca son los colores.</li>
-  </ol>
-</section>
-
-<section class="slide">
-  <h2>UX vs UI</h2>
+  <p class="kicker">El concepto que ordena todo</p>
+  <h2>UX vs UI: la confusión más común del oficio</h2>
   <table>
-    <tr><th></th><th>UX</th><th>UI</th></tr>
-    <tr><td>Pregunta</td><td>¿Logré lo que vine a hacer?</td><td>¿Qué veo y toco?</td></tr>
-    <tr><td>Falla</td><td>"No encontré cómo inscribirme"</td><td>"Esto no parece botón"</td></tr>
-    <tr><td>Mide</td><td>Clics, tiempo, frustración</td><td>Contraste, escala, alineación</td></tr>
+    <tr><th></th><th>UX · User Experience</th><th>UI · User Interface</th></tr>
+    <tr><td>Pregunta</td><td>¿Logré lo que vine a hacer, sin fricción?</td><td>¿Qué veo y con qué interactúo?</td></tr>
+    <tr><td>Alcance</td><td>Toda la experiencia: velocidad, flujos, textos, errores</td><td>La superficie: botones, colores, tipografía</td></tr>
+    <tr><td>Se mide con</td><td>Tareas, clics, tiempo, frustración</td><td>Contraste, escalas, alineación</td></tr>
+    <tr><td>Falla cuando</td><td>"No encontré cómo inscribirme"</td><td>"Este botón no parece botón"</td></tr>
   </table>
-  <div class="analogy"><b>Minecraft:</b> UX = game design (progresión, controles). UI = hotbar e inventarios. Nadie juega por los menús.</div>
+  <p style="margin-top:1rem">La UI es <b>una parte</b> de la UX, no su sinónimo. Puede existir UI perfecta con UX pésima.</p>
+  <div class="speaker">Leer la tabla como si fuera un mapa: columnas enfrentadas, vocabulario distinto en cada fila.
+La UI está DENTRO de la UX: la interfaz es lo visible, la experiencia es TODO (incluida la velocidad de carga — tema de S0 — y los textos, y los mensajes de error).
+El ejemplo que se lleven: un restaurante con emplatado digno de foto pero donde el plato tarda 2 horas y la cuenta llega equivocada. UI de 10, UX de 2. El mismo ejemplo vuelve en S2 cuando discutimos el método de crítica.
+Pregunta para la sala: "¿glud.org falla en UX o en UI?" — respuesta de bolsillo: casi todo lo que la gente llama 'feo' es en realidad UX (no encontrar algo, no saber qué es clicable). La UI solo falla cuando hay contraste/escala/alineación rota.</div>
 </section>
 
 <section class="slide">
-  <h2>Jerarquía visual: dirigir el ojo</h2>
+  <p class="kicker">La analogía que no se olvida</p>
+  <h2>Minecraft: <b>la interfaz no es la experiencia</b></h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>UX = el game design completo</h4>
+      <p style="font-size:.95em; color:var(--fg)">La progresión (madera → piedra → hierro → diamante), los controles, cuánto tarda romper cada bloque. Es lo que hace que jugar <b>SE SIENTA</b> bien.</p>
+    </div>
+    <div class="card">
+      <h4>UI = la hotbar y los inventarios</h4>
+      <p style="font-size:.95em; color:var(--fg)">La superficie gráfica sobre la que actúas: cuadrados grises, sin adornos, perfectamente utilitaria.</p>
+    </div>
+  </div>
+  <div class="analogy"><b>La lección:</b> millones de personas pagan horas de su vida por un juego de menús feúchos. Nadie juega Minecraft por sus inventarios bonitos. La interfaz sirve a la experiencia, <b>no al revés</b>.</div>
+  <div class="speaker">Dejar que la contradicción les golpee: ¿el juego más vendido de la historia tiene una UI gris y cuadrada? Sí. ¿Y a alguien le importa? No.
+Este es el argumento anti-floritura que se usa en todas las reuniones de producto: "¿esto que estás agregando mejora la experiencia del usuario o solo se ve lindo en la capture?" Si la respuesta es lo segundo y no hay evidencia de lo primero, se saca.
+Conectar con la sesión S2: la UI no es "decoración sin consecuencias"; es la capa donde la experiencia se hace visible. Una UI descuidada ENTORPECE la UX aunque la experiencia esté bien pensada. Las dos se defienden juntas: hoy UX (qué siente el usuario), mañana UI (con qué lo deleito o lo canso).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Jerarquía visual</p>
+  <h2>El usuario no lee tu página: <b>la escanea</b></h2>
+  <p>Tu página es una conversación que habla primero con lo que destaca. Cuatro palancas controlan quién habla primero:</p>
+  <table>
+    <tr><th>Palanca</th><th>Cómo funciona</th><th>Ejemplo real</th></tr>
+    <tr><td><b>Tamaño</b></td><td>Lo grande se ve primero</td><td>El título del hero sobre cualquier párrafo</td></tr>
+    <tr><td><b>Contraste / color</b></td><td>Lo que resalta llama primero</td><td>Un botón relleno entre texto plano</td></tr>
+    <tr><td><b>Posición</b></td><td>Arriba e izquierda antes que abajo y derecha</td><td>El logo arriba a la izquierda</td></tr>
+    <tr><td><b>Espacio</b></td><td>Lo aislado parece importante</td><td>Un botón rodeado de aire pide clics</td></tr>
+  </table>
+  <div class="speaker">Preguntar a la sala ANTES de revelar cada palanca: "¿qué palancas usaron ustedes para hacer que algo se notara?" — normalmente aparece tamaño y color, rara vez espacio. La del espacio es la que más ahorra fe en el oficio: el aire alrededor de un botón lo vuelve acción principal sin cambiar una sola letra.
+Relación con S0 (jerarquía = velocidad de carga): la jerarquía visual decide WHAT el usuario ve primero y NADA de eso es casual en un buen diseño.
+Regla que se repite en el curso: si todo grita, nada se oye. Una página con 10 botones de mismo peso visual es exactamente igual que una sin botones: el ojo no sabe a dónde ir.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Jerarquía visual · patrones</p>
+  <h2>Dos patrones de escaneo que vas a ver en todas partes</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Patrón F</h4>
+      <p style="font-size:.95em; color:var(--fg)">En páginas de <b>lectura</b> (artículos, docs): el ojo barre horizontal arriba, luego va bajando y leyendo menos de cada línea. La información crítica va arriba, la colateral abajo y a los costados.</p>
+    </div>
+    <div class="card">
+      <h4>Patrón Z</h4>
+      <p style="font-size:.95em; color:var(--fg)">En landings <b>visuales</b> con poco texto: arriba izquierda → arriba derecha → diagonal → abajo izquierda → abajo derecha. Es el camino del logo al CTA.</p>
+    </div>
+  </div>
+  <div class="industry"><b>En la industria:</b> los diseñadores no inventan estos patrones: los encontraron grabando la mirada (eyetracking, estudios NN/g — misma gente que enterró la regla de los 3 clics, slide 9). La mirada va donde la palanca la manda.</div>
+  <div class="speaker">Explicar cómo SE descubrieron: cámaras que graban hacia dónde mira la pupila. NN/g (Nielsen Norman Group) es el laboratorio de usabilidad más citado del mundo; conocerlo como institución vale más que memorizar cualquier patrón.
+Ejercicio de 45 segundos: "abran la home de glud.org y díganme cuál patrón predomina (es visual → Z) y qué enlace está colocado justo para captar la esquina inferior derecha." (En glud.org: el CTA principal del hero.)
+No confundir: F es para densidad de lectura (blogs, docs), Z es para páginas cuyo trabajo es UNA acción. Elegir mal el patrón = diseñar contra el ojo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Jerarquía en el juego</p>
+  <h2>Minecraft también la tiene: <b>el HUD nunca te pregunta</b></h2>
+  <p>Abre el juego sin mirar el HUD y pregúntate: ¿dónde está mi vida?</p>
   <ul>
-    <li><b>Tamaño</b> — lo grande primero</li>
-    <li><b>Contraste</b> — lo que resalta llama</li>
-    <li><b>Posición</b> — arriba/izquierda antes</li>
-    <li><b>Espacio</b> — lo aislado parece importante</li>
+    <li><b>Arriba, siempre</b> — es lo más crítico; no puede estar en otro lado ni enterrado en un menú.</li>
+    <li><b>El chat, abajo, pequeño</b> — es secundario: existe, pero no compite por tu atención central.</li>
+    <li><b>La hotbar, fija abajo</b> — tus herramientas vigentes, a una tecla.</li>
   </ul>
-  <p style="margin-top:1rem">Patrón F (lectura) vs patrón Z (landings).</p>
-  <div class="analogy"><b>Minecraft:</b> vida arriba SIEMPRE (crítico), chat abajo pequeño (secundario). Miles de decisiones de jerarquía fijadas para nunca buscarlas.</div>
+  <p style="margin-top:1rem">Mojang fijó jerarquía para que <b>nunca tengas que buscar</b>. Tu landing debe lograr lo mismo: lo importante imposible de no ver.</p>
+  <div class="speaker">La fórmula mental que se llevan: la jerarquía responde "¿qué ES lo más importante en esta pantalla?" y la respuesta está determinada por el USUARIO (qué necesita para decidir), no por el equipo.
+Contraste entre los dos mundos: en Minecraft la barra de vida está arriba aunque los jugadores casi siempre miran el centro de la pantalla; la decisión no responde a "qué se ve bonito" sino a "qué es lo que no puedo dejar de saber EN NINGÚN momento". En una landing, lo equivalente es el CTA del hero: tiene que estar visible cuando llegas, sin desplazarte, sin buscarlo.
+Reto express buscando: en glud.org, ¿qué elemento cumple el papel de "barra de vida"? (El CTA del hero / el botón primario. Respuesta esperada: el hero y su CTA.)</div>
 </section>
 
 <section class="slide">
-  <h2>Arquitectura de información</h2>
+  <p class="kicker">Arquitectura de información</p>
+  <h2>IA: qué existe, cómo se agrupa, cómo se conecta</h2>
+  <p>La <b>arquitectura de información (IA)</b> decide <b>qué contenidos existen</b>, <b>cómo se agrupan</b> y <b>cómo se navega entre ellos</b>. Su error típico de principiante:</p>
+  <div class="grid2">
+    <div class="card">
+      <h4 class="bad">Organizar por la casa</h4>
+      <ul style="font-size:.95em">
+        <li>"La sección del evento X"</li>
+        <li>"Lo que coordina Fulano"</li>
+        <li>Estructura interna del equipo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4 class="good">Organizar por el visitante</h4>
+      <ul style="font-size:.95em">
+        <li>"Quiero saber cuándo es el próximo evento"</li>
+        <li>"Quiero inscribirme"</li>
+        <li>Modelo mental de quien llega</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:1rem">El <b>sitemap</b> es el dibujo de esa organización: cajas por página, flechas por conexiones. Papel alcanza.</p>
+  <div class="speaker">Definir IA sin humo: es la respuesta a tres preguntas — qué pedazos de contenido existen, en qué grupos se ordenan, y cómo se llega de un grupo a otro. Eso es TODO.
+El pecado de principiante es universal: cuando un equipo hace "menú según departamentos" (Eventos, Comité, Redes) en vez de "menú según tareas del visitante" (Agendar, Participar, Ser voluntario). Lo que importa es lo que el visitante QUIERE HACER, no el organigrama de la organización.
+Actividad rápida: dibujar en el tablero el sitemap actual de glud.org en 3 minutos, por turnos (cada uno dice una casilla y una flecha). Resultado esperado: exactamente así de simple se ve un buen sitemap. Y advertir: si un sitemap se parece a un informe de organigrama de una empresa, está mal hecho. Se discute con él en el detalle de la sección 4 (3 clics) — el sitemap es lo que se mide con clics.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">IA · analogías</p>
+  <h2>La carta del restaurante y los cofres de Minecraft</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>La carta del restaurante</h4>
+      <p style="font-size:.95em; color:var(--fg)">Entradas, platos fuertes, postres, bebidas. <b>Nadie</b> ordena la carta por el orden en que llegaron las recetas a la cocina. Organizar "por la casa" en una web es lo mismo: el comensal no conoce tu cocina.</p>
+    </div>
+    <div class="card">
+      <h4>Los cofres etiquetados</h4>
+      <p style="font-size:.95em; color:var(--fg)">"Redstone", "Construcción", "Comida". Cada cofre responde a la pregunta del jugador: <b>"¿dónde está mi pollo asado?"</b>. 40 cofres sin etiquetas es una web sin arquitectura de información.</p>
+    </div>
+  </div>
+  <p style="margin-top:1rem">Ambas reglas se resumen en la misma: <b>etiqueta lo que el usuario busca, no lo que internamente guardas.</b></p>
+  <div class="speaker">Analogías deliberadamente simples: la meta es que para la próxima semana cualquiera de la sala pueda explicar IA diciendo "es como los cofres de Minecraft".
+Aterrizarlo en glud.org: las secciones del menú (Inicio, Cursos, SLUD, Integrantes, Contacto) — preguntar si están agrupadas "por la casa" o "por el visitante" y contrastar en voz alta. (En general están POR EL VISITANTE: cada una corresponde a una tarea: enterarme de cursos, conocer el evento, escribirles.)
+La regla de oro que se escribirá en el cuaderno: "Todo contenido alcanzable desde la home en un camino obvio." Si hace falta inventar un enlace secreto para llegar, la IA está rota, aunque el contenido sea bueno.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El mito de usabilidad</p>
+  <h2>La regla de los 3 clics: <b>verdad útil, mentira literal</b></h2>
+  <ul>
+    <li>Nació en los años 90 como intuición popular: "cualquier contenido en máximo 3 clics desde la home".</li>
+    <li>Sobrevive en oficinas hasta hoy... pero <b>la evidencia la desmiente como ley</b>.</li>
+    <li>NN/g (y otros estudios de eyetracking y task success) demostraron: los usuarios toleran 5, 6 o más clics <b>si cada paso les da confianza de que van bien camino</b>.</li>
+  </ul>
+  <p style="margin-top:1rem">El problema real nunca fue el conteo: <b>es perder la orientación</b>. Un clic que te hace preguntar "¿dónde estoy?" destruye; diez clics seguros de avanzar no.</p>
+  <div class="speaker">La parte DOCENTE importante acá es que el mito está muerto pero la gente lo sigue citando. No corregir con sorna; corregir con investigación: "se decía en los 90, y NN/g lo desmintió en estudios con medición".
+Anécdota de la vida real para que lo graben: en un dashboard de analytics (muy grande), los usuarios entran a una métrica pasando por 5 niveles de menú; nadie se queja, porque cada paso los acerca con claridad a lo que vinieron a ver. Comparemos con un sitio de 3 clics donde en el segundo clic terminas en una página que no reconoce a qué viniste.
+Y el ejemplo que todos entienden: "¿tú abandonas Minecraft llegar a diamantes? Llegar toma 20 pasos. No lo abandonas porque las coordenadas te dicen dónde estás." (Slide 11 lo desarrolla.)
+Mensaje del curso: pensar en DISEÑO = pensar en confianza del usuario en cada paso, no en el ciclo menor posible.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Lo que sí importa</p>
+  <h2>En lugar del conteo: <b>la orientación</b></h2>
+  <p>Solo hay 3 preguntas que necesitas responder en cada punto del viaje:</p>
   <ol>
-    <li>Agrupa como entiende el USUARIO, no como organiza tu equipo.</li>
-    <li>Cada página responde a un propósito único.</li>
-    <li>Todo alcanzable desde la home por camino obvio.</li>
-    <li>Nombres descriptivos ("Agenda"), no ingeniosos ("Nuestro mundo").</li>
+    <li><b>¿DÓNDE estoy?</b> — ubicación clara (migajas, título de página, navegación resaltada).</li>
+    <li><b>¿QUÉ puedo hacer aquí?</b> — acciones visibles, sin preguntas de "¿esto lleva a qué?"</li>
+    <li><b>¿CUÁL es el siguiente paso?</b> — el camino a lo que busco es evidente, sin adivinanzas.</li>
   </ol>
-  <div class="analogy"><b>Comida:</b> la carta se agrupa en entradas/platos/postres según el comensal... jamás por orden de llegada de recetas a la cocina.</div>
+  <p style="margin-top:1rem">Eso es lo que se defiende en este curso: clics calibrados por <b>orientación</b>, no por cantidad.</p>
+  <div class="speaker">Pasar las 3 preguntas como las únicas del día: si un usuario, en cualquier momento, no puede contestar alguna de las tres, AHÍ está la fricción. No hace falta más modelo que ese.
+Hacer el ejercicio en vivo con glud.org: ir a una subpágina (ej. cursos) y preguntar a la sala: ¿cuál es el título de la página (DÓNDE estoy)?, ¿qué acciones se ven claramente (QUÉ puedo hacer)?, ¿si yo quisiera inscribirme, el camino es evidente (CUÁL sigue)?.
+Relación con el diseño: "migajas" (breadcrumbs) y "navegación con el ítem activo resaltado" son la traducción concreta de la pregunta 1. No son decoración: son sistema de coordenadas.
+Anunciar que estos tres marcadores van a ser los indicadores de las próximas auditorías del semestre: si en una tarea no falla la orientación las tres veces, la tarea está bien diseñada.</div>
 </section>
 
 <section class="slide">
-  <h2>La regla de los 3 clics</h2>
+  <p class="kicker">La analogía de las coordenadas</p>
+  <h2>Minecraft: <b>el viaje largo no cansa si estás ubicado</b></h2>
   <ul>
-    <li>Leyenda popular de los años 90.</li>
-    <li>Los usuarios toleran más clics si CADA paso da confianza.</li>
-    <li>Lo que importa: saber dónde estoy, qué puedo hacer aquí, cuál es el siguiente paso.</li>
+    <li>Llegar a diamantes toma decenas de pasos: bajar niveles, encontrar cuevas, minar obsidiana de camino.</li>
+    <li>Nadie abandona por el largo, porque las <b>coordenadas</b> te dicen dónde estás y la <b>profundidad</b> te dice si vas bien (más abajo = más cerca).</li>
+    <li>El viaje largo funciona cuando <b>la orientación funciona</b>.</li>
   </ul>
-  <div class="analogy"><b>Minecraft:</b> llegar al diamante toma decenas de pasos y nadie abandona: las coordenadas siempre te orientan. Seis clics claros vencen a tres confusos.</div>
+  <div class="industry"><b>La moraleja en una línea:</b> un sitio con 6 clics claros vence siempre a uno con 3 clics confusos. El número no es el enemigo; la pérdida es el enemigo.</div>
+  <div class="speaker">Cierre de la sección del mito: la metáfora de Minecraft cierra el círculo del "3-clicks" — el grupo ya puede decir con sus palabras por qué el conteo no es la métrica. Evitar explicarlo V: dejarlos decir los conceptos (coordenadas, profundidad, confianza).
+Recalcar la aplicabilidad universal: el mismo principio gobierna onboarding de apps (pasos que dan confianza de "voy bien"), checkouts (pocos pasos claros con breadcrumb de progreso) y dashboards.
+Si el grupo entiende esto HOY, el resto del semestre va a ser fácil de evaluar: diseñar es diseñar para que la gente no se piense que está perdida.</div>
 </section>
 
 <section class="slide">
-  <h2>El caso real: glud.org</h2>
-  <ul>
-    <li>SLUD destacada en home sin clics: lo urgente no se busca.</li>
-    <li>Barra completa en desktop, panel inferior táctil en móvil.</li>
-    <li>Contacto directo en footer: correo + 6 redes accesibles.</li>
-  </ul>
-  <p style="margin-top:1rem">¿Es tan fácil como suena? Eso lo decides TU ahora.</p>
-</section>
-
-<section class="slide">
-  <h2>Reto: auditoría de flujos de tarea</h2>
+  <p class="kicker">Método de medición</p>
+  <h2>Flujos de tarea: <b>medir UX en vez de opinar</b></h2>
+  <p>"Me parece poco usable" es opinión. Medir es distinto. El método de todo el semestre:</p>
   <ol>
-    <li><b>Nivel base:</b> mide 3 tareas (cuándo es la SLUD / correo oficial / cómo entrar a cursos GNUBIES) en desktop Y móvil: tabla con clics, tiempo y fricciones.</li>
-    <li><b>Nivel reto:</b> 3 mejoras justificadas con tus datos + matriz impacto/esfuerzo.</li>
+    <li>Define la tarea como la plantearía un <b>usuario real</b>: "averiguar cuándo es la próxima SLUD".</li>
+    <li>Ejecútala <b>tú mismo</b> contando clics y cronometrando.</li>
+    <li>Registra cada <b>momento de fricción</b>: cada duda de "¿dónde hago clic?".</li>
+    <li>Repite la tarea en <b>otro dispositivo</b> (desktop vs móvil).</li>
+    <li>Compara contra el <b>mínimo teórico</b>: ¿cuántos clics DEBERÍA costar con un diseño perfecto?</li>
   </ol>
-  <div class="analogy">Fricción descrita con causa ("no vi el enlace X"), no con sentimiento ("era confuso").</div>
+  <div class="speaker">Este es el corazón MÉTODO del curso: convertir la opinión en número. El flujo de tarea es lo que separa "eso está feo" de "esta tarea tarda 3 veces lo que debería y el 60% de los intentos falló".
+Explicar el paso 5 (mínimo teórico) con un ejemplo: si "encontrar el correo del grupo" idealmente = 1 clic desde cualquier página (enlace en el footer) y el usuario hizo 4 explorando, hay 3 clics de margen de mejora. Ese cálculo se vuelve LA evidencia que se presenta en una reunión.
+Última línea del método: los datos no prueban que tu diseño sea perfecto, pero SÍ prueban dónde está la fricción. Y eso es oro: saber DÓNDE tocar.
+La palabra que se usa en la industria para esto: "métricas de tarea" (task success rate, time-on-task). Mencionar de pasada; el curso puede nombrarlas.</div>
 </section>
+
+<section class="slide">
+  <p class="kicker">Método · aterrizaje</p>
+  <h2>El mínimo teórico = <b>tu margen de mejora</b></h2>
+  <div class="analogy"><b>Comida:</b> medir la experiencia es como cronometrar cuánto tarda el plato en llegar EN LUGAR DE opinar "el servicio es malo". Si llega en 40 minutos y el chef dice que la cocina lo hace en 8, ya sabes que el problema está en la cadena entre la cocina y la mesa, no en el chef. La medición te dice DÓNDE.</div>
+  <p style="margin-top:1rem">La diferencia entre <b>lo medido</b> y el <b>mínimo teórico</b> es tu margen de mejora. Eso convierte la crítica en evidencia y la evidencia en cambios concretos.</p>
+  <div class="speaker">Cerrar el concepto con dos frases fáciles de memorizar:
+1. "Medido - mínimo teórico = margen de mejora."
+2. "La evidencia no discute con el jefe: lo convence."
+Preguntar a la sala: ¿cuántos estarían cómodos llevando "los clics y el tiempo" a una junta del GLUD vs llevando "es que no es intuitivo"? El punto queda solo.
+Además, es el puente hacia el reto: la auditoría que van a hacer en casa ES el flujo de tarea (con la tabla de clics/tiempo/fricciones). Todo lo de hoy se convierte en su trabajo de la semana.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El caso real</p>
+  <h2>glud.org: lo que ya hace bien (verbose: verificado)</h2>
+  <table>
+    <tr><th>Decisión de UX</th><th>Lo que hace</th><th>Por qué funciona</th></tr>
+    <tr><td><b>Lo urgente, sin clics</b></td><td>Tarjeta prominente de la SLUD apenas carga la home</td><td>El contenido temporal más importante no obliga a buscar</td></tr>
+    <tr><td><b>Menú dual</b></td><td>Barra completa en desktop; panel inferior deslizable en móvil</td><td>El patrón cambia, la orientación se conserva</td></tr>
+    <tr><td><b>Contacto en el footer</b></td><td>Correo oficial + 6 redes sociales etiquetadas</td><td>El que llega buscando contacto, lo encuentra</td></tr>
+  </table>
+  <p style="margin-top:1rem">Ahora la prueba real: ¿es tan fácil como suena? <b>Eso lo decides tú en el reto.</b></p>
+  <div class="speaker">Recorrer cada fila como CÓDIGO de buena práctica y traducir a la pregunta correcta: cada fila responde una de las tres preguntas de orientación (DÓNDE / QUÉ / CUÁL).
+Contrastar con lo que se ve mal HOY en el mundo: el caso real sirve para desmontar dos mitos: (1) "un sitio institucional de estudiantes no puede tener buen UX" — falso; (2) "con solo 2 botones no hay UX" — falso, el hero es casi todo.
+Un detalle que casi nadie nota y puedo revelar: el footer tiene 6 íconos de redes con etiqueta para lector de pantalla (aria-label) — un diseño sin etiquetas sería invisible para el lector de pantalla. Esa es la meta: la parte de accesibilidad que se toca S2 y S11.
+Cerrar con la promesa: "el reto de hoy es la auditoría real del sitio; después de hacerla, ustedes van a poder decirlo con números. No 'creo que está bien'."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">En vivo</p>
+  <h2>Hagamos un flujo juntos antes de que los hagas tú</h2>
+  <ol>
+    <li>Tarea: "encontrar el correo oficial del grupo".</li>
+    <li>Hago clic en voz alta, contando en público.</li>
+    <li>Anota ustedes cada vez que yo dude o busque.</li>
+    <li>Repetimos en la vista móvil (DevTools) y comparamos.</li>
+    <li>Calculamos el mínimo teórico y el margen de mejora.</li>
+  </ol>
+  <div class="analogy"><b>Regla del ejercicio:</b> nadie critica mi diseño favorito en abstracto — criticamos los clics como se verían hoy en nuestra web. La crítica a domicilio no funciona; la medición a domicilio sí.</div>
+  <div class="speaker">Este es el minuto en el que el docente DEBE tener la página abierta y ejecutar la tarea — si todo está bien diseñado, el ejercicio será aburridísimo (no hay fricción). Si el sitio tuviera fricción real, ES EL MOMENTO de usarla como material de clase ("¿vieron? en el segundo clic dudé").
+Preparar una tarea que casi con certeza tendrá algo que notar — por ejemplo "encontrar cómo inscribirse a los cursos GNUBIES" (si en la fecha hay información dinámica, mejor) y dejar que la fricción aparezca de forma natural.
+Los estudiantes copian el formato EN VIVO: clics - tiempo - nota de fricción. El objetivo es mostrar que el método es rápido (2 minutos por tarea) y que no requiere herramientas sofisticadas: lápiz y tablero.
+Si alguien levanta un desacuerdo ("yo en el primer clic iba a otra parte") — excelente: la métrica de valor agregado es discutir JUNTOS "por qué caminos distintos para la misma tarea" y eso YA es un insight de UX para llevar al reto.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Manos a la obra</p>
+  <h2>Reto de la sesión: auditoría de flujos de tarea</h2>
+  <p><b>Nivel base</b> — sobre glud.org, ejecuta y documenta estas tareas (desktop <b>y</b> móvil):</p>
+  <ol>
+    <li>Enterarte de cuándo y dónde es la próxima SLUD.</li>
+    <li>Encontrar el correo oficial del grupo.</li>
+    <li>Averiguar cómo participar en los cursos GNUBIES.</li>
+  </ol>
+  <p style="margin-top:1rem">Para cada tarea y cada dispositivo, tu tabla: <code>Tarea | Dispositivo | Clics | Tiempo | Momentos de confusión</code>. Fricciones con causa ("no vi el enlace X porque..."), nunca con sentimiento ("estaba difícil").</p>
+  <div class="speaker">Para el RITMO de la sesión: dejan tiempo para explicar qué es "fricción con causa": "la busqué en el menú de arriba y no estaba" (causa) vs "estaba difícil" (sentimiento). El estándar de causa es lo que va a usar el resto del semestre para TODAS las críticas.
+Se debe tener el instructivo a mano: los pasos 1-5 de la slide de flujos sirven como plantilla. La tabla: Tarea | Dispositivo | Clics | Tiempo | Fricciones (con causa).
+La fecha de entrega: antes de la próxima sesión, en el canal del curso (si es interno) o como tarea de aula (formato libre, aunque se sugiera Markdown).
+Dejar claro que la tarea se hace en PAJA tiempo real (posible en 20-30 min) y que el tiempo extra sirve para el reto (abajo).
+No permitir "la quiero hacer con el grupo": cada uno hace la MÍSMA tarea por separado, porque los caminos distintos son justamente los insights que se traen a la próxima clase.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Reto · nivel reto</p>
+  <h2>Reto (stretch): de la evidencia a la propuesta</h2>
+  <ol>
+    <li>Propón <b>3 mejoras de navegación</b> concretas para glud.org.</li>
+    <li>Justifica cada una <b>citando el dato medido</b> que la respalda ("la tarea X tardó 3 clics extra porque...").</li>
+    <li>Priorízalas en una matriz <b>impacto / esfuerzo</b> y di cuál implementarías primero y por qué.</li>
+  </ol>
+  <div class="analogy"><b>Por qué vale la pena:</b> este reto es el ensayo del momento donde el diseñador tiene que justificar cortar, mover o agregar — con la evidencia en la mano. Es exactamente lo que pasa en una reunión de producto real.</div>
+  <div class="speaker">Aclarar qué se entrega: la propuesta puede ser texto plano o un pequeño markdown. La diferencia clave frente al nivel base: NO se pueden proponer cambios sin citar el dato. Esa es la metodología.
+Esta es la primera vez que los estudiantes "proponen rediseños" y hay que entrenar la humildad del dato: un buen rediseño comienza con "media el problema", no con "reinventemos el menú".
+Si aparece el patrón clásico ("¿y qué tal cambiar todo el diseño?") la respuesta docente: "claro — fundaméndalo en una fricción medida. Si no hay fricción medida que lo respalde, es gusto personal, no diseño."
+Sirve además para calibrar el nivel del grupo de cara a S2 (donde se junta método de crítica + este reto) — quien ya está cómodo con la evidencia va a fluir mejor en el trabajo de crítica.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>Lo que te llevas hoy</h2>
+  <ul>
+    <li><b>UX ≠ UI</b> — la interfaz sirve a la experiencia, no al revés.</li>
+    <li><b>Jerarquía</b> — tamaño, contraste, posición y espacio dirigen al ojo; lo importante imposible de no ver.</li>
+    <li><b>IA</b> — agrupa por lo que el visitante quiere hacer, no por cómo guardas tú las cosas.</li>
+    <li><b>3 clics</b> — el conteo no es la ley; la orientación sí lo es.</li>
+    <li><b>Método</b> — mide la tarea; el margen contra el mínimo teórico es tu evidencia.</li>
+  </ul>
+  <div class="analogy"><b>Próxima sesión:</b> S2 — "¿Por qué esto se ve bien y esto otro no?" El ojo con los números: tipografía, espaciado, contraste y el método de crítica.</div>
+  <div class="speaker">Cierre en 2 minutos: repasar las 5 líneas del resumen con voz propia y preguntar si alguien tiene una sola duda bajo el brazo.
+El puente a S2: la próxima clase son los CRITERIOS de diseño que convierten la sensación "esto se ve bien / mal" en valores concretos (ratios, escalas, alineación). La crítica también usa la evidencia.
+Recordar el check-in del nivel base para la próxima: traer la tabla de flujos = derecho de entrada a la sesión 2 (aversión a clases sin tarea).
+Si el tiempo lo permite, responder la pregunta del inicio ("¿qué era exactamente lo que fallaba?") con las palabras que se aprendieron hoy — la idea es que las respuestas sean ahora técnicas y no coloquiales.</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
 
 <div class="footer">
-  <span>Frontend 101 · GLUD</span>
+  <span>Frontend 101 · GLUD · S1 Fundamentos UX</span>
   <span id="counter"></span>
-  <span>Flechas o clic para navegar</span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
 </div>
 
 <script>
   const slides = document.querySelectorAll(".slide");
-  let i = 0;
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle("active", k === i));
-    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
     document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
   }
   document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
-    if (e.key === "ArrowLeft") show(i - 1);
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
   });
   document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
   show(0);

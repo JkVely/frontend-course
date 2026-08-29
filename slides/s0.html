@@ -12,35 +12,67 @@
     --blue: #7aa2f7;
     --purple: #bb9af7;
     --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
     --surface: #24283b;
+    --surface2: #2f3549;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
-  .slide {
-    display: none;
-    height: 100vh;
-    padding: 6vh 8vw;
-    flex-direction: column;
-    justify-content: center;
-  }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
   .slide.active { display: flex; }
-  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; margin-bottom: 2rem; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
   h1 b { color: var(--blue); font-weight: inherit; }
-  h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); color: var(--purple); margin-bottom: 1.6rem; }
-  ul, ol { font-size: clamp(1.05rem, 2vw, 1.45rem); line-height: 1.75; padding-left: 1.4em; max-width: 62ch; }
-  li { margin-bottom: .55em; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
   li::marker { color: var(--blue); }
-  p { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 58ch; line-height: 1.7; }
-  table { border-collapse: collapse; font-size: clamp(.95rem, 1.8vw, 1.25rem); margin-top: 1rem; }
-  th, td { border: 1px solid var(--surface); padding: .6em 1em; text-align: left; }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
   th { color: var(--blue); background: var(--surface); }
-  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .95em; color: var(--green); }
-  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .85rem; margin-bottom: 1.2rem; }
-  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 0 10px 10px 0; max-width: 66ch; margin-top: 1.6rem; font-size: clamp(1rem, 1.9vw, 1.3rem); line-height: 1.65; }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); }
+  pre span.k { color: var(--purple); }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
   .analogy b { color: var(--green); }
-  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; font-size: .85rem; color: var(--muted); z-index: 10; }
-  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 10; }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .timeline { display: flex; gap: 0; margin-top: 1.4rem; max-width: 100%; }
+  .era { flex: 1; background: var(--surface); border-radius: 10px; padding: .8rem .7rem; font-size: clamp(.75rem, 1.3vw, .95rem); line-height: 1.5; border-top: 3px solid var(--blue); }
+  .era + .era { margin-left: .6rem; }
+  .era b { color: var(--fg); font-size: 1.02em; }
+  .era.warn { border-top-color: var(--orange); }
+  .era.good { border-top-color: var(--green); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
   .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
 </style>
 </head>
 <body>
@@ -50,108 +82,323 @@
 <section class="slide active">
   <p class="kicker">Bloque 0 · Contexto · Sesión 0</p>
   <h1>¿Qué es este sitio y <b>cómo llega a internet?</b></h1>
-  <p>Frontend 101 · GLUD · Caso de estudio: <b>glud.org</b></p>
+  <p>Escribes <code>glud.org</code>, presionas Enter y en un segundo la página está pintada. Ese segundo es lo que vamos a abrir hoy.</p>
+  <p style="margin-top:.8rem">Nivel de entrada: sabes que un HTML abierto en el navegador muestra una página. Nivel de salida: sabes cómo una web se hace, se publica y funciona en la industria actual.</p>
+  <div class="speaker">BIENVENIDA Y ENCUADRE.
+Pregunta guía para abrir: "¿Cuántas cosas creen que pasan entre Enter y la página pintada?" Pide números y hipótesis en voz alta, anótalas en el tablero. No corrijas todavía: las vamos a contrastar al final de la sesión.
+Encuadre: hoy armamos la base de TODAS las sesiones futuras. Cuando lleguemos a Astro (S7), a pnpm (S6) y a Lighthouse (S11), todo lo que digamos hoy va a caer en su lugar.
+Dato anecdótico para romper hielo: casi nadie que usa la web todos los días puede contar cómo llegó una página a su pantalla. Al terminar, este grupo va a poder hacerlo de memoria.</div>
 </section>
 
 <section class="slide">
-  <h2>Pregunta guía</h2>
-  <ol>
-    <li>Escribes <code>glud.org</code> y presionas Enter.</li>
-    <li>Un segundo después: página pintada.</li>
-    <li><b>¿Cuántas cosas pasaron en ese segundo?</b></li>
-    <li>Anota tu número y tus hipótesis. Volvemos al final.</li>
-  </ol>
-</section>
-
-<section class="slide">
-  <h2>Las tres capas de todo sitio web</h2>
+  <p class="kicker">Las piezas de una página</p>
+  <h2>Toda página web son <b>3 capas</b></h2>
   <table>
-    <tr><th>Capa</th><th>Tecnología</th><th>Responsabilidad</th></tr>
-    <tr><td>Estructura</td><td>HTML</td><td>Qué hay y qué significa</td></tr>
-    <tr><td>Presentación</td><td>CSS</td><td>Cómo se ve</td></tr>
-    <tr><td>Comportamiento</td><td>JavaScript</td><td>Cómo reacciona a ti</td></tr>
+    <tr><th>Capa</th><th>Tecnología</th><th>Sigla</th><th>Qué hace</th></tr>
+    <tr><td>Estructura</td><td><b>HTML</b></td><td>HyperText Markup Language</td><td>El contenido y su significado (qué es cada cosa)</td></tr>
+    <tr><td>Presentación</td><td><b>CSS</b></td><td>Cascading Style Sheets</td><td>Cómo se ve: colores, tamaños, posiciones</td></tr>
+    <tr><td>Comportamiento</td><td><b>JS</b></td><td>JavaScript</td><td>Qué pasa cuando interactúas con la página</td></tr>
   </table>
-  <div class="analogy"><b>Minecraft:</b> bloques = HTML, materiales = CSS, redstone = JavaScript.</div>
+  <div class="analogy"><b>Minecraft:</b> HTML son los bloques colocados (qué es la casa). CSS son los materiales y acabados (cómo luce). JS es la redstone (cómo reacciona la casa a ti).</div>
+  <div class="speaker">Expandir SIGLAS una por una:
+- HTML = HyperText Markup Language. "Markup" quiere decir que la página es texto con marcas (etiquetas) que le dicen al navegador qué significa cada cosa: un título, un párrafo, un enlace. "HyperText" = texto que enlaza a otro texto (los links).
+- CSS = Cascading Style Sheets. "Cascading" (en cascada) se refiere a cómo se resuelven las reglas cuando varias se contradicen: gana la más específica o la que viene después. "Style Sheets" = hojas de estilo: reglas que le dicen al navegador cómo pintar.
+- JS = JavaScript. NO tiene relación con Java (confusión histórica famosa: se llamó así por marketing en los 90). Es el único de los tres que programa: lógica, condiciones, repeticiones.
+Dato importante: el navegador es quien ejecuta Y pinta las tres capas juntas. "Ver la página" = el navegador tomó el HTML, aplicó el CSS y ejecutó el JS.</div>
 </section>
 
 <section class="slide">
-  <h2>El viaje de una petición</h2>
-  <ol>
-    <li>DNS traduce el nombre a una IP.</li>
-    <li>Navegador pide el HTML (GET).</li>
-    <li>Servidor responde el documento.</li>
-    <li>El HTML revela CSS, fuentes e imágenes: se piden también.</li>
-    <li>El navegador construye y pinta.</li>
-  </ol>
-  <div class="analogy"><b>Restaurante:</b> preguntar dirección (DNS), pedir el plato principal (HTML) y recibir acompañantes (CSS, imágenes) hasta servirse todo junto.</div>
+  <p class="kicker">La capa estructura</p>
+  <h2>HTML: hoy en el navegador, <b>abrimos la caja</b></h2>
+  <pre><span class="k">&lt;header&gt;</span>
+  <span class="k">&lt;nav&gt;</span> ... enlaces ... <span class="k">&lt;/nav&gt;</span>
+<span class="k">&lt;/header&gt;</span>
+<span class="k">&lt;main&gt;</span>
+  <span class="k">&lt;h1&gt;</span>Grupo GNU/Linux de la Distrital<span class="k">&lt;/h1&gt;</span>
+  <span class="k">&lt;p&gt;</span>Promovemos el software libre...<span class="k">&lt;/p&gt;</span>
+<span class="k">&lt;/main&gt;</span></pre>
+  <p>Las etiquetas no solo «envuelven» texto: <b>definen su significado</b>. Ese significado es lo que usan el navegador, los buscadores y los lectores de pantalla.</p>
+  <div class="speaker">Acción EN VIVO (pedazo clave de la clase): abrir glud.org, clic derecho, "Ver código fuente" / "Inspeccionar". Señalar que lo que ven es texto plano con etiquetas.
+Enseñar a leer 3 etiquetas de verdad: &lt;h1&gt; (encabezado principal, solo uno por página), &lt;p&gt; (párrafo), &lt;a&gt; (enlace animado el cursor). Y &lt;header&gt;,&lt;main&gt;,&lt;footer&gt; = regiones estructurales.
+Mensaje base: HTML NO es "código para decorar". Es "código para significar". Esta distinción es la puerta de entrada a la accesibilidad del curso: si la etiqueta dice qué significa, una persona ciega con lector de pantalla recibe la misma información que alguien viendo. En S2 y S11 esto vuelve.</div>
 </section>
 
 <section class="slide">
-  <h2>Estático vs dinámico</h2>
-  <table>
-    <tr><th></th><th>SSG (buffet)</th><th>SSR (a la carta)</th></tr>
-    <tr><td>Cuándo se cocina</td><td>Antes, una vez por publicación</td><td>En cada pedido</td></tr>
-    <tr><td>Velocidad</td><td>Instantánea</td><td>Depende del cocinero</td></tr>
-    <tr><td>Costo / riesgo</td><td>Bajo / bajo</td><td>Alto / superficie de ataque</td></tr>
-  </table>
-  <p style="margin-top:1.2rem"><b>glud.org es estático:</b> su contenido cambia poco y no hay datos vivos por usuario.</p>
+  <p class="kicker">La capa presentación</p>
+  <h2>CSS: las reglas para pintar</h2>
+  <p>Cada regla tiene un <b>selector</b> (a quién le aplico) y unas <b>propiedades</b> (qué le digo que sea).</p>
+  <pre><span class="k">h1</span> {
+  color: cyan;
+  font-size: 3rem;
+  text-shadow: 0 0 20px cyan;
+}
+<span class="k">.btn</span> {
+  background: cyan;
+  border-radius: 8px;
+  padding: 12px 24px;
+}</pre>
+  <p>Mismo HTML, dos CSS distintos: el <b>contenido es igual</b>, la <b>experiencia cambia</b>. Hacemos la prueba en vivo con un archivo.</p>
+  <div class="analogy"><b>Comida:</b> CSS es el emplatado y la presentación del plato. Los ingredientes (HTML) son los mismos; el emplatado decide si al comensal le dan ganas de comer o no.</div>
+  <div class="speaker">Demo con los 2 archivos del repo: material/ejemplos/hero-malo.html y hero-bueno.html. Abrirlos uno al lado del otro.
+Mostrar que el CONTENIDO es casi idéntico (misma información, misma marca) pero el CSS cambia todo: contraste, jerarquía, espaciado, legibilidad.
+Leer juntos una regla del hero-bueno (ej: .btn-primary) y una del hero-malo (ej: h1 o la fuente Comic Sans) para que sin saber CSS ya sepan LEERLO: "esto le dice a tal elemento que sea así".
+Aviso: esto es el adelanto de S2 (diseño) y S9 (Tailwind). Hoy solo queremos que entiendan el mecanismo selector + propiedades.</div>
 </section>
 
 <section class="slide">
-  <h2>El repositorio como fuente de verdad</h2>
+  <p class="kicker">La capa comportamiento</p>
+  <h2>JavaScript: la única capa que <b>programa</b></h2>
   <ul>
-    <li><code>feat/*</code> tu mundo local: experimenta sin miedo</li>
-    <li><code>dev</code> integración revisada: los mundos se combinan</li>
-    <li><code>main</code> producción: lo que ve el mundo en glud.org</li>
+    <li>Se escribe dentro de <code>&lt;script&gt;</code> o en archivos <code>.js</code>.</li>
+    <li>Lo ejecuta el <b>navegador del visitante</b>, en su propia máquina.</li>
+    <li>Manipula las otras dos capas: cambia textos, estilos, apariencia de elementos.</li>
   </ul>
-  <div class="analogy">Merge Request = alguien revisó que no dejaras cráteres antes de subir tu mundo al servidor del grupo.</div>
+  <p style="margin-top:1rem"><b>Ejemplo real en glud.org:</b> el botón "copiar correo" y el panel móvil que se desliza corren por JavaScript. El resto de la home... no usa JS.</p>
+  <div class="speaker">Concepto clave para sembrar hoy y cosechar en S10: el JS corre del lado del CLIENTE (la máquina del visitante), NO en el servidor. Eso tiene costo: el visitante debe descargar y ejecutar ese código; por eso "poco JS" = "página más rápida de cargar".
+Dato medible de glud.org: su página principal solo carga ~8 KB de JS propio. Para contexto: una foto típica de WhatsApp pesa más. La decisión "usar poco JS" es deliberada y la retomamos en S7 (Astro justamente existe para eso).
+Si alguien pregunta "¿entonces con qué se hace la página dinámica si no hay JS?" — no: ahí está el matiz. Hay JS en el navegador (que vimos) y hay programas en el servidor que GENERAN el HTML (SSR/SSG, lo vemos en esta misma sesión, slides 10-13). Cosas distintas.</div>
 </section>
 
 <section class="slide">
-  <h2>Herramientas del taller</h2>
+  <p class="kicker">El viaje empieza</p>
+  <h2>Antes del viaje: las siglas de la carretera</h2>
   <table>
-    <tr><th>Herramienta</th><th>Sirve para</th></tr>
-    <tr><td>Git</td><td>Historial de cambios</td></tr>
-    <tr><td>Node.js</td><td>JS fuera del navegador (la cocina)</td></tr>
-    <tr><td>pnpm</td><td>Dependencias (el inventario)</td></tr>
-    <tr><td>VS Code</td><td>Tu mesa de crafteo</td></tr>
-    <tr><td>Astro</td><td>Fábrica del sitio estático</td></tr>
+    <tr><th>Sigla</th><th>Significado</th><th>Papel en el viaje</th><th>Analogía</th></tr>
+    <tr><td><b>URL</b></td><td>Uniform Resource Locator</td><td>La dirección completa que escribes</td><td>La dirección postal completa</td></tr>
+    <tr><td><b>DNS</b></td><td>Domain Name System</td><td>Traduce el nombre a un número</td><td>La guía telefónica / el portero</td></tr>
+    <tr><td><b>IP</b></td><td>Internet Protocol</td><td>El número identificador de cada máquina</td><td>Las coordenadas de cada casa</td></tr>
+    <tr><td><b>HTTP(S)</b></td><td>HyperText Transfer Protocol (Seguro)</td><td>El idioma del pedido entre máquinas</td><td>El protocolo de la petición</td></tr>
   </table>
+  <div class="speaker">Ir despacio aquí: estas 4 siglas confunden a todo el mundo y explican el 90% de los "no me carga el sitio" que verás en la vida.
+- URL es lo que TÚ escribes: https://glud.org/. Tiene partes: protocolo (https://), dominio (glud.org). No hace falta más por hoy.
+- DNS: los humanos recordamos nombres, las máquinas números. El DNS es ese directorio gigante y distribuido que dice "glud.org = 75.2.96.93". Metáfora fuerte: en la ciudad real no dices "vive en lat 4.65, lon -74.03", dices "Calle 40 con Cra 7"; DNS hace esa traducción por ti.
+- IP: el número único que identifica una máquina en la red. V4 (cuatros grupos: 192.168.x.x) vs V6 (hexadecimal, más largo) — mencionar de pasada que IPv6 existe porque los números V4 se agotaron.
+- HTTP: el "idioma" del pedido. GET = "dame eso". HTTPS = el mismo idioma pero por un canal cifrado (la "S" de Secure). Regla práctica: HTTPS es obligatorio hoy, no opcional.
+Mini-ejercicio en vivo: pedirle al grupo que escriba el URL actual del navegador y nombrar sus partes.</div>
 </section>
 
 <section class="slide">
+  <p class="kicker">El viaje completo</p>
+  <h2>Paso a paso: tu Enter → la página pintada</h2>
+  <ol>
+    <li>Escribes la <b>URL</b> de la página.</li>
+    <li>El navegador consulta al <b>DNS</b> para obtener la <b>IP</b> del servidor.</li>
+    <li>El navegador envía una petición <b>HTTP GET</b> "dame la página /".</li>
+    <li>El servidor <b>responde el HTML</b> (más o menos tiempo según cómo esté hecho: lo vemos en las próximas slides).</li>
+    <li>El HTML revela que también se necesitan <b>CSS, fuentes e imágenes</b>: se piden por separado.</li>
+    <li>El navegador construye la página (árbol de elementos), le aplica estilos y pinta.</li>
+    <li>Si hay JS, se descarga, se ejecuta y puede modificar lo pintado.</li>
+  </ol>
+  <div class="analogy"><b>En una ciudad:</b> vas a comer a "La Casa del Parche" (URL). Le preguntas al portero (DNS) dónde queda. Caminas (IP). Al llegar, pides el almuerzo ejecutivo: "el plato principal" (HTML). Él te avisa que el almuerzo trae sopa, bebida y postre incluidos (CSS, imágenes, fuentes). Hasta que llega todo, la mesa no se sirve completa.</div>
+  <div class="speaker">Recorrer los 7 pasos con UNA sola frase-resumen que se puedan llevar: "El navegador traduce el nombre, pide el HTML, y el HTML va jalando todo lo demás hasta pintarse."
+Detalle técnico de nivel: los pasos 5-7 se llaman "renderizado" y hay etapas específicas (parsing, CSSOM, paint) que solo mencionamos de nombre. En S11 (Lighthouse/performance) vamos a ahí con números.
+Hacer en clase la demostración con DevTools abierto: pestaña Network, recargar, y señalar en vivo cómo se ven las peticiones: el documento HTML primero, luego CSS/fuentes/imágenes, y el barrido del waterfall. Pedir que identifiquen qué recurso es de qué tipo. Este es el momento "¡ajá!" del día.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Percepción de velocidad</p>
+  <h2>No todo tarda igual: <b>el agua se va llenando</b></h2>
+  <ul>
+    <li>Primero llega el <b>HTML</b> → el navegador ya puede dibujar algo blanco o básico.</li>
+    <li>Luego <b>CSS</b> → apariencia aplicada.</li>
+    <li>Luego <b>imágenes y fuentes</b> → el último salto de calidad.</li>
+    <li>El <b>JS</b> puede retrasar todo si bloquea el render.</li>
+  </ul>
+  <p style="margin-top:1rem">Por eso importa <b>cuánto pesa cada recurso y en qué orden se pide</b>: es más frecuente ver "la página con los estilos saltando" que una pantalla en negro.</p>
+  <div class="speaker">Concepto a dejar sembrado ("toda la web se trata de eso"): la velocidad PERCIBIDA depende del orden y del peso de los recursos, no solo del hardware.
+La imagen que deben llevarse: "el HTML llega, y la página se viste por partes".
+En clase: con Network abierto y el throttling o navegando con red lenta (o simplemente la pestaña en modo reload lento), mostrar cómo la página aparece primero sin estilos y "salta" cuando llega el CSS. Explicar de pasada el término técnico FOUC (flash of unstyled content) por si alguien lo ve en redes, sin entrar en detalles.
+Marco mental: esto es la antesala de las métricas de rendimiento (LCP, FCP) de S11. No profundizar hoy, solo plantar la semilla.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">La industria de hoy</p>
+  <h2>Para entender la web actual, hay que ver <b>cómo evolucionó</b></h2>
+  <div class="timeline">
+    <div class="era"><b>Años 90</b><br>Sitios estáticos simples<br>HTML en archivos<br>Actualizar = editar a mano</div>
+    <div class="era warn"><b>Años 2000</b><br>Páginas dinámicas (PHP, CMS)<br>HTML se arma al momento<br>Actualizar = tocar base de datos</div>
+    <div class="era warn"><b>Años 2010</b><br>SPA (React, Angular)<br>JS pinta todo en el navegador<br>Actualizar = muchas librerías</div>
+    <div class="era good"><b>Hoy</b><br>Híbridos: SSG + SSR + CDN<br>Elegir según el caso<br>Actualizar = publicar y olvidar</div>
+  </div>
+  <p style="margin-top:1rem">Cada era <b>resolvió algo</b>: la primera fue manual, la segunda automatizó el contenido, la tercera hizo apps con interfaces complejas, y hoy volvemos a lo simple... pero a lo simple <b>bien hecho</b>.</p>
+  <div class="speaker">Esta es la slide más importante del día a nivel conceptual. Recorrerla como una historia, no como un listado:
+1. Años 90: HTML estático a mano. Actualizar una fecha = abrir el archivo, editar, volver a subir. Era un infierno para contenidos grandes → nace el problema "¿cómo hago una web con MUCHO contenido que cambie a menudo?".
+2. Años 2000: PHP + CMS (WordPress, Joomla). La página ya no era un archivo: un PROGRAMA en el servidor generaba el HTML consultando una base de datos. Cada visitante recibía HTML cocinado al momento. Resolvió el contenido dinámico. Costo: cada visita = un pedido generado = más lento y más costo de servidor.
+3. Años 2010: SPA (React/Angular). Ya no se mandaba HTML generado: se mandaba un HTML mínimo + un mega-archivo de JS, y el JS construía TODO en el navegador. Perfecto para aplicaciones tipo dashboards… pero pesadísimo para una landing: descarga todo, lo ejecuta, y recién ahí el visitante ve algo. Dejó un legado de sitios lentísimos.
+4. Hoy: madurez. Nace la idea de "¿y si pre-cocino el HTML como en los 90 (rápido) pero con herramientas modernas?" = SSG. Y "¿y si lo cocino al momento solo cuando haga falta?" = SSR. Y "¿y si reparto los archivos por todo el mundo cerca del usuario?" = CDN. Los frameworks modernos (Astro, Next.js, SvelteKit) permiten mezclar. Moraleja a subrayar: la web de hoy no es "la más nueva tecnología", es "la que elige la herramienta correcta para el caso". Eso conecta directo con la filosofía del curso (criterio primero, no moda).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Las dos cocinas de hoy</p>
+  <h2>SSG vs SSR: las siglas que importan</h2>
+  <table>
+    <tr><th></th><th><b>SSG</b><br>Static Site Generation</th><th><b>SSR</b><br>Server-Side Rendering</th></tr>
+    <tr><td>Cómo se cocina</td><td>El HTML se arma <b>antes</b>, al publicar</td><td>El HTML se arma <b>al momento</b>, en cada visita</td></tr>
+    <tr><td>Rapidez para el visitante</td><td>Instantánea: solo se entrega archivos</td><td>Depende del servidor y la DB</td></tr>
+    <tr><td>Costo del servidor</td><td>Mínimo: una vez por publicación</td><td>Permanente</td></tr>
+    <tr><td>Riesgo / superficie de ataque</td><td>Bajo</td><td>Alto (código vivo, DB, sesiones)</td></tr>
+    <tr><td>Cuándo usar</td><td>Contenido que cambia poco: marketing, docs, blogs</td><td>Contenido vivo por usuario: apps, paneles, carrito</td></tr>
+  </table>
+  <div class="analogy"><b>Comida:</b> SSG = buffet preparado antes; SSR = cocina a la carta, cada plato a pedido.</div>
+  <div class="speaker">Expandir las SIGLAS con calma:
+- SSG = Static Site Generation: "generación de sitio estático". La palabra mágica: generar. El HTML no se escribe a mano (como los 90): lo genera una herramienta (en nuestro caso Astro) en el momento de publicar. Resultado: archivos listos.
+- SSR = Server-Side Rendering: "renderizado en el lado del servidor". El servidor corre un programa que produce el HTML por cada petición.
+- Comparación en la analogía del restaurante: SSG es un buffet preparado a las 6:00, cuando llegas a las 13:00 te sirven al instante, y si la receta cambia, se recocina toda la bandeja en el próximo "deploy". SSR es cocinar tu plato al momento: más fresco y personalizable, pero tardas más y necesitas al cocinero (servidor) activo siempre.
+- Terminología que aparecerá salvaje en internet y conviene nombrar: ISR (Incremental Static Regeneration — refrescar páginas estáticas de a poco, de Next.js) y "edge". Basta con nombralas: si suena, ya se sabe qué preguntar en S7.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">La decisión correcta</p>
+  <h2>No es «estático bueno / dinámico malo»: <b>es el caso de uso</b></h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Levanta la mano para ESTÁTICO (SSG)</h4>
+      <ul style="font-size:.95em">
+        <li>El contenido cambia poco (noticias, agenda, docs)</li>
+        <li>Lo visitan muchos sin loguearse</li>
+        <li>Importa que cargue al instante</li>
+        <li>No hay datos personales que proteger</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Levanta la mano para DINÁMICO (SSR)</h4>
+      <ul style="font-size:.95em">
+        <li>El contenido es distinto para cada usuario</li>
+        <li>Hay sesiones, carrito, chat, login</li>
+        <li>Se consulta una base de datos en cada visita</li>
+        <li>Requiere personalización en tiempo real</li>
+      </ul>
+    </div>
+  </div>
+  <p style="margin-top:1rem">Ejercicio con el grupo: decir sitios conocidos y pedir que los clasifiquen. (Correo electrónico → SSR. Página de un restaurante estático — SSG. Instagram — SSR/SPA.)</p>
+  <div class="speaker">Ritmo de clase: leer las dos columnas y preguntar "¿glud.org, estático o dinámico? ¿Y Otro sitio que conozcan?" Dejar que discutan antes de revelar.
+Botón de datos duros: hoy muchas páginas de "marketing" de empresas son SSG justamente porque pesan menos, cargan más rápido y rankean mejor en buscadores. Y los frameworks modernos permiten "SSG por página": una web puede tener el 90% estático y 10% dinámico. Eso se llama arquitectura híbrida (Astro lo permite; lo vemos en S7).
+Mensaje a insistir: "estático vs dinámico" NO es una disputa de tecnologías, es una decisión de PRODUCTO: primero el usuario y el contenido, después la herramienta. Esta es la primera vez en el curso que practican "criterio antes que tecnología" y va a volver en TODAS las sesiones.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El caso real</p>
+  <h2>glud.org: estático, y <b>por decisión</b></h2>
+  <table>
+    <tr><th>Pregunta de producto</th><th>Respuesta de glud.org</th><th>Consecuencia</th></tr>
+    <tr><td>¿Cuánto cambia el contenido?</td><td>Poco: agenda, cursos, integrantes</td><td>No necesita servidor vivo</td></tr>
+    <tr><td>¿Hay datos por usuario?</td><td>No: mismo sitio para todos</td><td>No necesita base de datos</td></tr>
+    <tr><td>¿Qué importa del visitante?</td><td>Que cargue rápido, en cualquier teléfono</td><td>HTML pre-cocido = carga al instante</td></tr>
+    <tr><td>¿Quién mantiene el código?</td><td>Estudiantes del grupo, con poca infra</td><td>Publicar y olvidar en Netlify</td></tr>
+  </table>
+  <div class="industry"><b>La industria de hoy:</b> Netlify o Vercel toman los archivos estáticos generados, los reparten por servidores de todo el mundo (CDN) y el visitante descarga desde el más cercano. "Estático" no significa "simple": significa "pre-cocido y servido por una red mundial".</div>
+  <div class="speaker">Conectar las 4 preguntas de la tabla con la decisión técnica. El punto pedagógico: escribir el razonamiento ANTES de la tecnología. La tabla es literalmente el proceso mental de quien diseñó el sitio.
+CDN = Content Delivery Network: red de servidores distribuidos que guardan copias de los archivos. El visitante de Bogotá descarga el archivo de un server en Bogotá, no en Estados Unidos. Resultado: web rápida en todo el planeta, sin tener un solo servidor propio.
+Dato de contexto para cuando pregunten "¿y Netlify qué paga?" — los planes gratuitos existen porque la CDN de archivos estáticos cuesta poco (son solo archivos); cuesta caro servirlos como dinámicos. Otra vez: la elección estática tiene consecuencias económicas reales.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Desde el código</p>
+  <h2>El repositorio como <b>fuente de verdad</b></h2>
+  <p>Todo lo que ves en el sitio vive en GitLab, como texto con historia:</p>
+  <pre><span class="k">main</span>        rama de producción  → lo que ve el mundo en glud.org
+<span class="k">dev</span>         rama de integración → los cambios aprobados se prueban juntos
+<span class="k">feat/*</span>      rama personal      → cada quien trabaja su cambio aquí</pre>
+  <p>El flujo, tal y como lo usaremos todo el curso:</p>
+  <ol>
+    <li>Trabajas en tu rama <code>feat/</code>.</li>
+    <li>Propones su inclusión con un <b>Merge Request</b> hacia <code>dev</code>.</li>
+    <li>Otra persona revisa el código y aprueba.</li>
+    <li><code>dev</code> se integra a <code>main</code> cuando el conjunto está estable.</li>
+    <li>Al llegar a <code>main</code>, Netlify re-cocina el sitio y lo publica: <b>deploy automático</b>.</li>
+  </ol>
+  <div class="speaker">Concepto sorpresa a explicar: el sitio se arma en un computador ajeno (el pipeline de CI), no en tu PC. Cuando el pipeline termina, la web se actualiza sola. Por eso nadie con una web en producción hace "subir archivos a mano" (era de los 90).
+Aquí el grupo ya usa GitHub o GitLab; si no, el README de git_course del grupo tiene el material del curso Git 101 para nivelar (enlace en el índice del curso).
+No profundizar en comandos git — HAY sesión dedicada (más adelante se decide si afuera en curso complementario o dentro del curso; en este programa básico, se enseña lo mínimo para no bloquearse y el flujo completo se practica en S13). Lo que hay que transmitir: el flujo mental de "rama personal → revisión → una sola rama estable".
+De paso sembrar la cultura GLUD: nunca se commit directo a main. Es la práctica de producción real del grupo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tu caja de herramientas</p>
+  <h2>Lo que vas a instalar hoy (y por qué)</h2>
+  <table>
+    <tr><th>Herramienta</th><th>Qué es</th><th>Para qué la necesitamos</th></tr>
+    <tr><td><b>Git</b></td><td>Control de versiones</td><td>Registrar cada cambio y volver atrás (el historial del juego)</td></tr>
+    <tr><td><b>Node.js</b></td><td>Motror de JS fuera del navegador</td><td>Para que las herramientas modernas (Astro, etc.) puedan ejecutarse</td></tr>
+    <tr><td><b>pnpm</b></td><td>Gestor de dependencias</td><td>Descarga y ordena las librerías del proyecto (el inventario)</td></tr>
+    <tr><td><b>VS Code</b></td><td>Editor de código</td><td>Tu mesa de crafteo</td></tr>
+    <tr><td><b>Astro</b></td><td>Framework del sitio</td><td>La fábrica que genera el HTML del SSG</td></tr>
+  </table>
+  <p style="margin-top:1rem">Nota: Node no es una "librería de más" — es el piso sobre el que corre todo el mundo de herramientas modernas. Si mañana quieres usar Vite, Next o Svelte: el piso es el mismo Node.</p>
+  <div class="speaker">Orden de instalación (que ya está en el material de la sesión como guía paso a paso):
+1. Git (opción de terminal/consola). Verificar con git --version.
+2. Node.js 20+ (LTS). Verificar node -v y npm -v.
+3. pnpm: se habilita con corepack enable pnpm (o pnpm habilitado por corepack). No instalarlo "aparte" con npm.
+4. VS Code.
+Decir el MOTIVO de cada cosa SIN leernos: si se apagan las luces y no entienden qué es node_modules, pnpm o por qué hay un package.json... que pregunten, que es la S6 (pnpm) la que lo desglosa a fondo. Hoy solo instalación.
+Los "motivos de AHORA": porque con solo estos 4 abrimos el sitio de glud.org en un computador propio, y eso es el primer logro del semestre.
+Si alguien ya tiene versiones raras (node 16, etc.), resolver la instalación limpia en el momento — no dejar gente "a medias", es un punto roto de confianza para la próxima sesión.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Manos a la obra</p>
   <h2>Reto de la sesión</h2>
   <ol>
-    <li><b>Nivel base:</b> clona el sitio, <code>corepack pnpm install</code>, <code>corepack pnpm dev</code>, levántalo local. Trae 3 dudas escritas.</li>
-    <li><b>Nivel reto:</b> en DevTools &gt; Network: número de peticiones, peso total y recurso dominante. Además: enumera las carpetas de <code>src/</code> con una hipótesis cada una.</li>
+    <li><b>Nivel base:</b> clona el sitio, instala dependencias, levántalo en tu computador con <code>corepack pnpm dev</code> y déjalo funcionando.</li>
+    <li><b>Nivel base:</b> escribe <b>3 dudas</b> que te queden explorando el código. Tráelas la próxima sesión.</li>
+    <li><b>Nivel reto:</b> DevTools &gt; Network: responde con números — cuántas peticiones hace la carga completa, cuántos KB pesa y qué recurso domina el peso.</li>
+    <li><b>Nivel reto:</b> enumera las carpetas de <code>src/</code> con una hipótesis de qué contiene cada una.</li>
   </ol>
+  <div class="speaker">Cierre de la sesión. Con tiempos:
+- 25-30 min para el reto (el push de git al inicio y la instalación suelen comerse minutos; apoyar bien a quien se atasque).
+- Reto reto (network / src) es para quien termine antes, NUNCA a la carrera.
+Pregunta a lanzar al cerrar, para conectar con la próxima clase: "Mañana relacionamos todo esto con las personas reales que van a usar el sitio. De este segundo que pasó entre Enter y la página pintada: ¿hay algún punto en que el humano se para a decidir?" (respuesta en S1... hasta llegar ahí!)
+Cierre emocional: cada quien va a tener en su PC una copia de producción corriendo. Eso ya es más de lo que puede decir la mayoría de estudiantes después de 2 horas.</div>
 </section>
 
 <section class="slide">
-  <h2>Volvamos a la pregunta inicial</h2>
-  <p>¿Cuántas cosas pasaban entre Enter y la página pintada?</p>
-  <p style="margin-top:1rem">Si ahora puedes contarlas: bienvenido al semestre.</p>
-  <div class="analogy"><b>Próxima sesión:</b> S1 — cómo piensa un usuario cuando usa tu sitio. Sin código, con navegador abierto.</div>
+  <p class="kicker">Cierre</p>
+  <h2>Volvamos a la pregunta del inicio</h2>
+  <p>¿Cuántas cosas creías que pasaban entre tu Enter y la página pintada? ¿Cuántas hay ahora?</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>el navegador traduce el nombre, pide el HTML, y el HTML va jalando el resto… hasta pintarse completa.</b></p>
+  <p style="margin-top:1rem">Y la decisión que gobierna la web moderna: <b>armar la página antes (SSG) o al momento (SSR) — según el caso de uso, no según la moda.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S1 — cómo piensa un usuario cuando usa tu sitio: donde la tecnología se pone al servicio de personas reales.</div>
+  <div class="speaker">Recapitulación MANUAL de 3-4 ideas sueltas a pizarrón y cierre. Lanzar la pregunta del inicio (cuántas cosas pasaban) y contrastar: si el grupo ahora puede contar los pasos del viaje, objetivo cumplido.
+Dejar claro qué se evalúa la próxima sesión: NO se evalúa teoría, se evalúa que el sitio les funcione local (checklist del reto) y que tengan las 3 dudas escritas.
+Novato-friendly: si alguien quedó atascado sin poder levantar el sitio, ofrecer auto-brindis después de clase para repasar, no dejar que se vaya frustrado: es la sesión 0 y el resto del curso se sube sobre esto.</div>
 </section>
 
+<div class="speaker" id="bottom"></div>
+
 <div class="footer">
-  <span>Frontend 101 · GLUD</span>
+  <span>Frontend 101 · GLUD · S0 Contexto</span>
   <span id="counter"></span>
-  <span>Flechas o clic para navegar</span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
 </div>
 
 <script>
   const slides = document.querySelectorAll(".slide");
-  let i = 0;
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle("active", k === i));
-    document.getElementById("bar").style.width = ((i + 1) / slides.length * 100) + "%";
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
     document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
   }
   document.addEventListener("keydown", e => {
-    if (e.key === "ArrowRight" || e.key === " ") show(i + 1);
-    if (e.key === "ArrowLeft") show(i - 1);
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
   });
   document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
   show(0);
