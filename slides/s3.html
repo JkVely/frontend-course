@@ -47,6 +47,9 @@
   .good { color: var(--green); }
   .bad { color: var(--red); }
   .state { display: inline-block; background: var(--surface); border: 1px solid var(--surface2); border-radius: 6px; padding: .15em .5em; font-size: .95em; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
   .speaker {
     display: none;
     position: fixed;
@@ -202,6 +205,22 @@ Cierre lección para el reto: en su wireframe de noticias habrá un CTA primario
 </section>
 
 <section class="slide">
+  <p class="kicker">Hero · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (4 min):</b>
+    <ol>
+      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a> y mira el hero <b>sin hacer scroll</b>.</li>
+      <li>En una frase, responde: ¿qué ofrece, para quién es, y qué hacés que pase si haces click?</li>
+      <li>Compatila por chat con el grupo: <em>"el hero de glud.org funciona porque ___"</em>.</li>
+      <li>Si algo del hero te confunde (¿por qué hay un botón grande adelante?), dilo — vamos a medirlo en la próxima slide.</li>
+    </ol>
+  </div>
+  <p style="margin-top:1rem">La regla: todos dejemos la ventana igual. Hero sin scroll: es lo que ustedes acaban de medir. Si el hero no vende ahí, el sitio ya está perdido sin saberlo.</p>
+  <div class="speaker">Dinámica virtual-friendly: pedir solo una frase corta por persona, escrito en el chat de la clase (Teams/Google/Donde sea). Con solo 2 estudiantes la conversación fluye sin muro.
+La idea es conectar con lo que Imaginaron sobre el wireframe: el hero tiene 3 elementos medibles (propuesta de valor, verbo de acción, foco único). El punto del ejercicio es que digan si glud.org cumple o no cada uno.</div>
+</section>
+
+<section class="slide">
   <p class="kicker">Navegación</p>
   <h2>Barra completa vs hamburguesa: <b>argumentos, no moda</b></h2>
   <table>
@@ -216,6 +235,22 @@ Más importante que la regla: la palabra "hamburguesa" describe el ICONO (tres r
 Pregunta de activación para el grupo: "¿cuándo fue la última vez que colapsaste un menú y todos los enlaces desaparecieron sin modo de saber dónde está la pizarra?" — respuesta esperada: TODOS. Esa es la fricción que la tabla cuantifica.
 Diferencia entre poner y ESCONDER: la hamburguesa es mala cuando esconde cosas importantes (contacto, eventos); buena cuando guarda opciones secundarias (la newsletter, el mapa del sitio).
 Cierre técnico: la regla de "desktop barra completa" es también de PERFORMANCE (no se carga un menú oculto extra) — se podrá cuantificar en S7/S11.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Navegación · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a> en DevTools, alterna entre <b>vista móvil</b> (teléfono) y <b>vista desktop</b> con el botón de esquina superior izquierdo.</li>
+      <li>Cuenta: ¿cuántas veces haces scroll en móvil vs desktop para llegar al footer? ¿El menú se cambia de forma o solo se desaparece?</li>
+      <li>En mobile: abre el panel de menú, prueba si el cierre es fácil de encontrar.</li>
+      <li>Comenta en el chat una frase: "la diferencia que noté fue/más importante fue..."</li>
+    </ol>
+  </div>
+  <p style="margin-top:1rem">La hamburguesa es policy, no decoration. El goal vs desktop: cada frame tiene sus quirks y debes pues resolverlos todos.</p>
+  <div class="speaker">La idea es que vivan el patrón por mulatorio: DevTools permite cambiar al formato de teléfono sin comprar smartphone. Mientras lo haga, double proyecto (count scroll, button tests) para que haya contrato entre las dos vistas: una bien formada, otra que le ahorre búsqueda o lean el hero ya destacada.
+Prepreguntar: "¿Cuál fue tu primer clic visible en la home? ¿Lo viste en la primera pantalla o lo buscaste?".</div>
 </section>
 
 <section class="slide">
@@ -269,6 +304,22 @@ Explicar QUÉ es :focus-visible en romano: cuando navegas con TAB (teclado), el 
 El dato que demuestra que NO es ciencia ficción: hay personas que NO usan mouse (movilidad reducida, programadores, productividad). Diseñar sin focus = diseñar para una sola población.
 Relacionar con S1: esto ES la pregunta "¿DÓNDE estoy?" (orientación del teclado) — el foco visible es la pizarra que anuncia dónde estás parado. El curso retoma esto en Lighthouse (S11, donde a11y saldrá automáticamente).
 Mensaje épico para el reto: "ustedes van a hacer un wireframe que debería aprender de este error: definan focus desde el primer día."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Estados · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a>.</li>
+      <li>Sin usar el mouse: presiona <b>Tab</b> una y otra vez hasta llegar al primer enlace del menú (o logo).</li>
+      <li>Cuenta: ¿cuántas veces haces Tab? ¿Ves el contorno de enfoque o se pierde?</li>
+      <li>Ahora haz lo mismo en otra página cualquiera (la página de la universidad, un blog grande, lo que sea) y comparar: ¿cuánto tiempo se queda perdido vs orientado?</li>
+    </ol>
+  </div>
+  <p style="margin-top:1rem">El contorno del teclado no es detalle: es <b>la manera en que un usuario sin mouse navega tu sitio</b>.</p>
+  <div class="speaker">Consejo docente: verificar que TODOS hagan Tab por primera vez y regular exactamente dónde están. La resistencia a usar teclado es normal — comprobar que están usando el contorno visible para verificar en DevTools si está frialdad (en ambience.darkest) en Ámbito en MORADA (distinguye perfectamente el focus plateado de otros colores de fondo).
+Este ejercicio duplica el costo pero la retribución futura es: futuro estudiante no va a decirle a la clase ( de estadística y uso respuesta del pueblo), '¿por qué el foco era tan pequeño=' president en <b>2 de trial de real consumers.</b></div>
 </section>
 
 <section class="slide">

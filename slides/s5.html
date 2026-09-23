@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S5 — TypeScript: tipos que hablan antes de que rompa</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.72rem, 1.2vw, .92rem); line-height: 1.5; overflow-x: auto; color: var(--muted); max-width: 78ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .good { color: var(--green); }
+  .bad { color: var(--red); }
+  .state { display: inline-block; background: var(--surface); border: 1px solid var(--surface2); border-radius: 6px; padding: .15em .5em; font-size: .95em; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 2 · TypeScript desde DevTools · Sesión 5</p>
+  <h1>S5 — TypeScript: <b>tipos que hablan antes de que rompa</b></h1>
+  <p>Abre la Consola en glud.org y escribe: <code>const edad = "veintiuno"; console.log(edad + 5)</code>. En JavaScript el resultado es <code>"veintiun005"</code>. ¿Te gustaría que el navegador te avise *antes* de ejecutar que estás sumando texto con número? TypeScript es el guardián que lo hace.</p>
+  <div class="speaker">PREGUNTA GUÍA: mostrar el poder de TypeScript para detectar errores antes de la ejecución. Pedir a un voluntario que ejecute el ejemplo en la consola y observe el resultado inesperado. Luego explicar que TypeScript añade una capa de verificación estática que captura esos errores en tiempo de compilación, evitando que lleguen al usuario. Esto establece el tono de la sesión: trabajar con contratos que nos avisan temprano.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar por qué JavaScript es <b>dinámicamente tipado</b> y qué costo tiene.</li>
+    <li>Instalar y configurar TypeScript en un proyecto Astro/HTML.</li>
+    <li>Declarar variables con tipos (<code>number</code>, <code>string</code>, <code>boolean</code>, <code>array</code>, <code>objeto</code>, <code>any</code>).</li>
+    <li>Usar <b>interfaces</b> para describir formas de datos.</li>
+    <li>Comprender <code>union types</code>, <code>literal types</code> y <code>null/undefined</code>.</li>
+    <li>Leer errores de compilación y usarlos para corregir código antes de ejecutar.</li>
+    <li>Conectar lo aprendido con el caso real: cómo TypeScript protege los datos del formulario de SLUD y la lógica de eventos.</li>
+  </ol>
+  <p style="margin-top:1rem"><b>TypeScript es JavaScript, pero con contratos.</b> No cambia cómo corre el navegador, cambia <i>cuándo</i> te enteras de los errores.</p>
+  <div class="speaker">Recorrer cada objetivo, conectando con los bloques de contenido que siguen. Resaltar que la tipificación estática cambia el flujo de trabajo: escribimos, compilamos, corregimos y luego ejecutamos. Enfatizar la ventaja de detectar errores en el editor antes de que el usuario los vea en la página.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El problema: JavaScript no avisa hasta que corre</p>
+  <h2>Tipado dinámico y su costo</h2>
+  <pre>let edad = 21
+edad = "veintiuno"   // válido en JS
+console.log(edad + 5) // → "veintiuno5"</pre>
+  <p>En JS los tipos se deciden en tiempo de ejecución. Eso permite rapidez, pero también errores silenciosos.</p>
+  <p>El error aparece cuando el usuario usa la página. TypeScript mueve la verificación a <b>tiempo de compilación</b>: antes de subir nada, el compilador revisa contratos.</p>
+  <div class="analogy"><b>Paralelo Minecraft:</b> JS es como construir con redstone a prueba y error; TS es como tener el circuito dibujado en papel, revisado, y luego montarlo. Si el papel está mal, no llega a la partida.</div>
+  <div class="speaker">Explicar que el tipado dinámico permite flexibilidad pero a costa de seguridad. Mostrar ejemplos comunes de errores que solo aparecen en runtime (sumar string y número, acceder a propiedad inexistente, etc.). Destacar que TypeScript no elimina JavaScript, sino que agrega una capa de revisión estática. Usar la analogía de Minecraft para ilustrar la diferencia entre improvisar y planificar con antelación.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Instalar y configurar TypeScript</p>
+  <h2>Preparando el proyecto</h2>
+  <p>En un proyecto Astro/HTML:</p>
+  <pre>corepack pnpm add -D typescript
+npx tsc --init</pre>
+  <p><code>tsconfig.json</code> mínimo:</p>
+  <pre>{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  }
+}</pre>
+  <p>Esto hace que el compilador sea estricto: no permite <code>any</code> implícito, exige inicialización, etc.</p>
+  <div class="speaker">Guiar a los estudiantes a ejecutar los comandos en sus proyectos. Explicar cada opción del tsconfig: target y module para compatibilidad, strict para activar todas las reglas de seguridad, esModuleInterop para mejor compatibilidad con CommonJS, skipLibCheck para acelerar compilación. Enfatizar que iniciar con configuración estricta es una buena práctica que se puede relajar posteriormente si es necesario.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Declarar con tipos</p>
+  <h2>Tipos básicos</h2>
+  <pre>let nombre: string = "Mónica"
+let edad: number = 21
+const activo: boolean = true
+
+let tags: string[] = ["frontend", "astro"]
+let colores: Array<string> = ["rojo", "verde"]
+
+let usuario: { nombre: string; edad: number } = {
+  nombre: "Andrés",
+  edad: 19
+}</pre>
+  <p>Si cambias el tipo, el compilador te avisa:</p>
+  <pre>nombre = 123  // Error: Type 'number' is not assignable to type 'string'</pre>
+  <div class="speaker">Explicar cada tipo básico y sus usos típicos. Mostrar cómo la sintaxis <code>: tipo</code> se agrega después del nombre de la variable. Destacar la diferencia entre <code>let</code> y <code>const</code>. Mostrar el error en tiempo de compilación cuando se intenta asignar un valor de tipo incorrecto. Animar a los estudiantes a probar estos ejemplos en sus propios archivos .ts y observar los mensajes de error.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio tipos en clase</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Declara las siguientes variables con su tipo correcto:</li>
+    </ol>
+  </div>
+  <pre>let ciudad: string
+let miembros: number
+let activo: boolean
+let cursos: string[]
+let perfil: { nombre: string; activo: boolean }
+
+ciudad = "Bogotá"
+miembros = 250
+activo = true
+cursos = ["Frontend 101", "Linux Avanzado"]
+perfil = { nombre: "GLUD", activo: true }</pre>
+  <p>Ejecuta <code>pnpm tsc</code> y corrige cualquier error que aparezca. Comparte el primer error que encontraste y cómo lo solucionaste.</p>
+  <div class="speaker">Guiar a los estudiantes a escribir el código en un archivo .ts, ejecutar el compilador y observar los resultados. Esperar que no haya errores si los tipos están correctos. Si alguien comete un error (por ejemplo, olvidar el tipo o asignar mal), usar ese momento para mostrar cómo el compilador indica exactamente qué está mal y dónde. Fomentar la discusión sobre cómo los errores tempranos ahorran tiempo de depuración posteriormente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Interfaces: la forma de los datos</p>
+  <h2>Definiendo contratos de objetos</h2>
+  <pre>interface Estudiante {
+  nombre: string
+  edad: number
+  cursos?: string[]   // opcional
+  activo: boolean
+}
+
+const estudiante: Estudiante = {
+  nombre: "Daniela",
+  edad: 20,
+  activo: true
+  // cursos es opcional
+}</pre>
+  <p>Ventaja: si alguien cambia la propiedad <code>nombre</code> a <code>name</code>, TypeScript lo señala en todos los usos.</p>
+  <div class="speaker">Explicar que las interfaces describen la forma que deben tener ciertos objetos, actuando como contratos. Destacar la sintaxis para propiedades opcionales (<code>?</code>) y cómo el compilador las trata. Mostrar cómo cambiar un nombre de propiedad genera errores en todos los lugares donde se usa la interfaz, lo que facilita el refactor seguro. Animar a los estudiantes a pensar en interfaces como documentación viviente que el compilador hace cumplir.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio interfaz en clase</p>
+  <div class="turn">
+    <b>EN CLASE (7 min):</b>
+    <ol>
+      <li>Crea una interfaz <code>EventoGLUD</code> con:</li>
+    </ol>
+  </div>
+  <ul>
+    <li>- nombre: string</li>
+    <li>- fecha: string</li>
+    <li>- inscritos: number</li>
+    <li>- gratuito: boolean</li>
+  </ul>
+  <p>Crea un objeto que cumpla la interfaz y verifica que el compilador acepte. Luego intenta quitar una propiedad obligatoria y observa el error.</p>
+  <div class="speaker">Guiar a los estudiantes a definir la interfaz, crear un objeto de ejemplo y compilar. Luego pedirles que eliminen una propiedad requerida (por ejemplo, <code>fecha</code>) y vean el error del compilador. Destacar cómo el mensaje indica exactamente qué falta y dónde. Usar este ejercicio para reforzar la idea de que las interfaces son contratos que deben cumplirse completamente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Union types y literal types</p>
+  <h2>Tipos que aceptan varios valores</h2>
+  <pre>type Rol = "estudiante" | "profesor" | "admin"
+
+function saludar(rol: Rol) {
+  console.log(`Hola ${rol}`)
+}
+
+saludar("estudiante") // ok
+saludar("invitado")   // Error</pre>
+  <p>Literal types protegen el flujo: una variable no puede ser solo "cualquier string", puede ser exactamente "activo" | "inactivo".</p>
+  <div class="speaker">Explicar cómo los union types permiten que una variable tenga uno de varios tipos específicos. Mostrar cómo los literal types (tipos basados en valores concretos) otorgan un control preciso sobre los valores permitidos. Destacar la ventaja de detectar en tiempo de compilación cuando se pasa un valor no esperado (como "invitado" en el ejemplo). Animar a los estudiantes a pensar en union types para modelar estados, roles, o cualquier conjunto finito de valores válidos.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio estado formulario</p>
+  <div class="turn">
+    <b>EN CLASE (7 min):</b>
+    <ol>
+      <li>Declara <code>type EstadoFormulario = "vacío" | "relleno" | "enviado"</code>.</li>
+    </ol>
+  </div>
+  <p>Crea una variable con ese tipo e intenta asignarle <code>"aprobado"</code>. ¿Qué ocurre?</p>
+  <div class="speaker">Guiar a los estudiantes a definir el tipo, crear una variable y asignarle un valor válido. Luego intentar asignar un valor no permitido y observar el error del compilador. Destacar cómo el mensaje indica que el tipo no es asignable. Usar este ejercicio para mostrar cómo los literal types pueden modelar estados de UI o flujos de trabajo, evitando que el código entre en estados inesperados.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">null, undefined y strict null checks</p>
+  <h2>Manejo seguro de valores ausentes</h2>
+  <pre>let valor: string | null = null
+valor = "hola"
+
+// valor.length funciona porque el compilador sabe que no es null ahora</pre>
+  <p>Con <code>strict: true</code>, TypeScript distingue <code>null</code>/<code>undefined</code>.</p>
+  <p>Patrón seguro:</p>
+  <pre>if (valor !== null) {
+  console.log(valor.length)
+}</pre>
+  <div class="speaker">Explicar cómo en modo strict, <code>null</code> y <code>undefined</code> son tipos distintos y deben ser considerados explícitamente. Mostrar cómo los tipos de unión (<code>string | null</code>) obligan a comprobar el valor antes de usarlo. Destajar el patrón de guarda (<code>if (valor !== null)</code>) y cómo TypeScript reduce el tipo dentro del bloque. Animar a los estudiantes a practicar este patrón para evitar errores comunes como "Cannot read property 'length' of null".</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Caso real glud.org con tipos</p>
+  <h2>Aplicando TypeScript al proyecto</h2>
+  <p>Imagina que el botón de copiar correo recibe datos de un objeto:</p>
+  <pre>interface BotonCopiar {
+  email: string
+  textoVisor: string
+}
+
+function copiar(boton: BotonCopiar) {
+  // lógica de copiar al portapapeles
+}</pre>
+  <p>Si alguien pasa <code>{ mail: "..." }</code> en lugar de <code>email</code>, TypeScript lo detecta antes de desplegar. En JS ese error aparece cuando el usuario hace clic y el botón no hace nada.</p>
+  <p>En el formulario de inscripción SLUD:</p>
+  <pre>interface Inscripcion {
+  nombre: string
+  correo: string
+  cursoId: number
+}</pre>
+  <p>Con tipos, no puedes enviar un número donde va un correo. Eso evita correos inválidos en la base de datos.</p>
+  <div class="speaker">Conectar los conceptos aprendidos con el sitio real del GLUD. Mostrar cómo definir interfaces para los objetos que el sitio maneja (como datos de formularios o configuraciones) ayuda a prevenir errores de integración. Destacar que TypeScript no cambia el comportamiento en tiempo de ejecución, pero sí asegura que los datos que pasamos a funciones tengan la forma esperada. Animar a los estudiantes a pensar en cómo aplicar estas ideas en sus propios proyectos del grupo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Reto después de clase</p>
+  <h2>Práctica guiada</h2>
+  <ol>
+    <li>Crea un archivo <code>tipos.ts</code> con:</li>
+  </ol>
+  <ul>
+    <li>- Interfaz <code>Usuario</code> con nombre, edad, cursos.</li>
+    <li>- Función <code>presentar(usuario: Usuario): string</code> que devuelva <code>"Hola, soy X, tengo Y años"</code>.</li>
+  </ul>
+  <p>2. Ejecuta <code>pnpm tsc tipos.ts --noEmit</code> y asegura cero errores.</p>
+  <p>3. Intenta pasar un objeto incompleto a <code>presentar</code> y documenta el error que devuelve el compilador.</p>
+  <div class="speaker">Explicar paso a paso cómo crear el archivo, definir la interfaz y la función, luego compilar sin emisión. Guiar a los estudiantes a intentar llamar a la función con un objeto que falte alguna propiedad y observar el error del compilador. Destacar cómo este ejercicio refuerza la idea de que los contratos deben cumplirse completamente. Animar a guardar el error como evidencia de aprendizaje.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Checklist de salida</p>
+  <h2>Al finalizar la sesión deberías poder:</h2>
+  <ul>
+    <li>Explicar por qué JavaScript es dinámicamente tipado y qué riesgo implica.</li>
+    <li>Declarar variables con tipos y arreglar errores del compilador.</li>
+    <li>Definir interfaces y las usar para modelar datos.</li>
+    <li>Usar union types y literal types para restringir valores.</li>
+    <li>Entender <code>null</code>/<code>undefined</code> en modo strict.</li>
+  </ul>
+  <div class="speaker">Recorrer cada ítem del checklist, preguntando a los estudiantes si se sienten cómodos con cada uno. Ofrecer hacer una rápida demostración de cualquiera que genere duda. Enfatizar que estas habilidades son la base para los próximos bloques de Astro y la integración real de TypeScript en proyectos del grupo.</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S5 TypeScript: tipos que hablan antes de que rompa</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

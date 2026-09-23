@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S4 — JavaScript desde DevTools</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.72rem, 1.2vw, .92rem); line-height: 1.5; overflow-x: auto; color: var(--muted); max-width: 78ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .good { color: var(--green); }
+  .bad { color: var(--red); }
+  .state { display: inline-block; background: var(--surface); border: 1px solid var(--surface2); border-radius: 6px; padding: .15em .5em; font-size: .95em; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 2 · JavaScript desde DevTools · Sesión 4</p>
+  <h1>S4 — JavaScript <b>desde DevTools</b></h1>
+  <p>Abre glud.org, presiona <kbd>F12</kbd>, pestaña <b>Consola</b>, y escribe:</p>
+  <pre>document.title = "Tú mandas"</pre>
+  <p>La pestaña cambió de nombre. Ningún programa externo hizo eso: lo ejecutaste tú, dentro del navegador. Hoy aprendemos a usar ese poder con intención.</p>
+  <div class="speaker">PREGUNTA GUÍA: mostrar el poder inmediato de JS en el navegador. Pedir a un voluntario que ejecute el ejemplo y observe el cambio en la pestaña. Enfatizar que JS corre en la máquina del visitante, no en el servidor. Esto establece el tono de laboratorio: el navegador es el IDE. No se necesita instalar nada; todo se prueba al momento. Conexión con la analogía de redstone en Minecraft: el comportamiento se calcula localmente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar qué es JavaScript y <b>dónde se ejecuta</b> (en el navegador del visitante, no en tu servidor).</li>
+    <li>Usar la <b>Consola de DevTools</b> como laboratorio: ejecutar expresiones, guardar valores, probar ideas sin instalar nada.</li>
+    <li>Declarar variables (<code>const</code>, <code>let</code>) y usar los tipos básicos: string, number, boolean, array, objeto.</li>
+    <li>Acceder a elementos de una página con el <b>DOM</b> (<code>querySelector</code>) y leer su contenido.</li>
+    <li>Modificar el DOM en tiempo real: texto, estilos, clases.</li>
+    <li>Escuchar eventos del usuario (<code>addEventListener</code>) y responder con código.</li>
+    <li>Leer errores en la Consola y depurar con <code>console.log</code>.</li>
+  </ol>
+  <p style="margin-top:1rem"><b>Hoy el navegador es el IDE.</b> Nada se instala; todo se prueba al momento.</p>
+  <div class="speaker">Recorrer cada objetivo, conectando con los bloques de contenido que siguen. Resaltar que la consola es un REPL y que el dominio del navegador permite manipular la página en vivo. Enfatizar la importancia de entender dónde corre JS para razonar sobre rendimiento y seguridad.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Qué es JavaScript y dónde corre</p>
+  <h2>JavaScript en el navegador del visitante</h2>
+  <table>
+    <tr><th>Concepto</th><th>Qué es</th><th>Analogía</th></tr>
+    <tr><td>Expresión</td><td>Código que produce un valor</td><td>Una pregunta que el motor responde</td></tr>
+    <tr><td>Sentencia</td><td>Una orden que hace algo (<code>document.title = ...</code>)</td><td>Una instrucción que das al navegador</td></tr>
+    <tr><td>Declaración</td><td>Darle nombre a un valor (<code>const nombre = "GLUD"</code>)</td><td>Poner una etiqueta a un objeto</td></tr>
+  </table>
+  <p>El motor JS interpreta todo en la máquina de quien visita. Por eso "poco JavaScript" significa "página más rápida": el visitante no tiene que descargar ni ejecutar tanto.</p>
+  <div class="speaker">Explicar la distinción entre expresión, sentencia y declaración usando ejemplos simples. Subrayar que la ejecución ocurre en el cliente, lo que implica responsabilidad de desempeño y seguridad. Analogía con la redstone de Minecraft: la lógica se calcula en la propia máquina del jugador, no en un servidor central.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Consola como laboratorio</p>
+  <h2>La Consola de DevTools como REPL</h2>
+  <p>Abre cualquier página, pulsa <kbd>F12</kbd> → <b>Consola</b>, y escribe:</p>
+  <pre>2 + 3
+typeof "GLUD"
+typeof 42
+document.body.innerText
+document.body.children.length</pre>
+  <p>La Consola es un REPL: lee, evalúa, imprime, repite.</p>
+  <div class="speaker">Demostrar en vivo: abrir DevTools en glud.org, escribir cada línea y mostrar resultados. Resaltar que se pueden guardar valores en variables temporales (<code>let x = 5</code>) y reutilizarlos. Enfatizar que la consola permite experimentar sin recargar la página. Mencionar que el historial se puede usar con flechas arriba/abajo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Paralelo Minecraft</p>
+  <h2>JavaScript es tu redstone</h2>
+  <div class="analogy">
+    La redstone en tu mundo: cuando pisas una placa de presión y la puerta se abre, eso no pasa en el servidor de Mojang — tu PC calcula esa lógica. JavaScript es tu redstone: cablea eventos dentro del navegador del visitante.
+  </div>
+  <div class="speaker">Desarrollar la analogía: en Minecraft, la redstone permite crear circuitos que responden a entradas del jugador y cambian el mundo localmente. De la misma forma, JS permite que la página responda a clics, teclas, movimientos del mouse sin necesidad de comunicarse con un servidor para cada acción. Esto permite interacciones instantáneas y experiencias fluidas.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tipos de datos y variables</p>
+  <h2>Qué valores puedes guardar</h2>
+  <pre>const nombre = "Mónica"
+const edad = 21
+let puntos = 0
+
+const activa = true
+
+const materiales = ["piedra", "madera", "hierro"]
+materiales.length
+materiales[0]
+
+const grupo = {
+  nombre: "GLUD",
+  miembros: 250,
+  activos: true
+}
+grupo.nombre</pre>
+  <p>Regla práctica: <code>typeof valor</code> responde <code>"string"</code>, <code>"number"</code>, <code>"boolean"</code>, <code>"object"</code>, <code>"undefined"</code> o <code>"function"</code>.</p>
+  <div class="speaker">Explicar cada tipo con ejemplos concretos. Resaltar que <code>typeof []</code> devuelve <code>"object"</code> — punto de discusión. Enfatizar la diferencia entre <code>const</code> (no reasignable) y <code>let</code> (reasignable). Mostrar cómo acceder a propiedades de objetos y elementos de arreglos.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio tipos en vivo</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Declara las siguientes variables en la Consola:
+        <ul>
+          <li><code>const estudiante = "Daniela"</code></li>
+          <li><code>let puntos = 0</code></li>
+          <li><code>let vistaPremium = false</code></li>
+        </ul>
+      </li>
+      <li>Ejecuta y anota los resultados de:
+        <ul>
+          <li><code>console.log(typeof estudiante)</code></li>
+          <li><code>console.log(typeof puntos)</code></li>
+          <li><code>console.log(typeof vistaPremium)</code></li>
+          <li><code>console.log(estudiante.length)</code></li>
+        </ul>
+      </li>
+      <li>Comparte en el chat un resultado que no esperabas. <code>typeof []</code> da <code>"object"</code> — es la discusión de hoy.</li>
+    </ol>
+  </div>
+  <div class="speaker">Guiar a los estudiantes a escribir el código paso a paso, observar los outputs y discutir por qué <code>typeof []</code> es <code>"object"</code>. Resaltar que en JavaScript los arreglos son objetos especializados. Anotar las respuestas en el chat para fomentar la participación.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Funciones: empaquetar decisiones</p>
+  <h2>Entrada → decisión → salida</h2>
+  <pre>function saludar(nombre) {
+  return "Hola, " + nombre + ", ¿cómo va tu curso?"
+}
+saludar("Mónica")</pre>
+  <p>Versión moderna:</p>
+  <pre>const despedirse = (nombre) => "Chao, " + nombre</pre>
+  <p>Regla mnemotécnica: <b>entrada → decisión → salida</b>. Si no tiene <code>return</code>, no devuelve nada.</p>
+  <div class="speaker">Explicar la estructura de una función: parámetros (entrada), lógica interna (decisiones), y valor de retorno (salida). Mostrar la diferencia entre la sintaxis tradicional y la función flecha. Enfatizar que una función sin <code>return</code> devuelve <code>undefined</code> implícitamente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio funciones en clase</p>
+  <div class="turn">
+    <b>EN CLASE (7 min):</b>
+    <ol>
+      <li>Copia y ejecuta esta función en la Consola:
+        <pre>function formatearNombre(nombre) {
+  const limpio = nombre.trim()
+  return limpio.charAt(0).toUpperCase() + limpio.slice(1)
+}
+console.log(formatearNombre("  daniela "))
+console.log(formatearNombre("  MÓNICA "))</pre>
+      </li>
+      <li>Observa la salida. Actividad: corrige la función para que el resultado sea siempre capitalizado correctamente (primer letra mayúscula, resto minúscula). Comparte la solución.</li>
+    </ol>
+  </div>
+  <div class="speaker">Guiar a los estudiantes a probar la función, notar que actualmente solo capitaliza la primera letra pero deja el resto como estaba (ej. "daniela" -> "Daniela", "MÓNICA" -> "MÓNICA"). Proponer usar <code>toLowerCase()</code> en el resto de la cadena. Discutir variantes y permitir que compartan sus soluciones en el chat.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El DOM: cómo JavaScript toca la página</p>
+  <h2>Accediendo y modificando elementos</h2>
+  <pre>const titulo = document.querySelector("h1")
+const botones = document.querySelectorAll("button")
+
+console.log(titulo.innerText)
+titulo.innerText = "Cursos del GLUD"
+titulo.style.color = "#1affff"
+titulo.classList.add("grande")
+</pre>
+  <p><code>querySelector</code> devuelve el <b>primer</b> elemento. Si necesitas todos, usa <code>querySelectorAll</code>.</p>
+  <div class="speaker">Explicar que el DOM representa la página como un árbol de objetos. Mostrar cómo <code>querySelector</code> selecciona por selector CSS y devuelve un nodo. Demostrar en vivo modificando el h1 de glud.org, cambiando texto, color y agregando una clase. Resaltar que los cambios se ven instantáneamente sin recargar.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio tocando glud.org</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Abre glud.org, <kbd>F12</kbd> → Consola.</li>
+      <li>Lee el primer h1:
+        <pre>const titulo = document.querySelector("h1")
+console.log(titulo.innerText)</pre>
+      </li>
+      <li>Modifícalo:
+        <pre>titulo.style.color = "#ff9e64"
+titulo.innerText = "Frontend 101 2026"</pre>
+      </li>
+      <li>Pregunta: ¿qué se pierde si este cambio se hace solo con CSS?</li>
+    </ol>
+  </div>
+  <div class="speaker>Guiar la sesión: asegurarse de que todos tengan glud.org abierto y la consola lista. Después de cada paso, pedir que compartan lo que observaron. Para la pregunta final, discutir que CSS solo afecta presentación y no puede cambiar el texto ni atributos como <code>innerText</code>; se necesita JS para modificar contenido dinámicamente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Eventos</p>
+  <h2>Escuchando acciones del usuario</h2>
+  <pre>const burger = document.querySelector(".menu-toggle")
+burger.addEventListener("click", () => {
+  console.log("Click")
+  document.body.classList.toggle("menu-abierto")
+})</pre>
+  <p>Patrón: elemento → tipo de evento → función a ejecutar.</p>
+  <div class="speaker>Explicar el modelo de eventos del DOM: registrar un listener que se dispara cuando ocurre una acción específica. Mostrar cómo usar flecha functions para callbacks breves. Resaltar que el evento provee un objeto <code>event</code> con detalles (posición, tecla, etc.) aunque aquí no lo usemos.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio contador de clics</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Inicia un contador y escucha clics en toda la página:
+        <pre>let totalClics = 0
+document.addEventListener("click", () => {
+  totalClics++
+  console.log(`Clic número ${totalClics}`)
+})</pre>
+      </li>
+      <li>Cambia el evento a <code>"mouseover"</code> y observa cómo cambia el comportamiento.</li>
+    </ol>
+  </div>
+  <div class="speaker>Guiar a los estudiantes a probar el contador, observar que cada clic en cualquier parte incrementa el número. Luego cambiar a <code>mouseover</code> y notar que el contador se dispara muchas veces incluso sin clic (al mover el cursor). Discutir la diferencia entre tipos de eventos y la importancia de elegir el adecuado para la interacción deseada.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El caso real: glud.org</p>
+  <h2>Qué hace JavaScript en el sitio del GLUD</h2>
+  <table>
+    <tr><th>Script</th><th>Qué hace</th><th>Por qué JS</th></tr>
+    <tr><td>Menú hamburguesa</td><td>Alterna clases <code>.open</code>, maneja <code>aria-expanded</code></td><td>Sin JS no abre</td></tr>
+    <tr><td>Copiar correo</td><td>Usa <code>navigator.clipboard.writeText</code></td><td>Portapapeles necesita JS</td></tr>
+    <tr><td>Navegación al hacer scroll</td><td>Marca enlace activo según sección visible</td><td>Evento de scroll</td></tr>
+    <tr><td>Carga ligera</td><td>Todo en CDN, ~8 KB propios</td><td>De S0</td></tr>
+  </table>
+  <div class="speaker>Recorrer cada fila, mostrando brevemente cómo inspeccionar cada funcionalidad en DevTools (por ejemplo, buscar el botón de menú, observar su <code>aria-expandido</code> al hacer clic). Enfatizar que aunque el sitio es mayormente estático (SSG), estos pequeños scripts añaden interactividad esencial.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio de inspección</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Ejecuta en la Consola:
+        <pre>document.querySelectorAll("button").length
+document.querySelectorAll("script").length
+document.scripts[0]?.src</pre>
+      </li>
+      <li>Compartan cuántos scripts carga la página y qué hacen.</li>
+    </ol>
+  </div>
+  <div class="speaker>Guiar a los estudiantes a obtener los números y, si es posible, inspeccionar el primer script para ver su origen (probablemente un archivo de Tailwig oアニメjs). Discutir por qué conocer la cantidad y origen de scripts ayuda a evaluar rendimiento y seguridad.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Reto después de clase</p>
+  <h2>Práctica guiada</h2>
+  <ol>
+    <li>Abre glud.org y en la Consola crea un <code><div id="contador"></code>.</li>
+    <li>Añade un botón y un contador que incremente con cada clic.</li>
+    <li>Usa <code>addEventListener</code> para conectar botón y contador.</li>
+  </ol>
+  <p>Entrega: captura del código en la Consola y el resultado visible.</p>
+  <div class="speaker>Explicar paso a paso cómo crear el div, el botón, actualizar el texto del contador y vincular el listener. Sugerir usar <code>document.createElement</code>, <code>appendChild</code>, y manipular <code>textContent</code>. Recordar que pueden usar la consola para probar líneas individuales antes de combinar todo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Checklist de salida</p>
+  <h2>Al finalizar la sesión deberías poder:</h2>
+  <ul>
+    <li>Explicar que JS corre en el navegador del visitante.</li>
+    <li>Declarar variables con <code>const</code>/<code>let</code> y distingo tipos.</li>
+    <li>Escribir funciones con <code>return</code>.</li>
+    <li>Seleccionar elementos con <code>querySelector</code> y leer/modificar su contenido.</li>
+    <li>Registrar un <code>addEventListener</code> y contar eventos.</li>
+  </ul>
+  <div class="speaker>Recorrer cada ítem del checklist, preguntando a los estudiantes si se sienten cómodos con cada uno. Ofrecer hacer una rápida demostración de cualquiera que genere duda. Enfatizar que estas habilidades son la base para los próximos bloques de TypeScript y la dissección real de glud.org.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Recursos extra</p>
+  <h2>Para seguir aprendiendo</h2>
+  <ul>
+    <li>MDN — Introducción al DOM</li>
+    <li>MDN — Introducción a eventos</li>
+    <li>javascript.info — La consola</li>
+  </ul>
+  <p><a href="../Indice.md">Índice</a> · <a href="../s3-anatomia-landing/README.md">← Anterior: S3</a> · <a href="../s5-typescript/README.md">Siguiente: S5 TypeScript →</a></p>
+  <div class="speaker>Invitar a explorar los enlaces para profundizar. Sugerir que dediquen tiempo después de clase a practicar los ejercicios del README y a experimentar en sus propios proyectos personales.</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S4 JavaScript desde DevTools</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

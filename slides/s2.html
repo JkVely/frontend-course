@@ -71,6 +71,12 @@
   .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
   .hint { opacity: .85; }
   .swatch { display: inline-block; width: .9em; height: .9em; border-radius: 3px; vertical-align: -2px; margin-right: .35em; border: 1px solid rgba(255,255,255,.25); }
+  .figure { background: var(--surface); border: 1px solid var(--surface2); border-radius: 12px; padding: 1.4rem 1.8rem; margin-top: 1.2rem; }
+  .figure-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .lbl { display: inline-block; background: var(--surface2); color: var(--muted); border-radius: 4px; padding: .1em .45em; font-size: .78em; margin-left: .5em; vertical-align: middle; }
 </style>
 </head>
 <body>
@@ -120,6 +126,55 @@ Mencionar que herramientas de diseño (Figma) traen escalas tipográficas predef
 </section>
 
 <section class="slide">
+  <p class="kicker">Figura · la escala vista</p>
+  <h2>La escala <b>se ve</b>, no solo se cuenta</h2>
+  <div class="figure">
+    <p style="font-size:39px; line-height:1.1; color:var(--fg); margin-bottom:.7rem;">Buenos días GLUD <span class="lbl">39px · display</span></p>
+    <p style="font-size:31px; line-height:1.1; color:var(--fg); margin-bottom:.6rem;">Sección hero <span class="lbl">31px · XXL</span></p>
+    <p style="font-size:25px; line-height:1.2; color:var(--fg); margin-bottom:.6rem;">Subtítulo de tarjeta <span class="lbl">25px · XL</span></p>
+    <p style="font-size:20px; line-height:1.35; color:var(--fg); margin-bottom:.6rem;">Título de noticia <span class="lbl">20px · LG</span></p>
+    <p style="font-size:16px; line-height:1.65; color:var(--muted);">Cuerpo de texto: el 90% del contenido de cualquier página es esto. Lee a velocidad estable sin que se note. <span class="lbl" style="margin-left:.5em;">16px · base</span></p>
+  </div>
+  <p style="margin-top:.9rem">¿De dónde salieron? De multiplicar por <b>1.25</b> cada vez. Cada escalón respeta la distancia del sistema: si algo no cabe, se pasa al siguiente del sistema, no a uno inventado.</p>
+  <div class="speaker">Pedir que digan de memoria el sentido exacto de la fórmula: si necesitan un tamaño intermedio, multiplican o dividen por 1.25 (16 ÷ 1.25 = 12.8 ≈ 13). NO se inventa un tamaño fuera del ritmo.
+Decir explícitamente: "si algo no cabe, saltamos al escalón de arriba del sistema".</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Figura · line-height</p>
+  <h2>El aire entre líneas <b>cambia la lectura completa</b></h2>
+  <div class="figure-grid2">
+    <div class="figure">
+      <p style="margin-bottom:.5rem;"><b>demasiado apretado</b> <span class="lbl">1.1</span></p>
+      <p style="font-size:15px; line-height:1.05; color:var(--fg);" >El GLUD es un grupo de estudiantes de la Universidad Distrital que promueve el software libre y facilidad del compartir conocimiento. Organizamos charlas y sílabos con el apoyo de estudiantes voluntarios.</p>
+    </div>
+    <div class="figure">
+      <p style="margin-bottom:.5rem;"><b>respiración correcta</b> <span class="lbl">1.65</span></p>
+      <p style="font-size:15px; line-height:1.65; color:var(--fg);">El GLUD es un grupo de estudiantes de la Universidad Distrital que promueve el software libre y facilidad del compartir conocimiento. Organizamos charlas y sílabos con el apoyo de estudiantes voluntarios.</p>
+    </div>
+  </div>
+  <p style="margin-top:1rem">Mismo texto, misma fuente, mismo tamaño: solo cambió el aire entre líneas.</p>
+  <div class="speaker">PRUEBA EN VIVO: levantar ambas columnas y pedir que escojan cuál se lee más rápido. La respuesta será la segunda. Recalcar: line-height no es "decoración", es legibilidad.
+Mostrar porque queda claro con el mismo texto: misma información, mundos de diferencia en facilidad de lectura. No hay más que decir.
+Apunte: para texto corrido (párrafos de blog, descripciones de muchas líneas), apuntar a 1.5-1.8. Para títulos grandes, volver a 1.1 para que no parezca fragmentado.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tipografía · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Abre <code>material/ejemplos/hero-bueno.html</code> en tu navegador.</li>
+      <li>En DevTools (F12 → pestaña <b>Estilos</b>), busca la regla <code>.hero-title</code> y cambia la fuente de <code>Exo 2</code> a <code>serif</code> y luego a <code>Comic Sans MS</code>. Recarga entre cada uno.</li>
+      <li>Mirá qué pasa: el contenido es idéntico, pero el carácter del sitio cambia por completo.</li>
+      <li>Anota: ¿qué sensación cambió? (confianza, seriedad, legibilidad…)</li>
+    </ol>
+  </div>
+  <p style="margin-top:1rem"><b>Objetivo:</b> verificar con tus ojos que <b>la fuente es una decisión de producto</b>, no una casualidad.</p>
+  <div class="speaker">Mecánica: 5 min de experimentación con el archivo del repo. Nada entrega aún; solo capturan qué cambia y lo comparten en el chat. Pregunta de cierre: "¿qué fuente usa Google en su homepage?" (Roboto, sans-serif — por razones de marca, no por azar).</div>
+</section>
+
+<section class="slide">
   <p class="kicker">Tipografía · el caso real</p>
   <h2>glud.org usa exactamente la pareja clásica</h2>
   <table>
@@ -131,7 +186,7 @@ Mencionar que herramientas de diseño (Figma) traen escalas tipográficas predef
   <div class="industry"><b>En la industria:</b> elegir una fuente "display" para marca y una "de cuerpo" para lectura es el estándar de los sistemas de diseño serios (Google, GitHub, Shopify lo hacen). Si alguien te dice "usé 5 fuentes porque cada una se ve linda" — está diseñando por gusto simple.</div>
   <div class="speaker">Revelar el caso con datos de verdad de la web: las familias EXACTAS están en el CSS (plan font-family). En el material tecleo las que se verificaron; si en la sesión los fonts cambian, revisar el archivo fonte del sitio (.fonts en el CSS) para confirmar.
 Subrayar "subactea" en 2 minutos: un .woff2 subactaea guarda SOLO los glifos que el texto usa (ej. sin la "Ÿ" si no aparece). Eso reduce el peso de fuentes de un archivo de 1 MB a decenas de KB — es una decisión de velocidad PERCIBIDA (S11).
-La relación con la marca: la tipografía no decora — comunica personalidad. Un GLUD con fuente manuscrita sería OTRĂ marca. Preguntar: "¿qué sensación transmite Exo 2 en comparación con, digamos, una serif clásica?"
+La relación con la marca: la tipografía no decora — comunica personalidad. Un GLUD con fuente manuscrita sería OTRA marca. Preguntar: "¿qué sensación transmite Exo 2 en comparación con, digamos, una serif clásica?"
 Reservar la parte de "woff2 subseteadas" como dato para volver en S11 (performance); hoy solo se nombra.</div>
 </section>
 
@@ -150,6 +205,49 @@ Explicar la escala 8: elijo "8" y todo es ese número multiplicado (8, 16, 24, 3
 Demostración en vivo: con un elemento de la home de glud.org, mostrar (con DevTools editando un padding a mano) que pasar un espaciado de 16 a 13px hace que "algo se note raro" aunque nadie sepa decir qué. Esa es la clave de la lección.
 Término que pueden compartir: "spacing scale" / "espaciado-sistema" vs "espaciado-aleatorio". Si un diseño usa valores arbitrarios, rompe el sistema y se siente (el ojo lo nota, la mente no lo nombra).
 Frase para el cuaderno: "El espaciado de tu UI es tu sistema de puntuación: define si un título y su texto son una frase o dos ideas."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Figura · el espaciado</p>
+  <h2>Misma información, <b>ritmo distinto</b></h2>
+  <div class="figure-grid2">
+    <div class="figure">
+      <p style="margin-bottom:.4rem;"><b>aleatorio</b> <span class="lbl bad"></span></p>
+      <div style="padding:14px 10px 33px 20px; border-radius:8px; background:rgba(255,255,255,.03);">
+        <p style="font-size:19px; color:var(--fg);">Título de la tarjeta</p>
+        <p style="font-size:12px; color:var(--muted); margin-top:2px; margin-bottom:19px;">un texto auxiliar</p>
+        <p style="font-size:14px; color:var(--fg); margin-bottom:4px;">Descripción del contenido aquí, torcido.</p>
+        <div style="width:70px; height:28px; background:var(--blue); border-radius:4px; margin:11px 0;"></div>
+      </div>
+    </div>
+    <div class="figure">
+      <p style="margin-bottom:.4rem;"><b>sistema (8px)</b> <span class="lbl good">8/16/24</span></p>
+      <div style="padding:16px; border-radius:8px; background:var(--surface2);">
+        <p style="font-size:19px; color:var(--fg); margin-bottom:8px;">Título de la tarjeta</p>
+        <p style="font-size:13px; color:var(--muted); margin-bottom:16px;">un texto auxiliar</p>
+        <p style="font-size:14px; color:var(--fg); margin-bottom:16px;">Descripción del contenido, alineado al sistema.</p>
+        <div style="height:32px; background:var(--blue); border-radius:6px; width:80px;"></div>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:.9rem">La de la derecha respira igual en cada nivel. La de la izquierda "se siente rara" sin que nadie sepa decir por qué.</p>
+  <div class="speaker">Señalar que el contenido es IDÉNTICO: solo cambió el espaciado. Fórmula mental: "si lo ves igual, sospecha de los números que no figuran".
+Hacer la pregunta inversa: "¿cuál botón parece más clickeable?" (el del sistema — el aire alrededor es la pista).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Espaciado · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Abre <code>glud.org</code> y abre DevTools (F12) en cualquier sección (ej. tarjetas de beneficios).</li>
+      <li>Selecciona una tarjeta, ve a <b>Estilos</b>, busca el <code>padding</code> o <code>gap</code>.</li>
+      <li>Bájalo un par de píxeles (16→13, 24→19) y mira qué cambia: ¿alguien nota el cambio? ¿incluso tú mismo perdiste el hilo?</li>
+      <li>Vuelve al valor original. Anota: ¿qué se sentía roto cuando el espaciado salía del sistema?</li>
+    </ol>
+  </div>
+  <p style="margin-top:.9rem">El objetivo: sentir la "fricción sutil" que aparece cuando un sistema se rompe.</p>
+  <div class="speaker">Ajuste virtualizado: en lugar de mostrar en DevTools cada tío, pueden hacerlo rápido y compartir una impresión escrita. La dinámica de 2 personas: cada quien puede tomar una tarjeta distinta y comparar: "¿mi tarjeta estaba más rota que la tuya?".</div>
 </section>
 
 <section class="slide">
@@ -192,13 +290,37 @@ Nota organizativa: este número (4.5:1) es el que vuelve en S11 cuando usemos Li
     <tr><td>Blanco al 80% de opacidad</td><td>variable</td><td class="ratio fail">Patrón frágil: medir caso por caso</td></tr>
     <tr><td>Colores hardcodeados fuera de paleta (sección SLUD)</td><td>—</td><td class="ratio fail">Deuda de diseño: rompe el sistema de tokens</td></tr>
   </table>
-  <div class="speaker">Esta slide es EJEMPLO VIVO del tipo de evidencia que se entrega en una auditoría: combinar veredicto CALIFICABLE con medida NUMÉRICA. Cada fila es un riesgo real documentado del propio sitio.
-Leer fila por fila:
-- Cian neón: 14:1 — el motivo de que la marca GLUD use neón sobre oscuro: contraste altísimo casi sin esfuerzo.
-- Gris soporte: 5.5:1 — pasa AA pero flojo: si el CSS se toca y el gris baja una opacidad, deja de pasar. Documentado para recontrastar en S11.
-- Blanco al 80%: "patrón frágil" = el ratio de un blanco con opacidad depende de lo que tenga detrás (una imagen transmite luz distinta en cada zona). No es "malo por sí": es "quién se acuerda de medir SOBRE la imagen real".
-- Hardcodeados en la sección SLUD: se diseñó una sección con un color fuera de paleta "porque quedaba bonito" → se rompe el token. La moraleja: los tokens (variables de color) existen para evitar exactamente esto; se ve en S9 (Tailwind).
-Cierre de la tabla: el grupo ahora puede criticar con datos. El próximo paso del método (S3) usa ESTA manera de criticar para construir el diseño.</div>
+  <div class="speaker">Leer fila por fila. Cerrar la tabla: el grupo ahora puede criticar con datos. El próximo paso del método (S3) usa ESTA manera de criticar para construir.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Figura · el contraste visto</p>
+  <h2>El número <b>cambia el color</b> de tu criterio</h2>
+  <div class="figure">
+    <p style="background:#1a1b26; color:#1affff; padding:.7rem 1.2rem; font-size:22px; font-weight:700; border-radius:6px; margin-bottom:.5rem; margin-top:.5rem;">Neón sobre fondo oscuro <span class="lbl" style="color:var(--green)">≈ 14 : 1 · pasa AA</span></p>
+    <p style="background:#1c1e1e; color:#8e95a1; padding:.7rem 1.2rem; font-size:15px; border-radius:6px; margin-bottom:.5rem;">Gris soporte sobre fondo oscuro <span class="lbl" style="color:var(--orange)">≈ 5.5 : 1 · límite AA</span></p>
+    <p style="background:#d4d4d4; color:#999999; padding:.7rem 1.2rem; font-size:15px; border-radius:6px; margin-bottom:.5rem;">Texto chicle sobre fondo claro <span class="lbl" style="color:var(--red)">≈ 2.1 : 1 · NO pasa</span></p>
+    <p style="background:#ff9e64; color:#ffffff; padding:.7rem 1.2rem; font-size:15px; border-radius:6px;">Blanco sobre naranja <span class="lbl" style="color:var(--red)">≈ 3.0 : 1 · falla en texto</span></p>
+  </div>
+  <p style="margin-top:.9rem">Los cuatro se "ven" sobre esta diapositiva. Solo dos pasan la regla. El ojo es mentiroso; el número no.</p>
+  <div class="speaker">Demostración: pasar el cursor por cada píldora y decir el ratio de memoria. Pedir que busquen el número del sitio glud.org. Si alguien dice "sí se ve bien" a la tercera columna (≈2.1:1), corregir con el número: "está bonita pero es ilegible para un abuelo o con un teléfono viejo al sol."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Contraste · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Abre <a style="color:var(--green)" href="https://webaim.org/resources/contrastchecker/" target="_blank">webaim.org/resources/contrastchecker</a>.</li>
+      <li>Ve al sitio <b>glud.org</b>, abre DevTools y haz clic derecho en cualquier texto oscuro (por ejemplo, del footer).</li>
+      <li>Copia el valor exacto del fondo y del texto (busca en <b>Estilos calculados</b> → <code>color</code> y <code>background-color</code>).</li>
+      <li>Pega ambos colores en el checker. ¿Cuánto da? ¿Pasa AA (4.5) o con descuento (3.0)?</li>
+      <li>Comparte en el chat: "saqué X y pasa/no pasa".</li>
+    </ol>
+  </div>
+  <p style="margin-top:.9rem">Este número es tu evidencia. Ya no digas "está bonito" — di: "tiene 5.6:1, pasa AA".</p>
+  <div class="speaker">Asegurar que ambas estudiantes hagan al menos un contraste en el tiempo. No es trampilla: es el paso de la sensación a la precisión. Verificar que hayan copiado los colores exactos y no puros (ej. varios grises en dark mode difieren).
+Cierre: cada una eligió una sección distinta; al final, comparar para mostrar que el sitio completo no es uniforme en accesibilidad.</div>
 </section>
 
 <section class="slide">
@@ -230,6 +352,67 @@ Explicar que la alineación viene de un sistema de columnas invisible (típicame
 Analogía clave del inventario de Minecraft (mantener el mismo universo): como jugador NUNCA tienes que buscar un slot "que se salió" de la grilla (porque nunca pasa). En diseño se persigue lo mismo: que nada desentone.
 En glud.org: pedir que observen la sección de features/tarjetas y verifiquen si las tarjetas comparten bordes verticales (en general la grilla está sana por usar Tailwind). Retomamos en S9 como hacerlo en código.
 Frase del día: "La grilla es la ley que mantiene la calma en la página. No se ve por excepción; se ve por ausencia — cuando falta, todo se percibe desordenado."</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Figura · la alineación</p>
+  <h2>Misma información, <b>orden distinto</b></h2>
+  <div class="figure-grid2">
+    <div class="figure">
+      <p style="margin-bottom:.4rem;"><b>sin grilla</b> <span class="lbl bad"></span></p>
+      <div style="padding:10px 6px 22px 14px; background:rgba(255,255,255,.02); border-radius:8px;">
+        <div style="display:flex; gap:0 8px; margin-bottom:6px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+        <div style="display:flex; gap:0 8px; margin-bottom:6px; margin-left:5px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+        <div style="display:flex; gap:0 6px; margin-left:20px; margin-top:4px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+      </div>
+    </div>
+    <div class="figure">
+      <p style="margin-bottom:.4rem;"><b>alineado a grilla</b> <span class="lbl good"></span></p>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px;">
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+        <div style="display:flex; gap:8px; margin-bottom:8px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <div style="width:34px; height:34px; background:#7aa2f7; border-radius:5px; flex-shrink:0;"></div>
+          <p style="font-size:12px; color:var(--fg); line-height:1.2;">Pásame tu correo y te invito al grupo</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p style="margin-top:.9rem">Los bordes verticales que comparten los cuadros no están en la página: están en tu cerebro.</p>
+  <div class="speaker">Pedir que mires solo la columna izquierda de cada figura y la comparen con la distancia entre el texto y el icono. A la izquierda: todo descuadra en silencio; a la derecha, todo hace fila.
+Cierre: el ojo busca líneas verticales y horizontales donde repetir confianza. No se trata del número de píxeles, sino de qué tan fácil se repite el patrón. Eso es lo que "ritmo" significa en grillas.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Grilla + método · tu turno</p>
+  <div class="turn">
+    <b>EN CLASE (7 min):</b>
+    <ol>
+      <li>Abre <code>material/ejemplos/hero-malo.html</code> y <code>material/ejemplos/hero-bueno.html</code> lado a lado.</li>
+      <li>Activa <b>→ Layout → Grid Lines</b> en DevTools (acá aparece el esqueleto invisible).</li>
+      <li>En el hero-bueno: mira cómo todo encaja en columnas. En el hero-malo: mira que NO encaja en casi nada.</li>
+      <li>Anota nombre técnico de 3 cosas que cambian (ajuste de columna, padding, gap, alineación).</li>
+      <li>Siéntate 30 segundos mirando cada uno sin seguir instrucción: ¿cómo cambiaría tu primera impresión?</li>
+    </ol>
+  </div>
+  <p style="margin-top:.9rem">El cómputo con solo el nombre: "activé Grid Lines en DevTools y comparé ambos héroes".</p>
+  <div class="speaker">El objetivo es que toque el código real del ejercicio del repo y sienta la diferencia antes de la siguiente sección donde critican una sección de glud.org con el método de 6 pasos.
+Si alguien se atasca buscando la opción de Grid Lines, guíala: está en DevTools, pestaña <b>Elementos</b>, icono de la columna (flex/grid). En algunos navegadores se muestra con toggle.</div>
 </section>
 
 <section class="slide">

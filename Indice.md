@@ -100,17 +100,35 @@
 **Sesiones 4-6 · el sitio como laboratorio**
 
 <div style="background-color:#16161e; padding:15px; margin:10px 0; border-left:4px solid #565f89;">
-	<h3>S4: Qué es JavaScript y cómo funciona su lógica <em>(en construcción)</em></h3>
+	<h3>S4: Qué es JavaScript y cómo funciona su lógica <a href="sesiones/s4-javascript/README.md">(material)</a></h3>
+	<h4>Temas</h4>
 	<ul>
-		<li>Variables, tipos, funciones, arrays y objetos desde DevTools sobre el sitio vivo</li>
+		<li>JavaScript corre en el navegador del visitante: expresiones, sentencias y declaraciones</li>
+		<li>La Consola de DevTools como laboratorio REPL</li>
+		<li>Variables, tipos, funciones y callbacks en tiempo real</li>
+		<li>El DOM como árbol accesible: querySelector, innerText, classList</li>
+		<li>Eventos con addEventListener y depuración con console.log</li>
+		<li>Caso real glud.org: menú hamburguesa, copiar correo, navegación</li>
 	</ul>
+	<p><strong>Reto base:</strong> modificar elementos de glud.org desde la Consola y contar clics con un listener.</p>
+	<p><strong>Nivel reto:</strong> crear un contador de clics persistente con DOM y eventos.</p>
+	<p><strong>Slides:</strong> <a href="slides/s4.html">s4.html</a></p>
 </div>
 
 <div style="background-color:#16161e; padding:15px; margin:10px 0; border-left:4px solid #565f89;">
-	<h3>S5: Por qué existe TypeScript y cómo se escribe <em>(en construcción)</em></h3>
+	<h3>S5: Por qué existe TypeScript y cómo se escribe <a href="sesiones/s5-typescript/README.md">(material)</a></h3>
+	<h4>Temas</h4>
 	<ul>
-		<li>JS sin tipos vs TS con contratos, leyendo los tipos reales del repositorio</li>
+		<li>JS dinámicamente tipado vs TS con contratos</li>
+		<li>Declaración de tipos, arrays, objetos e interfaces</li>
+		<li>Union types y literal types para restringir valores</li>
+		<li>null/undefined y strict null checks</li>
+		<li>Compilación previa y errores antes de ejecutar</li>
+		<li>Caso real glud.org: proteger datos de formulario y eventos</li>
 	</ul>
+	<p><strong>Reto base:</strong> tipar un objeto Estudiante y una función presentar.</p>
+	<p><strong>Nivel reto:</strong> crear una interfaz EventoGLUD y usarla en una función de validación.</p>
+	<p><strong>Slides:</strong> <a href="slides/s5.html">s5.html</a></p>
 </div>
 
 <div style="background-color:#16161e; padding:15px; margin:10px 0; border-left:4px solid #565f89;">
