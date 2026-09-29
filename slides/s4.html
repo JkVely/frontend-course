@@ -213,9 +213,9 @@ grupo.nombre</pre>
   <pre>function saludar(nombre) {
   return "Hola, " + nombre + ", ¿cómo va tu curso?"
 }
-saludar("Mónica")</pre>
-  <p>Versión moderna:</p>
-  <pre>const despedirse = (nombre) => "Chao, " + nombre</pre>
+saludar("Mónica")
+
+const despedirse = (nombre) => "Chao, " + nombre</pre>
   <p>Regla mnemotécnica: <b>entrada → decisión → salida</b>. Si no tiene <code>return</code>, no devuelve nada.</p>
   <div class="speaker">Explicar la estructura de una función: parámetros (entrada), lógica interna (decisiones), y valor de retorno (salida). Mostrar la diferencia entre la sintaxis tradicional y la función flecha. Enfatizar que una función sin <code>return</code> devuelve <code>undefined</code> implícitamente.</div>
 </section>
@@ -248,8 +248,7 @@ const botones = document.querySelectorAll("button")
 console.log(titulo.innerText)
 titulo.innerText = "Cursos del GLUD"
 titulo.style.color = "#1affff"
-titulo.classList.add("grande")
-</pre>
+titulo.classList.add("grande")</pre>
   <p><code>querySelector</code> devuelve el <b>primer</b> elemento. Si necesitas todos, usa <code>querySelectorAll</code>.</p>
   <div class="speaker">Explicar que el DOM representa la página como un árbol de objetos. Mostrar cómo <code>querySelector</code> selecciona por selector CSS y devuelve un nodo. Demostrar en vivo modificando el h1 de glud.org, cambiando texto, color y agregando una clase. Resaltar que los cambios se ven instantáneamente sin recargar.</div>
 </section>
@@ -296,7 +295,7 @@ burger.addEventListener("click", () => {
 document.addEventListener("click", () => {
   totalClics++
   console.log(`Clic número ${totalClics}`)
-})</pre>
+}</pre>
       </li>
       <li>Cambia el evento a <code>"mouseover"</code> y observa cómo cambia el comportamiento.</li>
     </ol>
@@ -335,7 +334,7 @@ document.scripts[0]?.src</pre>
 
 <section class="slide">
   <p class="kicker">Reto después de clase</p>
-  <h2>Práctica guiada</h2>
+  <p class="muted">Práctica guiada</p>
   <ol>
     <li>Abre glud.org y en la Consola crea un <code><div id="contador"></code>.</li>
     <li>Añade un botón y un contador que incremente con cada clic.</li>
@@ -343,6 +342,87 @@ document.scripts[0]?.src</pre>
   </ol>
   <p>Entrega: captura del código en la Consola y el resultado visible.</p>
   <div class="speaker>Explicar paso a paso cómo crear el div, el botón, actualizar el texto del contador y vincular el listener. Sugerir usar <code>document.createElement</code>, <code>appendChild</code>, y manipular <code>textContent</code>. Recordar que pueden usar la consola para probar líneas individuales antes de combinar todo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Sintaxis avanzada</p>
+  <h2>Desestructuración y spread/rest</h2>
+  <p>La desestructuración permite extraer valores de arreglos y objetos en variables distintas. El operador rest recoge elementos restantes en un parámetro o variable. El operador spread copia o combina elementos de arreglos y propiedades de objetos.</p>
+  <pre>
+const numeros = [1, 2, 3];
+const [primero, segundo, tercero] = numeros;
+console.log(primero);
+
+const usuario = { nombre: "Ana", edad: 25, ciudad: "Bogotá" };
+const { nombre, edad } = usuario;
+console.log(nombre, edad);
+
+function sumar(...valores) {
+  return valores.reduce((ac, v) => ac + v, 0);
+}
+console.log(sumar(1, 2, 3, 4));
+
+const parte = [5, 6];
+const completo = [1, 2, ...parte, 7, 8];
+console.log(completo);
+
+const base = { rol: "estudiante", activo: true };
+const info = { ...base, nombre: "Luis", curso: "Frontend" };
+console.log(info);
+</pre>
+  <div class="turn">
+    <b>EN CLASE (5 min):</b>
+    <ol>
+      <li>Dado el objeto <code>const datos = { usuario: { perfil: { nombre: "Carlos", edad: 20 } }, hobbies: ["fútbol", "lectura"] }</code>, desestructura para obtener <code>nombre</code> y el segundo hobby.</li>
+      <li>Escribe una función que reciba un arreglo de números y devuelva el promedio usando rest y spread.</li>
+    </ol>
+  </div>
+  <div class="speaker">Explicar cómo la desestructuración facilita extraer valores de arreglos y objetos. Mostrar que rest permite capturar argumentos indeterminados y spread permite copiar o combinar estructuras. Guiar la solución del ejercicio en pareja.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Integración con CSS y HTML</p>
+  <h2>Estilo, clases y creación de elementos</h2>
+  <p>JavaScript puede modificar estilos en línea, agregar o remover clases, crear nuevos elementos y manipular atributos. También puede leer valores de formularios y prevenir el envío por defecto.</p>
+  <pre>
+const titulo = document.querySelector("h1");
+titulo.style.color = "#ff9e64";
+titulo.style.fontSize = "2rem";
+
+titulo.classList.add("destacado");
+titulo.classList.remove("normal");
+titulo.classList.toggle("activo");
+
+const nuevoDiv = document.createElement("div");
+nuevoDiv.textContent = "Soy un div creado con JS";
+document.body.appendChild(nuevoDiv);
+
+const enlace = document.createElement("a");
+enlace.href = "https://glud.org";
+enlace.textContent = "Visitar GLUD";
+enlace.target = "_blank";
+enlace.rel = "noopener noreferrer";
+document.body.appendChild(enlace);
+
+const input = document.querySelector("input[type='email']");
+console.log(input.value);
+input.value = "nuevo@glud.org";
+
+const formulario = document.querySelector("form");
+formulario.addEventListener("submit", function(event) {
+  event.preventDefault();
+  const datos = new FormData(formulario);
+  console.log(datos.get("nombre"));
+});
+</pre>
+  <div class="turn">
+    <b>EN CLASE (7 min):</b>
+    <ol>
+      <li>Crear un botón que, al hacer clic, cambie el color de fondo de la página a un color aleatorio.</li>
+      <li>Dado un formulario con campos nombre y correo, mostrar una alerta con los valores al enviar, sin recargar la página.</li>
+    </ol>
+  </div>
+  <div class="speaker">Mostrar cómo usar style para cambios inmediatos, classList para aplicar clases predefinidas, y createElement para añadir contenido dinámico. Recordar que los formularios deben usar preventDefault para evitar el recargo. Guiar los ejercicios en parejas.</div>
 </section>
 
 <section class="slide">
