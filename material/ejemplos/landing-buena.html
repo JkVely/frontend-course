@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLUD 2026 – Congreso de Software Libre (versión buena)</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:system-ui,sans-serif; line-height:1.6; }
+  header {
+    text-align:center;
+    padding:4rem 2rem;
+    background:linear-gradient(135deg,var(--blue),var(--purple));
+    color:#fff;
+  }
+  header h1 { font-size:2.2rem; margin-bottom:1rem; }
+  header p { font-size:1.2rem; margin-bottom:2rem; max-width:32ch; }
+  header .cta {
+    display:inline-block;
+    padding:.9rem 1.8rem;
+    background:#fff;
+    color:var(--blue);
+    text-decoration:none;
+    border-radius:4px;
+    font-weight:600;
+    font-size:1.1rem;
+  }
+  section { padding:3rem 2rem; max-width:80ch; margin:0 auto; }
+  .stats { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin:2rem 0; }
+  .stat { background:var(--surface); border-radius:8px; padding:1.5rem; text-align:center; min-width:120px; }
+  .stat-number { font-size:2rem; font-weight:bold; color:var(--green); display:block; }
+  .stat-label { font-size:1rem; color:var(--muted); margin-top:.3rem; }
+  .features { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; margin:2rem 0; }
+  .feature { background:var(--surface); border-radius:8px; padding:1.8rem; text-align:center; width:260px; }
+  .feature h3 { color:var(--blue); margin-bottom:1rem; }
+  .feature p { color:var(--muted); }
+  footer { text-align:center; padding:2rem 1rem; font-size:.9rem; color:var(--muted); border-top:1px solid var(--surface2); margin-top:3rem; }
+  @media (max-width:600px){
+    header h1{font-size:1.8rem;}
+    header p{font-size:1rem;}
+    .stats{flex-direction:column;align-items:center;}
+    .features{flex-direction:column;align-items:center;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>SLUD 2026 – Congreso de Software Libre</h1>
+  <p>18–21 agosto 2026 • Bogotá, Congreso Nacional</p>
+  <a href="#registro" class="cta">Registrarme ahora</a>
+</header>
+
+<section class="stats">
+  <div class="stat"><span class="stat-number">1500</span><span class="stat-label">Asistentes esperados</span></div>
+  <div class="stat"><span class="stat-number">50</span><span class="stat-label">Charlas</span></div>
+  <div class="stat"><span class="stat-number">12</span><span class="stat-label">Talleres</span></div>
+  <div class="stat"><span class="stat-number">8</span><span class="stat-label">Países</span></div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>Charlas inspiradoras</h3>
+    <p>Expertos internacionales en software libre y tecnología abierta compartirán sus experiencias y casos de éxito.</p>
+  </div>
+  <div class="feature">
+    <h3>Talleres prácticos</h3>
+    <p>Aprende a contribuir, licenciar y distribuir tus proyectos con guías paso a paso y ejercicios en vivo.</p>
+  </div>
+  <div class="feature">
+    <h3>Espacio de networking</h3>
+    <p>Conecta con desarrolladores, emprendedores y empresas del sector en áreas diseñadas para el intercambio.</p>
+  </div>
+  <div class="feature">
+    <h3>Feria de empleo</h3>
+    <p>Oportunidades de trabajo y pasantías en organizaciones líderes que buscan talento en tecnologías abiertas.</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 SLUD • Universidad Distrital • Todos los derechos reservados
+</footer>
+</body>
+</html>

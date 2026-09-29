@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-CO">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,431 +17,812 @@
     --surface: #24283b;
     --surface2: #2f3549;
   }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
-  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
-  .slide.active { display: flex; }
-  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
-  h1 b { color: var(--blue); font-weight: inherit; }
-  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
-  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
-  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
-  li { margin-bottom: .45em; }
-  li::marker { color: var(--blue); }
-  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
-  p b { color: var(--fg); }
-  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
-  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
-  th { color: var(--blue); background: var(--surface); }
-  td b { color: var(--fg); }
-  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
-  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.72rem, 1.2vw, .92rem); line-height: 1.5; overflow-x: auto; color: var(--muted); max-width: 78ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
-  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
-  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
-  .analogy b { color: var(--green); }
-  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 72ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
-  .industry b { color: var(--orange); }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
-  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
-  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
-  .good { color: var(--green); }
-  .bad { color: var(--red); }
-  .state { display: inline-block; background: var(--surface); border: 1px solid var(--surface2); border-radius: 6px; padding: .15em .5em; font-size: .95em; }
-  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
-  .turn b { color: var(--orange); }
-  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:system-ui,sans-serif; overflow:hidden; }
+  .slide { display:none; height:100vh; padding:6vh 7vw 9vh; flex-direction:column; justify-content:center; }
+  .slide.active { display:flex; }
+  h1 { font-size:clamp(1.9rem,4.6vw,3.4rem); line-height:1.12; margin-bottom:1.6rem; max-width:24ch; }
+  h1 b { color:var(--blue); font-weight:inherit; }
+  h2 { font-size:clamp(1.4rem,3.2vw,2.3rem); color:var(--purple); margin-bottom:1.3rem; }
+  h3 { font-size:clamp(1.05rem,1.9vw,1.4rem); color:var(--fg); margin:1.2rem 0 .5rem; }
+  p { font-size:clamp(1rem,1.9vw,1.32rem); color:var(--muted); max-width:62ch; line-height:1.65; }
+  .turn { background:linear-gradient(90deg,rgba(255,158,100,.13),var(--surface)); border-left:4px solid var(--orange); border-radius:0 10px 10px 0; padding:1.05rem 1.4rem; margin-top:1.2rem; }
+  .turn b { color:var(--orange); }
   .speaker {
-    display: none;
-    position: fixed;
-    left: 7vw; right: 7vw; bottom: 3.2rem;
-    background: var(--surface2);
-    border: 1px solid var(--purple);
-    border-radius: 10px;
-    padding: .9rem 1.2rem;
-    font-size: clamp(.85rem, 1.6vw, 1.05rem);
-    line-height: 1.55;
-    color: var(--fg);
-    max-height: 38vh;
-    overflow-y: auto;
-    z-index: 30;
-    white-space: pre-wrap;
+    display:none;
+    position:fixed;
+    left:7vw; right:7vw; bottom:3.2rem;
+    background:var(--surface2);
+    border:1px solid var(--purple);
+    border-radius:10px;
+    padding:.9rem 1.2rem;
+    font-size:clamp(.85rem,1.6vw,1.05rem);
+    line-height:1.55;
+    color:var(--fg);
+    max-height:38vh;
+    overflow-y:auto;
+    z-index:30;
+    white-space:pre-wrap;
   }
-  .speaker.show { display: block; }
-  .speaker b { color: var(--purple); }
-  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
-  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
-  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
-  .hint { opacity: .85; }
+  .speaker.show { display:block; }
+  .speaker b { color:var(--purple); }
+  .footer { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:12px 28px; font-size:.82rem; color:var(--muted); z-index:20; background:rgba(26,27,38,.92); }
+  .progress { height:3px; background:var(--surface); position:fixed; top:0; left:0; right:0; z-index:40; }
+  .bar { height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--purple)); transition:width .25s ease; }
+  .hint { opacity:.85; }
+  /* Browser mockup */
+  .browser {
+    position:relative;
+    width:320px;
+    height:560px;
+    background:#fff;
+    border-radius:16px;
+    box-shadow:0 8px 24px rgba(0,0,0,.15);
+    overflow:hidden;
+    font-size:14px;
+    margin:0 auto;
+  }
+  .browser .bar {
+    height:44px;
+    width:100%;
+    flex:none;
+    background:linear-gradient(180deg,#f5f5f5,#eaeaea);
+    display:flex;
+    align-items:center;
+    padding:0 12px;
+    border-bottom:1px solid #ddd;
+  }
+  .browser .dots { width:4px;height:4px;background:#999;border-radius:50%;margin:0 2px; }
+  .browser .url {
+    flex:1;
+    min-width:0;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius:4px;
+    padding:2px 6px;
+    font-family:monospace;
+    color:#333;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .browser .content {
+    position:relative;
+    height:calc(100% - 44px);
+    overflow:hidden;
+    background:#fafafa;
+  }
+  /* Wireframe sections */
+  .wireframe {
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+  }
+  .wireframe > * { flex:shrink 0; }
+  .section-nav { height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 12px; }
+  .section-nav .logo { width:32px;height:32px;background:var(--surface);border-radius:4px; }
+  .section-nav .links { display:flex; gap:8px; }
+  .section-nav .links div { width:48px;height:20px;background:var(--surface2);border-radius:3px; }
+  .section-nav .cta-sm { width:56px;height:24px;background:var(--blue);border-radius:3px; }
+  .section-hero { flex:1 1 auto; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:24px; text-align:center; }
+  .section-hero .title { width:180px;height:24px;background:var(--surface);border-radius:3px;margin-bottom:8px; }
+  .section-hero .support { width:140px;height:18px;background:var(--surface);border-radius:3px;margin-bottom:16px; }
+  .section-hero .btn-primary { width:120px;height:36px;background:var(--blue);border-radius:4px; }
+  .section-hero .btn-secondary { width:100px;height:30px;background:var(--surface2);border-radius:4px;margin-top:8px; }
+  .section-prueba { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:12px; }
+  .section-prueba .card { background:var(--surface);border-radius:6px;padding:12px;text-align:center; }
+  .section-prueba .num { width:40px;height:40px;background:var(--blue);border-radius:50%;margin:0 auto 8px; }
+  .section-prueba .txt { width:80px;height:14px;background:var(--surface2);border-radius:2px;margin:4px auto; }
+  .section-features { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:12px; }
+  .section-features .card { background:var(--surface);border-radius:6px;display:flex;flex-direction:column; }
+  .section-features .img { width:100%;height:80px;background:var(--surface2);border-radius:4px;margin-bottom:8px; }
+  .section-features .title { width:100%;height:18px;background:var(--surface);border-radius:3px;margin-bottom:4px; }
+  .section-features .txt { width:100%;height:14px;background:var(--surface2);border-radius:2px;margin:2px 0; }
+  .section-cta { height:80px;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center; }
+  .section-cta .btn { width:140px;height:40px;background:#fff;color:var(--blue);border-radius:4px;font-weight:600; }
+  .section-footer { height:60px;display:flex;flex-wrap:wrap;gap:8px;padding:8px; }
+  .section-footer .col { flex:1 1 80px;min-width:80px; }
+  .section-footer .bar { height:12px;background:var(--surface2);border-radius:2px;margin:4px 0; }
+  .section-footer .bar.wide { width:100%; }
+  .section-footer .bar.narrow { width:60%; }
+  /* Focus styles */
+  .focus-nav .wireframe .section-nav,
+  .focus-hero .wireframe .section-hero,
+  .focus-prueba .wireframe .section-prueba,
+  .focus-features .wireframe .section-features,
+  .focus-cta .wireframe .section-cta,
+  .focus-footer .wireframe .section-footer {
+    opacity:1 !important;
+    border:3px solid var(--blue);
+    box-shadow:0 0 12px var(--blue);
+  }
+  .focus-nav .wireframe :not(.section-nav),
+  .focus-hero .wireframe :not(.section-hero),
+  .focus-prueba .wireframe :not(.section-prueba),
+  .focus-features .wireframe :not(.section-features),
+  .focus-cta .wireframe :not(.section-cta),
+  .focus-footer .wireframe :not(.section-footer) {
+    opacity:0.3;
+  }
+  /* Types of landing browsers */
+  .types { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:24px; }
+  .types .browser { width:100%; height:380px; }
+  .types .browser .content { padding:12px; overflow-y:auto; color:#30364a; }
+  .types .product-block { width:100%;height:120px;background:var(--surface2);border-radius:8px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700; }
+  .types .price { width:max-content;height:auto;background:var(--green);border-radius:4px;padding:4px 8px;margin-bottom:8px;color:#1f2a22;font-weight:700; }
+  .types .btn-buy { width:100px;height:34px;background:var(--blue);color:#fff;border-radius:4px;font-weight:600; }
+  .types .event-badge { width:60px;height:24px;background:var(--orange);color:#fff;border-radius:3px;font-size:10px;text-align:center;line-height:24px;margin-bottom:8px; }
+  .types .event-title { width:auto;height:auto;background:var(--surface);color:var(--fg);border-radius:3px;padding:4px 6px;margin-bottom:4px;font-weight:700;line-height:1.25; }
+  .types .event-date { width:max-content;height:auto;background:var(--surface2);color:var(--fg);border-radius:3px;padding:3px 5px;margin-bottom:8px; }
+  .types .event-cta { width:100px;height:34px;background:var(--green);color:#fff;border-radius:4px;font-weight:600; }
+  .types .progress-bar { width:100%;height:8px;background:var(--surface2);border-radius:4px;overflow:hidden;margin-bottom:8px; }
+  .types .progress-fill { height:100%;background:var(--green);width:60%; }
+  .types .avatars { display:flex;gap:-12px;margin-bottom:12px; }
+  .types .avatars .avatar { width:36px;height:36px;border-radius:50%;background:var(--blue); }
+  .types .avatars .avatar:nth-child(2) { background:var(--purple); }
+  .types .avatars .avatar:nth-child(3) { background:var(--green); }
+  .types .btn-join { width:100px;height:34px;background:var(--orange);color:#fff;border-radius:4px;font-weight:600; }
+  .types .desc { font-size:13px;color:var(--muted);margin-top:8px;line-height:1.4; }
+  .types .link { margin-top:12px;font-size:13px; }
+  .types .link a { color:var(--blue);text-decoration:none; }
+  /* Hero bueno vs malo */
+  .hero-comp { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:24px; }
+  .hero-comp .browser { height:420px; }
+  .hero-comp .browser .content { padding:24px; }
+  .hero-malo .title { width:100%;height:24px;background:#ffeb3b;border-radius:3px;margin-bottom:6px; }
+  .hero-malo .support { width:100%;height:18px;background:#ff9800;border-radius:3px;margin-bottom:8px; }
+  .hero-malo .buttons { display:flex;flex-wrap:wrap;gap:8px; }
+  .hero-malo .btn { width:80px;height:28px;background:#f44336;color:#fff;border-radius:4px;font-weight:600; }
+  .hero-bueno .title { width:200px;height:24px;background:var(--surface);border-radius:3px;margin-bottom:12px; }
+  .hero-bueno .support { width:160px;height:18px;background:var(--surface);border-radius:3px;margin-bottom:20px; }
+  .hero-bueno .btn-primary { width:120px;height:36px;background:var(--blue);border-radius:4px; }
+  /* Desktop vs mobile */
+  .nav-compare { display:flex; gap:24px; margin-top:24px; align-items:flex-start; }
+  .nav-compare .browser { flex:1; min-width:260px; }
+  .nav-compare .phone {
+    width:140px;
+    height:260px;
+    background:#fff;
+    border-radius:20px;
+    position:relative;
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    margin-top:auto;
+  }
+  .nav-compare .phone .notch {
+    width:60px;
+    height:16px;
+    background:#000;
+    position:absolute;
+    top:-16px;
+    left:50%;
+    transform:translateX(-50%);
+    border-bottom-left-radius:8px;
+    border-bottom-right-radius:8px;
+  }
+  .nav-compare .phone .content {
+    position:absolute;
+    inset:16px;
+    bottom:16px;
+    background:#fafafa;
+    border-radius:12px;
+    overflow:hidden;
+  }
+  .nav-compare .phone .menu-btn {
+    width:36px;
+    height:24px;
+    position:absolute;
+    top:16px;
+    left:16px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .nav-compare .phone .menu-btn div {
+    width:100%;
+    height:3px;
+    background:var(--surface);
+    border-radius:2px;
+  }
+  .nav-compare .phone .logo {
+    width:30px;
+    height:30px;
+    background:var(--surface);
+    border-radius:4px;
+    position:absolute;
+    top:16px;
+    right:16px;
+  }
+  /* Interaction states */
+  .states {
+    display:flex;
+    gap:16px;
+    margin-top:24px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .states button {
+    min-width:80px;
+    padding:8px 16px;
+    font-size:14px;
+    cursor:pointer;
+    border:none;
+    border-radius:4px;
+    transition:background .2s, transform .1s;
+  }
+  .states button.normal { background:var(--blue);color:#fff; }
+  .states button.hover:hover { background:var(--purple);color:#fff;transform:translateY(-2px); }
+  .states button.focus:focus-visible { outline:3px solid var(--green);outline-offset:2px;background:var(--blue);color:#fff; }
+  .states button.error { background:var(--red);color:#fff;opacity:0.7; }
+  .states button.disabled { background:var(--surface2);color:var(--muted);cursor:not-allowed;opacity:0.5; }
+  .states label {
+    font-size:13px;
+    color:var(--muted);
+    margin-top:4px;
+    display:block;
+  }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .types, .hero-comp { grid-template-columns: 1fr; }
+    .nav-compare { flex-direction: column; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
 </style>
 </head>
 <body>
 
 <div class="progress"><div class="bar" id="bar"></div></div>
 
+<!-- Slide 1: Título -->
 <section class="slide active">
-  <p class="kicker">Bloque 1 · Anatomía landing · Sesión 3</p>
+  <p class="kicker">Bloque 1 · Diseño landing · Sesión 3</p>
   <h1>¿Cómo se diseña una página <b>que convierte?</b></h1>
-  <p>Has entrado a cientos de sitios: en algunos supiste al instante qué hacer siguiente; en otros te perdiste y cerraste la pestaña. Piensa en <b>un sitio de cada tipo</b> y trae tu respuesta: hoy la vamos a nombrar técnicamente.</p>
-  <p style="margin-top:.8rem">Aviso grande: el wireframe que produces hoy <b>no es desechable</b> — es el insumo directo del proyecto final (S13), donde se implementa y se envía como Merge Request real al repo del grupo.</p>
-  <div class="speaker">APERTURA del día y CONTRATO. Sesión con manos en la masa: diseñan sus primeros wireframes.
-Ritual de entrada: pedir 3 voluntarios para contar su sitio-perdido y su sitio-claro en una frase cada uno. Escribir en columnas: "se perdía porque..." / "se intuía porque..." — y HOY vamos a nombrar esas razones técnicamente (al final el tablero debe quedar ordenado bajo los nombres que dan la teoría).
-Frase-semilla: "Diseñar una landing es diseñar UNA conversación que termina en una acción."
-Encargo serio: el wireframe del reto de hoy es el material con el que se implementa el proyecto real del grupo en S13. Sí, así de serio es el grupo.
-Cierre del encuadre: "Hoy ustedes se vuelven diseñadores de producto: la tecnología llega (S4+) pero lo que se decide HOY es qué se construye y por qué."</div>
+  <p class="muted">Visualizamos la anatomía, los tipos y los detalles que hacen que una landing funcione.</p>
+  <div class="speaker">Abrir con la pregunta: ¿Qué hace que una página te diga al instante qué hacer? Anotar respuestas breves. Explicar que hoy veremos la estructura en bloques y practicaremos con ejemplos reales.</div>
 </section>
 
+<!-- Slide 2: Wireframe maestro -->
 <section class="slide">
-  <p class="kicker">La anatomía</p>
-  <h2>Una landing responde las preguntas <b>en orden</b></h2>
-  <pre>
-+---------------------------------------------------+
-|  NAV: logo + enlaces + CTA pequeño   ¿Quién eres? │
-+---------------------------------------------------+
-|  HERO:                                             │
-|   - Título con propuesta de valor   ¿Qué ofreces?  │
-|   - Párrafo de apoyo                ¿Te importa?   │
-|   - CTA principal (+secundario opc) ¿Qué hago?     │
-+---------------------------------------------------+
-|  PRUEBA SOCIAL: logos, números, testimonios        │
-|                              ¿Quién más confía?    │
-+---------------------------------------------------+
-|  FEATURES: tarjetas de beneficios                  │
-|                              ¿Qué gano exactamente?│
-+---------------------------------------------------+
-|  CTA FINAL: repite la acción principal  Última llamada│
-+---------------------------------------------------+
-|  FOOTER: enlaces, contacto, legal                  │
-|                              Lo que busco al final │
-+---------------------------------------------------+
-  </pre>
-  <div class="speaker">Presencia el diagrama como si fuera un GUIÓN: cada sección contesta UNA pregunta del usuario, y las preguntas están ordenadas según la LÓGICA de la decisión. Ese orden no es casual: replica la conversación de ventas (quién → qué → por qué te interesa → quién más confía → detalle → acción → recursos).
-Recorrer pregunta por pregunta con el dedo sobre el diagrama y dar 5 segundos de silencio entre cada una para que "vean" cómo también ellos la leen.
-Punto de comparación de la S1: la regla de las 3 preguntas (DÓNDE/QUÉ/QUÉ SIGUE) se puede mapear aquí: nav responde DÓNDE estoy, hero responde QUÉ es esto, CTA responde QUÉ sigo. La landing es el mapa del viaje, no decoración.
-Aquí la clase debe estar agarrada del playbook (glud.org abierto): insistir EN VIVO, recorriendo la home con el scroll, en que cada sección está "diseñada" para el diagrama.
-Frase de cierre de slide: "No memorices las secciones: memoriza el orden lógico de las preguntas. Las secciones son la respuesta; el orden es el criterio."</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">La anatomía · en vivo</p>
-  <h2>El caso real: <b>verifiquemos la anatomía en glud.org</b></h2>
-  <ol>
-    <li><b>Nav:</b> logo, enlaces y CTA pequeño → ¿quién soy?</li>
-    <li><b>Hero:</b> badge contextual (comunidad GNU/Linux) + título neón + párrafo + 2 botones → ¿qué ofrezco y quién soy para quién?</li>
-    <li><b>Prueba social:</b> tres estadísticas bajo el hero → ¿quién más confía?</li>
-    <li><b>Features:</b> tarjetas de cursos / integración → ¿qué gano?</li>
-    <li><b>CTA final:</b> repetición de la acción → última llamada.</li>
-    <li><b>Footer:</b> enlaces, contacto, redes → lo que busco al decidir.</li>
-  </ol>
-  <p style="margin-top:1rem">Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a> y ve tachando una a una. La teoría se vuelve evidente apenas la miras con esta lente.</p>
-  <div class="speaker">Aquí se hace el baile DE LAS 2 VENTANAS (glud.org + el diagrama): la idea es que la anatomía deje de ser abstracta y se vuelva verificable con un scroll.
-Rodear la home y hacer las preguntas en vivo:
-- "¿La sección de estadísticas es PRUEBA SOCIAL?" — sí: los números ("X integrantes", "Y asistentes") son la forma más directa de decir "gente confía". Si falta, el visitante no sabe si el grupo es 'serio'.
-- "¿El hero tiene dos CTAs?" — mira, es coyuntural: en el sitio EL CTA primario es el de SLUD y el secundario es el de los cursos. Esta doble opción suele decidirse en una discusión de producto (slide 6).
-- "¿El footer es la última pregunta?" — correcto: los que deciden escriben/contactan al final.
-Anotar hallazgos de la clase en el tablero: cada pregunta respondida es una sección justificada. Si falta una pregunta sin respuesta, hay una sección faltante.
-Mensaje que NO puede faltar: "observar sitios reales no es pasatiempo: es el entrenamiento de diseño, y ustedes acaban de hacerlo con profesionalidad."</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">La analogía</p>
-  <h2>Una landing es la <b>fachada y la carta de un restaurante</b></h2>
-  <div class="grid2">
-    <div class="card">
-      <h4>Nav = la entrada</h4>
-      <p style="font-size:.95em; color:var(--fg)">Ves el nombre, el letrero, sabes por dónde moverte. Sin lerdo, no entras ni a probar.</p>
+  <p class="kicker">Wireframe maestro</p>
+  <h2>Estructura de secciones en orden</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
     </div>
-    <div class="card">
-      <h4>Hero = el plato del día en la pizarra</h4>
-      <p style="font-size:.95em; color:var(--fg)">Si ese texto no te antoja, no entras. El hero vende el plato antes de que haya mesa.</p>
-    </div>
-    <div class="card">
-      <h4>Prueba social = las mesas llenas</h4>
-      <p style="font-size:.95em; color:var(--fg)">"Si hay gente, debe ser bueno." El comensal reconoce la calidad por el ambiente.</p>
-    </div>
-    <div class="card">
-      <h4>Features + CTA final = ingredientes y el mesero</h4>
-      <p style="font-size:.95em; color:var(--fg)">El detalle convence al interesado; el mesero pregunta justo cuando decidiste.</p>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="speaker">Esta analogía sirve de 3 maneras: 1) hace la anatomía inolvidable (todo el mundo ha caminado una calle de restaurantes); 2) da el repertorio natural de preguntas de diseño: "¿cuál es el plato del día?", "¿las mesas están llenas?"; 3) prepara el VOCABULARIO del reto (vamos a diseñar "el restaurante de noticias del GLUD").
-No leer las 4 tarjetas de corrido: para cada una, pedir primero "¿qué creen que representa esta parte en la web?" y revelar recién después. La sala lleva el juego.
-Cierre de analogía: "el diseñador de landing debe saber qué pregunta está respondiendo cada sección Y también qué suena vacío si la sección falta" — con el reto del día (noticias) van a vivir eso.
-Nota organizacional: el ejemplo es DEL MISMO restaurante para toda la clase (carta, fachada) y la web: los términos compartidos en el curso van a ser estos.</div>
+  <div class="speaker">Señalar que cada bloque representa una sección real. El orden es la conversación: quién eres, qué ofreces, quién más confía, qué gano, última acción, recursos. Pausar para que identifiquen cada bloque en voz alta.</div>
 </section>
 
-<section class="slide">
-  <p class="kicker">El hero</p>
-  <h2>Los primeros 5 segundos se deciden <b>en el hero</b></h2>
-  <p>El usuario decide quedarse o irse en segundos. El hero es la única parte que <b>TODOS</b> ven, así que concentra ahí la claridad:</p>
-  <ol>
-    <li><b>Propuesta de valor:</b> en una frase, qué es esto y para quién es.</li>
-    <li><b>Un verbo de acción:</b> el botón dice QUÉ pasa al presionarlo ("Únete", "Ver agenda"). Nunca "Enviar", nunca "Click aquí".</li>
-    <li><b>Un solo foco visual:</b> si todo grita, nada escucha.</li>
-  </ol>
-  <div class="analogy"><b>Minecraft:</b> el hero es la <b>hotbar</b>: máximo 9 slots, siempre visibles, siempre iguales. Podrían ser 27 (todo el inventario), pero encontrar tu espada en medio de una pelea sería imposible. La restricción ES el diseño.</div>
-  <div class="speaker">La explicación que corre el día: "Hero no viene de héroe: en diseño se llama así la zona de encabezado (la primera pantalla que se ve sin scrollear). El nombre importa poco; lo que importa es que concentra TODA la decisión."
-Los 3 puntos son la VERSIÓN DE VALOR exigible: propuesta en una frase (si no puedes decirla en una frase, no la has pensado), verbo de acción (un botón no dice "Enviar"; dice "Inscríbete en SLUD 2026"), y un foco (el ojo del usuario no sigue 3 botones).
-Dos errores mortales a corregir en clase: (1) poner de hero una imagen gigante sin texto (pierde la ventana de los 5 segundos); (2) un hero con "Bienvenidos a..." sin decir para quién es (frase aspiracional vacía).
-Reto diagnóstico EN VIVO con glud.org: ¿era una sola propuesta la del hero? Sí: "promovemos el software libre + SLUD como CTA". El grupo puede verificar por sí mismo si eso está cumpliendo.
-Analogía hotbar: la restricción ES el diseño: si el hero tuviera 10 opciones, sería un inventario abierto — nadie decidiría. En el reto de noticias va a clavar esta lección: máximo UN CTA claro.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">El debate del doble botón</p>
-  <h2>"¿No se supone que hay <b>un solo CTA?</b>"</h2>
-  <p>glud.org tiene dos botones en el hero, y la regla clásica dice "un único CTA". ¿Está violando su propia regla? <b>Spoiler: no.</b></p>
-  <table>
-    <tr><th></th><th>CTA principal</th><th>CTA secundario</th></tr>
-    <tr><td>Peso visual</td><td>Botón relleno (alta presencia)</td><td>Bordeado, menos peso</td></tr>
-    <tr><td>A quién</td><td>Al visitante curioso: entra a la SLUD</td><td>Al que ya sabe programar: ver cursos</td></tr>
-    <tr><td>Jerarquía</td><td>El único que grita</td><td>El que susurra, pero está</td></tr>
-  </table>
-  <p style="margin-top:1rem">La regla real es <b>una sola acción primaria</b>, no "un solo botón". Dos audiencias distintas merecen dos salidas — ordenadas por peso.</p>
-  <div class="speaker">Sembrar la pregunta ANTES de la respuesta: "¿qué opina el grupo: se viola la regla o no?" Dejar 1 minuto de discusión libre. El objetivo es que lleguen solos a la distinción "una acción PRIMARIA ≠ un solo botón".
-La regla en su versión correcta: "una sola acción primaria por pantalla". Todos los demás botones deben ceder visualmente (menor peso, menor tamaño) para que el ojo no compita. Es un problema de jerarquía (S1), no de cantidad.
-El "por qué" real del sitio: el visitante curioso (busca la SLUD) y el convencido programador (busca cursos) son audiencias distintas; la landing atiende a las dos con pesos distintos. La prueba del tiempo: ningún estudiante se confundió entre "tarjeta SLUD" y "cursos" — la claridad está en la jerarquía, no en el número.
-Insistir en que el "spoiler" no fue mío: es algo que el grupo verificó con sus ojos durante la revisión de la anatomía. El criterio se aprende así: verificando, no creyendo.
-Cierre lección para el reto: en su wireframe de noticias habrá un CTA primario y quizá un secundario — decidan cuál es cuál y que el peso lo diga.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Hero · tu turno</p>
-  <div class="turn">
-    <b>EN CLASE (4 min):</b>
-    <ol>
-      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a> y mira el hero <b>sin hacer scroll</b>.</li>
-      <li>En una frase, responde: ¿qué ofrece, para quién es, y qué hacés que pase si haces click?</li>
-      <li>Compatila por chat con el grupo: <em>"el hero de glud.org funciona porque ___"</em>.</li>
-      <li>Si algo del hero te confunde (¿por qué hay un botón grande adelante?), dilo — vamos a medirlo en la próxima slide.</li>
-    </ol>
+<!-- Slide 3: Enfoque NAV -->
+<section class="slide focus-nav">
+  <p class="kicker">Nav: ¿Quién eres?</p>
+  <h2>Logo, menú y CTA secundario</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p style="margin-top:1rem">La regla: todos dejemos la ventana igual. Hero sin scroll: es lo que ustedes acaban de medir. Si el hero no vende ahí, el sitio ya está perdido sin saberlo.</p>
-  <div class="speaker">Dinámica virtual-friendly: pedir solo una frase corta por persona, escrito en el chat de la clase (Teams/Google/Donde sea). Con solo 2 estudiantes la conversación fluye sin muro.
-La idea es conectar con lo que Imaginaron sobre el wireframe: el hero tiene 3 elementos medibles (propuesta de valor, verbo de acción, foco único). El punto del ejercicio es que digan si glud.org cumple o no cada uno.</div>
+  <div class="speaker">Preguntar: ¿Qué comunica el logo? ¿Cuántos enlaces principales veis? ¿El CTA pequeño invita a una acción de bajo compromiso? Señalar que el nav debe ser claro pero no robar protagonismo al hero.</div>
 </section>
 
-<section class="slide">
-  <p class="kicker">Navegación</p>
-  <h2>Barra completa vs hamburguesa: <b>argumentos, no moda</b></h2>
-  <table>
-    <tr><th>Patrón</th><th>Ventaja</th><th>Costo</th></tr>
-    <tr><td><b>Barra completa</b></td><td>Todo visible, un clic a cualquier lado</td><td>Ocupa espacio horizontal</td></tr>
-    <tr><td><b>Hamburguesa</b></td><td>Compacta, limpia</td><td>Oculta las opciones: fuera de vista, fuera de mente</td></tr>
-  </table>
-  <p style="margin-top:1rem">Regla práctica: <b>en desktop, barra completa casi siempre</b> — hay espacio de sobra. En móvil, la hamburguesa es aceptable <b>si</b> el menú que revela está bien construido.</p>
-  <div class="analogy"><b>Comida:</b> la hamburguesa es el menú del día escrito en una pizarra <b>dentro de la cocina</b>: ahorra pared, pero si el cliente no sabe que existe, pide lo único que vio afuera. Todo lo que escondes tras un clic reduce la probabilidad de que lo encuentren.</div>
-  <div class="speaker">Marco de decisión que se lleva el estudiante: es UNA tabla de ventaja/costo, no un veredicto. La elección depende del ancho de pantalla y de cuántas opciones se necesitan: en el móvil no cabe una barra de 6 enlaces con estilo; en desktop que haya una hamburguesa con 3 enlaces es un desperdicio raro.
-Más importante que la regla: la palabra "hamburguesa" describe el ICONO (tres rayas), y se usa como si fuera un patrón; insistir en que "hamburguesa" es solo el icono de apertura. El debate real es qué hace el menú al abrirse (y si la pizarra afuera sigue existiendo).
-Pregunta de activación para el grupo: "¿cuándo fue la última vez que colapsaste un menú y todos los enlaces desaparecieron sin modo de saber dónde está la pizarra?" — respuesta esperada: TODOS. Esa es la fricción que la tabla cuantifica.
-Diferencia entre poner y ESCONDER: la hamburguesa es mala cuando esconde cosas importantes (contacto, eventos); buena cuando guarda opciones secundarias (la newsletter, el mapa del sitio).
-Cierre técnico: la regla de "desktop barra completa" es también de PERFORMANCE (no se carga un menú oculto extra) — se podrá cuantificar en S7/S11.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Navegación · tu turno</p>
-  <div class="turn">
-    <b>EN CLASE (5 min):</b>
-    <ol>
-      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a> en DevTools, alterna entre <b>vista móvil</b> (teléfono) y <b>vista desktop</b> con el botón de esquina superior izquierdo.</li>
-      <li>Cuenta: ¿cuántas veces haces scroll en móvil vs desktop para llegar al footer? ¿El menú se cambia de forma o solo se desaparece?</li>
-      <li>En mobile: abre el panel de menú, prueba si el cierre es fácil de encontrar.</li>
-      <li>Comenta en el chat una frase: "la diferencia que noté fue/más importante fue..."</li>
-    </ol>
+<!-- Slide 4: Enfoque HERO -->
+<section class="slide focus-hero">
+  <p class="kicker">Hero: ¿Qué ofreces y para quién?</p>
+  <h2>Titular, apoyo y CTA primario</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p style="margin-top:1rem">La hamburguesa es policy, no decoration. El goal vs desktop: cada frame tiene sus quirks y debes pues resolverlos todos.</p>
-  <div class="speaker">La idea es que vivan el patrón por mulatorio: DevTools permite cambiar al formato de teléfono sin comprar smartphone. Mientras lo haga, double proyecto (count scroll, button tests) para que haya contrato entre las dos vistas: una bien formada, otra que le ahorre búsqueda o lean el hero ya destacada.
-Prepreguntar: "¿Cuál fue tu primer clic visible en la home? ¿Lo viste en la primera pantalla o lo buscaste?".</div>
+  <div class="speaker">Enfatizar que el hero debe responder en ≤5 segundos: qué es, para quién y qué hacer. Un solo CTA primario, sin competencia visual. Pedir que imaginen el texto real dentro de esos bloques.</div>
 </section>
 
+<!-- Slide 5: Enfoque PRUEBA SOCIAL -->
+<section class="slide focus-prueba">
+  <p class="kicker">Prueba social: ¿Quién más confía?</p>
+  <h2>Logos, números y testimonios</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Explicar que la prueba social reduce el riesgo percibido. Pedir que observen si los números son relevantes y si los logos son reconocibles. Sugerir que cada tarjeta tenga un número grande y una breve leyenda.</div>
+</section>
+
+<!-- Slide 6: Enfoque FEATURES -->
+<section class="slide focus-features">
+  <p class="kicker">Features: ¿Qué gano exactamente?</p>
+  <h2>Beneficios claros, no características técnicas</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Recalcar que cada feature debe comenzar con un verbo de beneficio (crear, desplegar, optimizar). Evitar jerga. Pedir que lean en voz alta lo que imaginen dentro de cada barra de texto.</div>
+</section>
+
+<!-- Slide 7: Enfoque CTA FINAL -->
+<section class="slide focus-cta">
+  <p class="kicker">CTA final: Última llamada a la acción</p>
+  <h2>Botón principal que cierra el flujo</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Destacar que el CTA final debe ser visualmente distinto del secundario del nav y del hero. Debe usar el color primario y un verbo de acción claro. Preguntar: ¿Qué ocurre si lo presionan ahora?</div>
+</section>
+
+<!-- Slide 8: Enfoque FOOTER -->
+<section class="slide focus-footer">
+  <p class="kicker">Footer: ¿Qué busco al final?</p>
+  <h2>Contacto, legal y enlaces de referencia</h2>
+  <div class="browser">
+    <div class="bar">
+      <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+      <span class="url">glud.org</span>
+    </div>
+    <div class="content">
+      <div class="wireframe">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+        <div class="section-prueba">
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="num"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-features">
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+          <div class="card"><div class="img"></div><div class="title"></div><div class="txt"></div><div class="txt"></div></div>
+        </div>
+        <div class="section-cta"><div class="btn"></div></div>
+        <div class="section-footer">
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+          <div class="col"><div class="bar wide"></div><div class="bar narrow"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Indicar que el footer no es un cementerio: contiene enlaces útiles (sociales, correo, políticas). Preguntar qué información esperan encontrar al final de una landing.</div>
+</section>
+
+<!-- Slide 9: Tipos de landing -->
 <section class="slide">
-  <p class="kicker">Navegación · el caso real</p>
-  <h2>glud.org usa <b>los dos patrones</b>: según el ancho</h2>
-  <ul>
-    <li><b>Desktop:</b> barra completa con enlaces grandes.</li>
-    <li><b>Móvil:</b> hamburguesa que abre un <b>panel inferior deslizable</b> (bottom sheet) con targets táctiles amplios.</li>
-    <li>Detalle de calidad: botón accesible — <code>aria-label</code> describiendo el menú y <code>aria-expanded</code> anunciando si está abierto o cerrado.</li>
-  </ul>
-  <p style="margin-top:1rem">Es un ejemplo local de que la hamburguesa <b>puede hacerse bien</b>. Lo destripamos a nivel código en S7; hoy nos llevamos el patrón.</p>
-  <div class="speaker">Destacar primero el CONTRASTE con la teoría que ya conocen: el sitio no eligió "una" navegación: eligió DOS según el dispositivo. Cada una usa la ventaja del patrón y evita el costo (en móvil, deslizar un panel es más natural que un menú que cae).
-Explicación accesible de aria-* (sin ahondar): los lectores de pantalla leen al usuario "menú abierto" / "menú cerrado" gracias a aria-expanded; el botón mismo dice QUÉ hace gracias a aria-label. Es la parte invisible que hace que una hamburguesa sea "bien hecha". En S7 entre a código.
-En vivo: pedir que verifiquen con una herramienta de accesibilidad del navegador (o simplemente abriendo DevTools y pulsando el botón) que aria-expanded cambia con el clic. Si no, en la demo de la clase lo mostramos abierto/cerrado dos veces.
-Dato think: más de la mitad del tráfico de glud.org llega desde celulares — así que la barra móvil (bottom sheet) no es un "extra": es el patrón que la mayoría de usuarios ven de verdad. Eso refuerza el mobile-first de la próxima slide.
-Cierre: el criterio de diseño no es "hamburguesa vs barra", es "¿qué ve mi usuario real en su pantalla real?".</div>
+  <p class="kicker">Tipos de landing según intención</p>
+  <h2>Producto, evento y comunidad</h2>
+  <div class="types">
+    <!-- Producto -->
+    <div class="browser">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">ejemplo.com/producto</span>
+      </div>
+      <div class="content">
+        <div class="product-block">Producto destacado</div>
+        <div class="price">Desde $99</div>
+        <button class="btn-buy">Comprar</button>
+        <div class="desc">Landing enfocada en convertir la visita en compra directa. Muestra el producto, precio y beneficios clave.</div>
+        <div class="link"><a href="https://www.apple.com/iphone/" target="_blank" rel="noopener noreferrer">Ver ejemplo real</a></div>
+      </div>
+    </div>
+    <!-- Evento -->
+    <div class="browser">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">ejemplo.com/evento</span>
+      </div>
+      <div class="content">
+        <div class="event-badge">SLUD 2026</div>
+        <div class="event-title">Congreso de Software Libre</div>
+        <div class="event-date">18–21 ago 2026</div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <button class="event-cta">Registrarse</button>
+        <div class="desc">Landing que convoca a un evento con fecha, agenda y llamado a la inscripción.</div>
+        <div class="link"><a href="https://glud.org" target="_blank" rel="noopener noreferrer">Ver ejemplo real</a></div>
+      </div>
+    </div>
+    <!-- Comunidad -->
+    <div class="browser">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">ejemplo.com/comunidad</span>
+      </div>
+      <div class="content">
+        <div class="avatars">
+          <div class="avatar"></div>
+          <div class="avatar"></div>
+          <div class="avatar"></div>
+        </div>
+        <button class="btn-join">Unirse</button>
+        <div class="desc">Landing que invita a formar parte de una comunidad, mostrando membresía activa y espacios de colaboración.</div>
+        <div class="link"><a href="https://glud.org" target="_blank" rel="noopener noreferrer">Ver ejemplo real</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Recorrer cada tipo preguntando: ¿Cuál es el objetivo principal? ¿Qué elemento visual lo destaca? ¿Cómo cambiaría el diseño si la intención fuera otra? Animar a abrir los enlaces en tiempo real.</div>
 </section>
 
+<!-- Slide 10: Hero bueno vs malo -->
+<section class="slide">
+  <p class="kicker">Hero bueno vs malo</p>
+  <h2>Jerarquía y enfoque visual</h2>
+  <div class="hero-comp">
+    <!-- Malo -->
+    <div class="browser hero-malo">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">ejemplo.com/malo</span>
+      </div>
+      <div class="content">
+        <div class="title"></div>
+        <div class="support"></div>
+        <div class="buttons">
+          <button class="btn">Descargar</button>
+          <button class="btn">Más info</button>
+          <button class="btn">Contacto</button>
+          <button class="btn">Registro</button>
+        </div>
+      </div>
+    </div>
+    <!-- Bueno -->
+    <div class="browser hero-bueno">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">ejemplo.com/bueno</span>
+      </div>
+      <div class="content">
+        <div class="title"></div>
+        <div class="support"></div>
+        <div class="btn-primary"></div>
+      </div>
+    </div>
+  </div>
+  <p class="muted">Insignias: EVITA ESTO (rojo) y ASÍ SÍ (verde)</p>
+  <div class="speaker">Señalar que el malo compite por atención con múltiples botones y colores chillones. El bueno tiene un solo CTA primario, espacio de respirar y colores del tema. Pedir que abran los ejemplos reales en material/ejemplos/ y comparen.</div>
+</section>
+
+<!-- Slide 11: Navegación desktop vs móvil -->
+<section class="slide">
+  <p class="kicker">Navegación desktop vs móvil</p>
+  <h2>Visibilidad de enlaces y acceso con una mano</h2>
+  <div class="nav-compare">
+    <div class="browser">
+      <div class="bar">
+        <span class="dots"></span><span class="dots"></span><span class="dots"></span>
+        <span class="url">glud.org</span>
+      </div>
+      <div class="content">
+        <div class="section-nav">
+          <div class="logo"></div>
+          <div class="links"><div></div><div></div><div></div><div></div></div>
+          <div class="cta-sm"></div>
+        </div>
+        <div class="section-hero">
+          <div class="title"></div>
+          <div class="support"></div>
+          <div class="btn-primary"></div>
+          <div class="btn-secondary"></div>
+        </div>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="notch"></div>
+      <div class="content">
+        <div class="section-nav" style="justify-content:space-between;padding:8px;">
+          <div class="logo"></div>
+          <div class="menu-btn">
+            <div></div><div></div><div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Explicar que en desktop los enlaces están siempre visibles; en móvil se agrupan detrás de la hamburguesa para priorizar el hero. Pedir que observen la facilidad de acceso al menú en sus propios teléfonos.</div>
+</section>
+
+<!-- Slide 12: Estados de interacción -->
 <section class="slide">
   <p class="kicker">Estados de interacción</p>
-  <h2>El diseño que nadie nota: <b>los 7 estados de un botón</b></h2>
-  <table>
-    <tr><th>Estado</th><th>Cuándo</th><th>Qué comunica</th></tr>
-    <tr><td><b>Reposo</b> (default)</td><td>Nadie toca nada</td><td>Esto es interactivo</td></tr>
-    <tr><td><b>Hover</b></td><td>Cursor encima</td><td>Estás apuntando a esto</td></tr>
-    <tr><td><b>Focus</b></td><td>Llegas con Tab / teclado</td><td>Estoy parado aquí — crítico para accesibilidad</td></tr>
-    <tr><td><b>Active</b></td><td>Se está presionando</td><td>Recibí tu clic</td></tr>
-    <tr><td><b>Loading</b></td><td>Esperando respuesta</td><td>Está trabajando, espera</td></tr>
-    <tr><td><b>Error</b></td><td>Algo falló</td><td>Salió mal y por qué</td></tr>
-    <tr><td><b>Disabled</b></td><td>No disponible</td><td>No puedes usar esto ahora</td></tr>
-  </table>
-  <div class="analogy"><b>Comida:</b> son la <b>temperatura del plato</b>: tibio = recién servido (hover), humeante = está listo (active), frío = algo pasó (error). Si el mesero no reacciona a nada, dudas de que te atiendan.</div>
-  <div class="speaker">Antes de leer la tabla: pedir que admitan cuántos estados creían que había. La respuesta "uno" es la más común — y ese es el punto: el diseño de calidad se nota justamente donde nadie lo mira.
-Leer los 7 con calma, cada uno con su "cuándo" y su "qué comunica" — es un par CSV: estado → mensaje. No hacen falta definir más.
-Explicar los 2 más olvidados en la industria: focus (los diseñadores terminan el hover y olvidan que alguien navega con Tab) y loading (la pantalla se queda esperando sin decir nada = el usuario cree que se colgó). "Loadear sin feedback" es fábrica de abandono de usuarios.
-Hacer el MAPEO con Minecraft: ¿el juego tiene estados? ¡Claro! (el cofre cerrado/abierto, la barra de vida, el cursor de la espada al atacar). Todos conocen estos estados por jugar — solo les falta nombrarlos en diseño. Esa transferencia es el gol del día.
-Pregunta de cierre que anticipa el reto: "si vas a diseñar las tarjetas de noticias hoy, ¿qué estados van a definir? (hover, focus, loading...)" — van a responder con el repertorio recién aprendido.</div>
+  <h2>Botones que responden en vivo</h2>
+  <div class="states">
+    <button class="button normal">Normal</button>
+    <button class="button hover">Hover</button>
+    <button class="button focus">Focus‑visible</button>
+    <button class="button error">Error</button>
+    <button class="button disabled">Disabled</button>
+  </div>
+  <div class="speaker">Invitar a pasar el mouse sobre el botón “Hover”, a usar Tab para enfocar “Focus‑visible” y a notar el outline. Explicar que cada estado comunica retroalimentación al usuario.</div>
 </section>
 
+<!-- Slide 13: Turn ejercicio 1 -->
 <section class="slide">
-  <p class="kicker">El pecado confeso</p>
-  <h2>glud.org: <b>un error real, documentado</b></h2>
-  <ul>
-    <li>El sitio cuida sus hovers: subrayados animados, brillos…</li>
-    <li><b>Pero no define ningún estado <code>:focus-visible</code> propio.</b></li>
-    <li>Quien navega solo con teclado depende del contorno por defecto del navegador, que se pierde fácil sobre fondo oscuro con neón.</li>
-  </ul>
-  <p style="margin-top:1rem">Moraleja que vamos a repetir todo el semestre: <b>hasta el admin peca</b>, y documentar el error nos enseña a todos. Será reto de arreglo en sesiones futuras.</p>
-  <div class="speaker">Este es el momento de mostrar que la crítica no es contra el sitio: contra un ESTADO. El admin del grupo editó y nadie lo notó; es un pecado colectivo, no de una persona.
-Explicar QUÉ es :focus-visible en romano: cuando navegas con TAB (teclado), el navegador dibuja un contorno sobre el elemento enfocado para que sepas dónde estás. El CSS:focus-visible permite que ese contorno sea bonito y sea visible sobre el fondo oscuro. glud.org no lo personalizó, y el contorno por defecto del navegador es casi invisible sobre neón.
-El dato que demuestra que NO es ciencia ficción: hay personas que NO usan mouse (movilidad reducida, programadores, productividad). Diseñar sin focus = diseñar para una sola población.
-Relacionar con S1: esto ES la pregunta "¿DÓNDE estoy?" (orientación del teclado) — el foco visible es la pizarra que anuncia dónde estás parado. El curso retoma esto en Lighthouse (S11, donde a11y saldrá automáticamente).
-Mensaje épico para el reto: "ustedes van a hacer un wireframe que debería aprender de este error: definan focus desde el primer día."</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Estados · tu turno</p>
+  <p class="kicker">Ejercicio EN CLASE 1</p>
+  <h2>Observa glud.org y etiqueta las secciones</h2>
   <div class="turn">
-    <b>EN CLASE (5 min):</b>
+    <b>EN CLASE (5 min):</b>
     <ol>
-      <li>Abre <a style="color:var(--green)" href="https://glud.org" target="_blank">glud.org</a>.</li>
-      <li>Sin usar el mouse: presiona <b>Tab</b> una y otra vez hasta llegar al primer enlace del menú (o logo).</li>
-      <li>Cuenta: ¿cuántas veces haces Tab? ¿Ves el contorno de enfoque o se pierde?</li>
-      <li>Ahora haz lo mismo en otra página cualquiera (la página de la universidad, un blog grande, lo que sea) y comparar: ¿cuánto tiempo se queda perdido vs orientado?</li>
+      <li>Abre glud.org en el navegador.</li>
+      <li>Sin scroll, identifica el hero y responde: ¿Qué ofrece y para quién?</li>
+      <li>Desplázate ligeramente y nombra la prueba social que ves.</li>
+      <li>Continúa hasta el footer y señala cada sección en orden.</li>
+      <li>¿El menú está a la izquierda, centrado o a la derecha?</li>
     </ol>
   </div>
-  <p style="margin-top:1rem">El contorno del teclado no es detalle: es <b>la manera en que un usuario sin mouse navega tu sitio</b>.</p>
-  <div class="speaker">Consejo docente: verificar que TODOS hagan Tab por primera vez y regular exactamente dónde están. La resistencia a usar teclado es normal — comprobar que están usando el contorno visible para verificar en DevTools si está frialdad (en ambience.darkest) en Ámbito en MORADA (distinguye perfectamente el focus plateado de otros colores de fondo).
-Este ejercicio duplica el costo pero la retribución futura es: futuro estudiante no va a decirle a la clase ( de estadística y uso respuesta del pueblo), '¿por qué el foco era tan pequeño=' president en <b>2 de trial de real consumers.</b></div>
+  <div class="speaker">Guiar a dos voluntarios a responder en voz alta. Anotar en pizarra si glud.org cumple con cada punto. Recargar si es necesario. Subrayar que observar un sitio real es entrenamiento de diseño.</div>
+</section>
+
+<!-- Slide 14: Turn ejercicio 2 -->
+<section class="slide">
+  <p class="kicker">Ejercicio EN CLASE 2</p>
+  <h2>Compara landing buena y mala</h2>
+  <div class="turn">
+    <b>EN CLASE (6 min):</b>
+    <ol>
+      <li>Abre en dos pestañas: material/ejemplos/landing-mala.html y material/ejemplos/landing-buena.html.</li>
+      <li>Sin leer texto, menciona 3 diferencias de jerarquía visual que notes al instante.</li>
+      <li>En la mala, ¿cuántos CTAs compiten por atención?</li>
+      <li>En la buena, ¿cuál es el único CTA primario y qué color tiene?</li>
+      <li>¿Dónde está la prueba social en cada una?</li>
+    </ol>
+  </div>
+  <div class="speaker">Pedir que trabajen en parejas y que anoten sus observaciones. Luego compartir en voz alta y discutir cómo mejorar la mala usando la teoría de la sesión.</div>
+</section>
+
+<!-- Slide 15: Turn ejercicio 3 -->
+<section class="slide">
+  <p class="kicker">Ejercicio EN CLASE 3</p>
+  <h2>Encuentra la hamburguesa en tu móvil</h2>
+  <div class="turn">
+    <b>EN CLASE (4 min):</b>
+    <ol>
+      <li>En tu teléfono, abre glud.org.</li>
+      <li>Localiza el icono de menú (tres líneas).</li>
+      <li>Ábrelo y verifica que los enlaces aparecen.</li>
+      <li>Cierra el menú y confirma que vuelve al estado inicial.</li>
+      <li>¿El ícono es fácil de alcanzar con el pulgar?</li>
+    </ol>
+  </div>
+  <div class="speaker">Recorrer el salón ayudando a quien tenga dificultad. Destacar que la hamburguesa debe ser reconocible y que el menú debe quedar dentro del viewport sin empujar contenido.</div>
+</section>
+
+<!-- Slide 16: Reto y checklist -->
+<section class="slide">
+  <p class="kicker">Reto de la sesión</p>
+  <h2>Wireframe de la sección de noticias</h2>
+  <p class="muted">Diseña el wireframe de la futura sección de noticias del GLUD (hero, lista de artículos, filtro, CTA de suscripción). Será el insumo para tu proyecto final en S13.</p>
+  <div class="speaker">Entregar una hoja en blanco y pedir que dibujen en 5 minutos el wireframe básico. Recoger unos pocos para comentar rápidamente.</div>
 </section>
 
 <section class="slide">
-  <p class="kicker">Mobile-first</p>
-  <h2>Primero el refugio, <b>después el castillo</b></h2>
-  <ol>
-    <li><b>En móvil caben pocas cosas</b> — obliga a priorizar. Si algo no cabe en móvil, quizá no era tan importante.</li>
-    <li><b>Expandir siempre es más fácil que recortar</b> — sumar columnas a una grilla duele menos que eliminar secciones completas.</li>
-    <li><b>La mayoría del tráfico real</b> de sitios universitarios llega desde el celular.</li>
-  </ol>
-  <div class="analogy"><b>Minecraft:</b> nadie empieza su primera noche construyendo un castillo de cuarzo. Empiezas con un <b>refugio de tierra</b> que cumple lo esencial (no morir), y sobre esa base segura levantas la fortaleza después. El refugio ES tu diseño móvil: funcional, mínimo, honesto.</div>
-  <div class="speaker">Romper el mito: "mobile-first" NO significa "no diseñar los de desktop": significa diseñar PRIMERO el móvil y luego 'extender'. La causa es lógica: lo que funciona en 360 px (lo justo) funciona en 1440 px (sobra espacio) pero a la inversa no. Empezar por lo apretado te obliga a priorizar QUÉ SOBRA.
-La idea de "si no cabe, quizá no era importante" es dura: enfrenta a los equipos con "¿tienes que recortar o estás llenando de relleno?". El grupo debe vivir ese QUÉ SOBRA en el wireframe: qué se recorta de la landing al llevarla a móvil.
-El argumento del tráfico (dato GLUD): la mayoría de las visitas de sitios universitarios/dinámicos llegan del celular. No es "un extra", es la primera familia de usuarios.
-Analogía del refugio-castillo: los estudiantes lo entienden porque TODOS murieron alguna vez en su primera noche por ponerse ambiciosos. Conectado: un wireframe móvil sólido evita "morir" por un desktop imposible de adaptar.
-Encargo explícito para el reto (noticias): PRIMERO la versión móvil, DESPUÉS la desktop. Y contamos clics en móvil antes de mover nada a desktop.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Mobile-first · el dato real</p>
-  <h2>El precio de <b>diseñar en paralelo</b></h2>
-  <div class="industry"><b>Dato del sitio real:</b> glud.org mantiene versiones desktop y mobile separadas de varias secciones: las clases <code>landing-desktop</code> y <code>landing-mobile</code> existen como <b>árboles gemelos</b> en el HTML. Funciona, pero paga un precio: contenido duplicado que hay que mantener dos veces, y errores que aparecen en los dos lados.</div>
-  <p style="margin-top:1rem">Pregunta para guardarse hasta S7: ¿cómo harías una <b>sola estructura</b> que sirva para ambos tamaños? — (Spoiler: eso se llama <b>responsive</b>, y es el estándar moderno.)</p>
-  <div class="speaker">Este dato es un RAREZA honesta del sitio: buen caso de "funciona pero con deuda técnica". El objetivo es ponerle nombre a la deuda: "duplicación = costo". Quien diseñe un sitio "desktop" y luego "mobile" como dos páginas separadas duplica el mantenimiento.
-Aclaración técnica para no asustar: en el sitio los dos árboles viven en el MISMO HTML (se muestran u ocultan con CSS según ancho de pantalla), no son dos archivos. El costo es de DOM duplicado y de mantener dos versiones del mismo texto.
-La alternativa moderna se llama responsive design (una sola estructura que se "adapta"), y ES el foco de S7/S9 con Tailwind. La pregunta guardada es deliberada: se asegura de que el grupo la lleve en el bolsillo hasta ese momento.
-Para el reto: pedir explícitamente que NO dupliquen: un solo wireframe mobile-first con notas de "cuando pasa a desktop se agrega columna X". Confiar en la lógica de "refugio → castillo", no en "dos dibujos".
-Glud.org como caso vivo: los estudiantes pueden verificar en inpsector que las clases landing-desktop/landing-mobile existen. Eso lo convierte en material de práctica de S3, no solo lectura.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Wireframes</p>
-  <h2>El plano antes de los bloques: <b>cajas, texto placeholder, orden</b></h2>
+  <p class="kicker">Checklist de salida</p>
+  <h2>¿Llevas puesto el criterio de diseño?</h2>
   <ul>
-    <li>Un wireframe responde <b>qué va, dónde va y por qué ahí</b> — sin colores, sin tipografías bonitas, sin imágenes reales.</li>
-    <li>Es el boceto estructural: dibujar barato, cambiar barato.</li>
+    <li>Puedes dibujar de memoria la anatomía de una landing (6 secciones en orden).</li>
+    <li>Explicas por qué el hero lleva una acción primaria y reconoces la excepción de doble botón.</li>
+    <li>Defiendes cuándo usar barra completa vs hamburguesa.</li>
+    <li>Nombras los 7 estados de interacción sin mirar la tabla.</li>
+    <li>Tu wireframe de noticias incluye: hero, acción principal, versión móvil y versión desktop.</li>
+    <li>Sabes qué decisión de tu wireframe tendrás que defender en S13.</li>
   </ul>
-  <p style="margin-top:1rem">Herramientas válidas para este curso:</p>
-  <ol>
-    <li><b>Papel y lápiz</b> — el mejor: cero fricción, cero excusas.</li>
-    <li><b>Excalidraw</b> — gratis, online, dibujo suelto.</li>
-    <li><b>Figma</b> — gratis en plan personal, más formal.</li>
-  </ol>
-  <div class="analogy"><b>Minecraft:</b> el wireframe es el plano que trazas con <b>bloques de lana</b> antes de la construcción definitiva: defines dimensiones, puertas y ventanas gastando material barato. Si el plano está mal, cambias lana, no piedra. En S13 construirás con piedra (código); hoy todo es lana.</div>
-  <div class="speaker">Hablar de los criterios: un wireframe NO se evalúa por fealdad — se evalúa por si responde las 3 preguntas (QUÉ/DÓNDE/POR QUÉ). Si tiene eso, se puede escalar.
-Explicar por qué sin colores/fuentes: porque el wireframe decide la ESTRUCTURA, y la estructura es la lógica que no depende del gusto. Si primero dibujas con colores, confundirás "se ve lindo" con "está bien ordenado".
-Cuándo parar de wireframear: cuando cualquier persona del grupo puede explicar "esta caja va aquí porque..." Y si no lo pueden explicar, faltó trabajo de estructura.
-La jerarquía de herramientas: recomendada papel primero (nadie bloquea el papel), luego digital. No es prescripción cerrada: quien se siente cómodo en Figma puede hacer lápiz→Figma.
-Dato de la industria: muchos equipos reales NUNCA abandonan el papel en la fase de exploración, por rápido y sin fricción. Wireframe no es señal de "no sé dibujar": es señal de saber priorizar.
-Cerrar con el vínculo con el reto: los wireframes que van a hacer son EXACTAMENTE los que implementará en S13. La lana de hoy se vuelve piedra luego.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Manos a la obra · el reto</p>
-  <h2>Reto base: diseña la sección de <b>noticias/blog</b> de glud.org</h2>
-  <p>El grupo necesita publicar noticias, convocatorias y posts. Hoy la diseñas tú; en S13 la implementas de verdad.</p>
-  <ol>
-    <li>Elige herramienta: <b>papel</b>, Excalidraw o Figma.</li>
-    <li>Wireframea la vista principal considerando:<ul>
-      <li>Cómo se llega desde la nav (nuevo enlace / dropdown).</li>
-      <li>Lista de noticias: tarjetas o lista, cuántas visibles.</li>
-      <li>Vista de detalle de una noticia individual.</li>
-      <li>Versión móvil primero, desktop después.</li>
-    </ul></li>
-    <li>Aplica la anatomía: hero de sección + UNA acción principal marcada.</li>
-  </ol>
-  <div class="speaker">Rito de despegue del reto: aclarar que no necesitan "ideal final de diseño": necesitan decisiones justificadas. El wireframe valga más si explica el "por qué" de cada caja que si se ve bonito.
-Guion de acompañamiento en clase (20-30 min):
-- Pasan por las 3 preguntas (nav, lista, detalle) en orden, y revisan con cada uno si la decisión de caja está justificada.
-- Verificar en cada wireframe: ¿definieron el estado "vacio" (sin noticias)? ¿el estado "cargando"?
-- Confirmar que hay una (1) acción principal y que está identificable en móvil y en desktop.
-Sugerencia de técnica para el que no sabe por dónde empezar: empezar dibujando el móvil 360x640 y colocar SOLO lo esencial; si algo no cabe, se descarta (prueba de prioridad del mobile-first).
-Dejar claro el formato de entrega: foto/screenshot del wireframe + 2-3 frases que justifiquen las decisiones de estructura.
-Dato: no evaluar el wireframe por "bonito" — evaluar por "puedo implementarlo en S13 sin dudas". Si el estudiante mismo, al mirarlo, tiene dudas de QUÉ va donde entra a revisar.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Reto · nivel reto</p>
-  <h2>Reto (stretch): la justificación escrita</h2>
-  <p>Además del wireframe, entrega media página que responda con argumentos:</p>
-  <ol>
-    <li>¿Cuántos clics cuesta llegar de la home a <b>leer una noticia completa</b>? Justifica ese número (prueba de la orientación, no del conteo).</li>
-    <li>¿Qué <b>estados</b> definiste para tus tarjetas y botones (hover, focus, loading)?</li>
-    <li>¿Qué <b>sacrificaste</b> al pasar de desktop a móvil y por qué fue correcto?</li>
-  </ol>
-  <div class="analogy"><b>Recuerda:</b> es exactamente lo que vas a tener que defender ante un manteniente real en S13. Justificar con criterio = entregar con confianza.</div>
-  <div class="speaker">El reto stretch siga el hilo del curso: usa las 3 preguntas de la S1 (orientación), los 7 estados de la S3 y la matriz mobile-first — la justificación es comprobar que el origen de cada decisión fue criterio, no azar.
-Para la pregunta 1 de clics: recordarles que NO se responde "3 porque la regla dice 3" (regla desmentida en S1). Se responde "2 clics, porque el camino es directo y en cada paso sé dónde estoy". Número justificado con la S1 = aprendizaje de verdad.
-Prevención del "sacrifiqué todo": el recorte móvil debe ser PRECISO (cuál sección se quita o se reordena) y con POR QUÉ. "Sacrifiqué el hero y apliqué sus 3 puntos en el encabezado" es una respuesta; "no cabe" NO.
-Dejar una pista de calidad: la mejor justificación de los estados es señalar el que casi nadie recuerda, el loading ("si tardo, el botón lo dice"), y sobre todo el focus. Eso demuestra que entendieron la tabla.
-Aviso: si el reto base produce un wireframe fantástico y la justificación va floja, es una señal de que el diseño fue intuitivo, no razonado — el acompañamiento docente en esa entrega es clave para convertir la intuición en criterio.</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Antes de salir</p>
-  <h2>Checklist: ¿sí o sí, hoy?</h2>
-  <ul>
-    <li>Dibujo de memoria la anatomía de una landing (6 secciones, en orden).</li>
-    <li>Explico por qué un hero lleva UNA acción primaria — y reconozco la excepción del doble botón.</li>
-    <li>Defiendo en voz alta cuándo hamburguesa vs barra completa.</li>
-    <li>Nombro los 7 estados de interacción sin mirar la tabla.</li>
-    <li>Mi wireframe de noticias tiene: hero, acción principal, versión móvil y versión desktop.</li>
-    <li>Sé qué decisión mía voy a tener que defender en S13.</li>
-  </ul>
-  <div class="speaker">Contar el checklist alto y pedir que cada uno marque con transparencia; quien falle en 3 o más, sugerirle repasar la anatomía encima del propio glud.org abierto esa semana.
-Los 2 puntos más "fáciles de saltar": explicar la excepción del doble botón (cae bien que lo cuenten con la SLUD como ejemplo) y el "qué decisión defenderé" — estos dos son exactamente los que van a aparecer en S13, guardarlos.
-Cerrar emocionalmente distinto: hoy el grupo DISEÑA por primera vez. Si lo hacen bien, la S13 va a ser el primer Merge Request real del grupo a su propia web.
-Frase final del día: "Hoy nacieron diseñadores de producto. El lápiz es la herramienta de diseño más rápida del mundo — y ya saben dibujar justificando."
-Recordatorio del encargo para el resto de la semana: terminar wireframe (base) + justificación (reto) + tener fresco el código de S0 (S4 abrirá DevTools).</div>
-</section>
-
-<section class="slide">
-  <p class="kicker">Cierre</p>
-  <h2>La landing es una conversación <b>diseñada en el orden correcto</b></h2>
-  <p>Pregunta de apertura, ahora con vocabulario: el sitio donde te perdiste fallaba en <b>nav</b>, en la <b>jerarquía del hero</b> o en la <b>navegación escondida</b> — y el sitio claro respondía las preguntas <b>en orden</b>.</p>
-  <p style="margin-top:1rem">Una frase para llevarte: <b>las secciones son la respuesta; el orden de las preguntas es el criterio.</b></p>
-  <div class="analogy"><b>Próxima sesión:</b> S4 — JavaScript desde DevTools. El bloque 2 abre el motor de la web moderna con el navegador como laboratorio.</div>
-  <div class="speaker">Cierre circular: volver a las dos columnas del inicio ("se perdía porque..." / "se intuía porque...") y CLASIFICAR cada comentario con la teoría nueva. El tablero debe quedar convertido en un mapa: nav / hero / prueba social / states / mobile-first. Eso cierra el bloque 1 con la sensación de "todo quedó conectado".
-Revelar la estructura del curso: bloque 1 (UX/UI/estructura) termina hoy; el bloque 2 (S4-S6) es el motor técnico; el bloque 3 (S7-S11) disección real de glud.org; el bloque 4 (S12-S13) tu entrega real.
-Recordar que las decisiones de hoy caen en código real rápidamente: S4 DevTools, S7 los estados en HTML/CSS, S9 grillas/diseño, S13 tu wireframe en producción.
-Cierre con la promesa del lápiz: "El cursor del mouse es el lápiz de hoy; el cursor del código será el de S13. El diseño que acaban de hacer es el ADN de lo que van a construir."
-Despedida con revisión de tarea pendiente: entregar wireframe (reto) antes de la próxima clase, y traer ganas de abrir DevTools. — V.</div>
+  <div class="speaker">Leer en voz alta cada ítem y pedir que marquen con una ✔ si lo cumplen. Resaltar los ítems que suelen olvidarse: excepción del doble botón y decisión a defender. Cerrar con: “Hoy nacimos diseñadores de producto. El lápiz es la herramienta más rápida — y ya saben dibujar justificando.”</div>
 </section>
 
 <div class="speaker" id="bottom"></div>

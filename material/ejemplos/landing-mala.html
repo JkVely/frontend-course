@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLUD 2026 – Congreso de Software Libre (versión mala)</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--fg); font-family:system-ui,sans-serif; line-height:1.6; }
+  header { background:linear-gradient(to right,#ff0000,#ffff00); color:#000; padding:2rem; text-align:center; }
+  header h1 { font-size:2.5rem; margin-bottom:.5rem; }
+  header p { font-size:1.2rem; }
+  .cta-buttons { display:flex; flex-wrap:wrap; gap:.8rem; justify-content:center; margin:2rem; }
+  .cta-buttons a {
+    display:inline-block;
+    padding:.8rem 1.5rem;
+    background:var(--red);
+    color:#fff;
+    text-decoration:none;
+    border-radius:4px;
+    font-weight:600;
+  }
+  .cta-buttons a:nth-child(even){background:var(--orange);}
+  .cta-buttons a:nth-child(3){background:var(--green);}
+  .cta-buttons a:nth-child(4){background:var(--purple);}
+  .cta-buttons a:nth-child(5){background:var(--blue);}
+  .section { padding:2rem; border-top:1px solid var(--surface2); }
+  .stats { display:flex; gap:2rem; justify-content:center; flex-wrap:wrap; }
+  .stat { background:var(--surface); padding:1rem; border-radius:8px; text-align:center; min-width:120px; }
+  .stat-number { font-size:2rem; font-weight:bold; color:var(--yellow); }
+  .features { display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; margin:2rem 0; }
+  .feature { background:var(--surface2); border:1px solid var(--red); border-radius:8px; padding:1.5rem; width:220px; text-align:center; }
+  .feature h3 { color:var(--orange); margin-bottom:.5rem; }
+  footer { background:var(--surface2); color:var(--muted); text-align:center; padding:2rem; font-size:.9rem; }
+  .error-strip { background:#ffeb3b; color:#000; padding:1.5rem; margin-top:2rem; }
+  .error-strip h3 { margin-top:0; margin-bottom:.5rem; color:#d32f2f; }
+  .error-strip ol { margin-left:1.5rem; }
+  @media (max-width:600px){
+    header h1{font-size:2rem;}
+    .cta-buttons{flex-direction:column;align-items:center;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>SLUD 2026 – Congreso de Software Libre</h1>
+  <p>18–21 agosto 2026 • Bogotá, Colombia</p>
+</header>
+
+<div class="cta-buttons">
+  <a href="#">Registro General</a>
+  <a href="#">Alojamiento</a>
+  <a href="#">Patrocinio</a>
+  <a href="#">Agenda Completa</a>
+  <a href="#">Descarga App</a>
+  <a href="#">Contacto</a>
+  <a href="#">Preguntas frecuentes</a>
+  <a href="#">Mapa del evento</a>
+</div>
+
+<section class="section stats">
+  <div class="stat"><div class="stat-number">1500</div><div>Asistentes esperados</div></div>
+  <div class="stat"><div class="stat-number">50</div><div>Charlas</div></div>
+  <div class="stat"><div class="stat-number">12</div><div>Talleres</div></div>
+  <div class="stat"><div class="stat-number">8</div><div>Países</div></div>
+</section>
+
+<section class="section features">
+  <div class="feature">
+    <h3>Charlas inspiradoras</h3>
+    <p>Expertos internacionales en software libre y tecnología abierta.</p>
+  </div>
+  <div class="feature">
+    <h3>Talleres prácticos</h3>
+    <p>Aprende a contribuir, licenciar y distribuir tus proyectos.</p>
+  </div>
+  <div class="feature">
+    <h3>Espacio de networking</h3>
+    <p>Conecta con desarrolladores, emprendedores y empresas del sector.</p>
+  </div>
+  <div class="feature">
+    <h3>Feria de empleo</h3>
+    <p>Oportunidades de trabajo y pasantías en organizaciones líderes.</p>
+  </div>
+</section>
+
+<footer>
+  © 2026 SLUD • Universidad Distrital • Todos los derechos reservados
+</footer>
+
+<div class="error-strip">
+  <h3>Encuentra los errores</h3>
+  <ol>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ol>
+</div>
+</body>
+</html>
