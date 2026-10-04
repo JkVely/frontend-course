@@ -50,6 +50,13 @@
   .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
   .turn b { color: var(--orange); }
   .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .cycle { display: flex; align-items: stretch; gap: .6rem; margin-top: 1.4rem; max-width: 100%; }
+  .cycle .step { flex: 1; background: var(--surface); border: 1px solid var(--surface2); border-top: 3px solid var(--blue); border-radius: 10px; padding: .9rem .8rem; text-align: center; font-size: clamp(.9rem, 1.5vw, 1.1rem); }
+  .cycle .step b { color: var(--blue); display: block; font-size: 1.15em; margin-bottom: .15rem; }
+  .cycle .step em { color: var(--muted); font-style: normal; display: block; font-size: .88em; line-height: 1.4; }
+  .cycle .arrow { align-self: center; color: var(--purple); font-size: clamp(1rem, 1.8vw, 1.35rem); }
+  .cycle-back { width: min(58%, 40rem); margin: .55rem auto 0; height: 18px; border: 2px solid var(--purple); border-top: none; border-radius: 0 0 12px 12px; position: relative; }
+  .cycle-back::before { content: ""; position: absolute; top: -7px; left: -3px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-bottom: 8px solid var(--purple); }
   .speaker {
     display: none;
     position: fixed;
@@ -133,15 +140,55 @@
   </table>
   <div class="speaker">Explicar distinción entre expresión, sentencia y declaración. Subrayar ejecución cliente e implicaciones de desempeño.</div>
 </section>
+<section class="slide">
+  <p class="kicker">Java vs JavaScript</p>
+  <h2>Comparando Java y JavaScript</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Java</h4>
+      <pre>public class Saludo {
+  public static String saludar(String nombre) {
+    return "Hola, " + nombre;
+  }
+  public static void main(String[] args) {
+    System.out.println(saludar("Mónica"));
+  }
+}</pre>
+    </div>
+    <div class="card">
+      <h4>JavaScript</h4>
+      <pre>function saludar(nombre) {
+  return "Hola, " + nombre;
+}
+console.log(saludar("Mónica"));</pre>
+    </div>
+  </div>
+  <table>
+    <tr><th>Aspecto</th><th>Java</th><th>JavaScript</th></tr>
+    <tr><td>Tipos</td><td>Estáticos al compilar</td><td>Dinámicos al ejecutar</td></tr>
+    <tr><td>Estructura</td><td>Clases obligatorias</td><td>Funciones y objetos literales</td></tr>
+    <tr><td>Ejecución</td><td>Compilado a bytecode JVM</td><td>Interpretado por el navegador</td></tr>
+    <tr><td>Ceremonia</td><td>8 líneas</td><td>2 líneas</td></tr>
+  </table>
+  <div class="speaker">Señalar que el nombre JavaScript fue estrategia de marketing de Netscape para aprovechar la popularidad de Java, aunque no tienen relación técnica. Destacar que Java requiere más código estructurado mientras que JS permite escribir menos líneas para lograr lo mismo. Preguntar: ¿qué implica que los tipos sean dinámicos? Esperar respuestas sobre flexibilidad y posibles errores en tiempo de ejecución.</div>
+</section>
 
 <section class="slide">
   <p class="kicker">Consola como laboratorio</p>
-  <h2>La Consola de DevTools como REPL</h2>
-  <p>Abre cualquier página, pulsa <kbd>F12</kbd> → <b>Consola</b></p>
-  <pre>2 + 3
-typeof "GLUD"
-typeof 42</pre>
-  <div class="speaker">Demostrar en vivo. Resaltar guardado de valores temporales y reutilización. Historial con flechas.</div>
+  <h2>REPL: el ciclo de ida y vuelta</h2>
+  <p><b>REPL</b> son las siglas de <b>R</b>ead, <b>E</b>valuate, <b>P</b>rint, <b>L</b>oop: leer, evaluar, imprimir, repetir.</p>
+  <div class="cycle">
+    <div class="step"><b>R</b>ead<em>escribes una línea</em></div>
+    <span class="arrow">→</span>
+    <div class="step"><b>E</b>valuate<em>el motor la ejecuta</em></div>
+    <span class="arrow">→</span>
+    <div class="step"><b>P</b>rint<em>te muestra el resultado</em></div>
+    <span class="arrow">→</span>
+    <div class="step"><b>L</b>oop<em>vuelve a empezar</em></div>
+  </div>
+  <div class="cycle-back"></div>
+  <p style="margin-top:1rem">La Consola es un ciclo de ida y vuelta, no un archivo que se compila. Pruébalo: escribe <code>2 + 3</code> en <kbd>F12</kbd> → <b>Consola</b>.</p>
+  <div class="speaker">Demostrar el ciclo en vivo: escribir 2 + 3 en la Consola y señalar cada paso del diagrama en voz alta: lo escribiste (Read), el motor lo ejecutó (Evaluate), te mostró 5 (Print) y quedó esperando la siguiente línea (Loop). Contrastar con el flujo de Java que ya conocen: allá se escribe el archivo completo, se compila y se ejecuta; acá el ciclo es línea por línea e inmediato. Mencionar que el historial se recorre con flechas arriba y abajo.</div>
 </section>
 
 <section class="slide">
@@ -149,7 +196,7 @@ typeof 42</pre>
   <h2>Explorar el DOM desde la consola</h2>
   <pre>document.body.innerText
 document.body.children.length</pre>
-  <p>La Consola es REPL: lee, evalúa, imprime, repite.</p>
+  <p>El REPL también sirve para leer la página en vivo, sin recargarla.</p>
   <div class="speaker">Mostrar lectura del DOM sin recargar. Preparar transición a tipos y variables.</div>
 </section>
 
@@ -164,29 +211,37 @@ document.body.children.length</pre>
 
 <section class="slide">
   <p class="kicker">Tipos de datos y variables</p>
-  <h2>Primitivas y declaración</h2>
-  <pre>const nombre = "Mónica"
-const edad = 21
-let puntos = 0
-const activa = true</pre>
-  <p>Regla: <code>typeof valor</code> responde <code>"string"</code>, <code>"number"</code>, <code>"boolean"</code>.</p>
-  <div class="speaker">Explicar const vs let. Mostrar typeof. Preparar ejercicios.</div>
+  <h2>Tabla de tipos primitivos y objetos</h2>
+  <table>
+    <tr><th>Tipo</th><th>Ejemplo</th><th>typeof devuelve</th></tr>
+    <tr><td>string</td><td><code>"hola"</code></td><td><code>"string"</code></td></tr>
+    <tr><td>number</td><td><code>42</code></td><td><code>"number"</code></td></tr>
+    <tr><td>boolean</td><td><code>true</code></td><td><code>"boolean"</code></td></tr>
+    <tr><td>undefined</td><td><code>undefined</code></td><td><code>"undefined"</code></td></tr>
+    <tr><td>null</td><td><code>null</code></td><td><code>"object"</code> (bug histórico)</td></tr>
+    <tr><td>array</td><td><code>[1,2,3]</code></td><td><code>"object"</td></tr>
+    <tr><td>object</td><td><code>{a:1}</code></td><td><code>"object"</td></tr>
+  </table>
+  <div class="speaker">Recorrer la tabla fila por fila. Enfatizar que typeof null devuelve "object" por un fallo histórico de JavaScript que nunca se corrigió para no romper código existente. Preguntar: ¿cómo comprobar explícitamente si un valor es null? Esperar respuesta: usar === null.</div>
 </section>
-
 <section class="slide">
   <p class="kicker">Tipos de datos y variables</p>
-  <h2>Arreglos y objetos</h2>
-  <pre>const materiales = ["piedra", "madera", "hierro"]
-materiales.length
-materiales[0]
-
-const grupo = {
-  nombre: "GLUD",
-  miembros: 250,
-  activos: true
-}
-grupo.nombre</pre>
-  <div class="speaker">Mostrar acceso a índices y propiedades. Mencionar que typeof [] es object.</div>
+  <h2>const vs let</h2>
+  <pre>const persona = { nombre: "Ana", edad: 30 };
+persona.edad = 31; // permitido: mutar propiedad
+// persona = {}; // Error: no se puede reasignar</pre>
+  <p>const impide reasignar la variable, pero si el valor es un objeto o arreglo, sus propiedades o elementos pueden modificarse.</p>
+  <div class="speaker">Explicar la diferencia entre vinculación inmutable (const) y mutabilidad interna del objeto. Mostrar que intentar reasignar const lanza TypeError. Preguntar: ¿cuándo usar const y cuándo let? Esperar respuestas: const para valores que no se reasignan, let cuando el valor cambia.</div>
+</section>
+<section class="slide">
+  <p class="kicker">Tipos de datos y variables</p>
+  <h2>Coerción y comparación</h2>
+  <pre>"5" + 3   // "53"
+"5" - 3   // 2
+5 == "5"  // true
+5 === "5" // false</pre>
+  <p>Regla en grande: USA SIEMPRE ===.</p>
+  <div class="speaker">Explicar que + con cadena convierte el número a cadena y concatena; - convierte la cadena a número y resta. == convierte tipos antes de comparar (coerción), mientras que === compara valor y tipo sin convertir. Destacar que usar === evita sorpresas. Preguntar: ¿qué resultados darían 0 == false y 0 === false? Esperar: true con ==, false con ===.</div>
 </section>
 
 <section class="slide">
@@ -212,7 +267,7 @@ saludar("Mónica")
 
 const despedirse = (nombre) => "Chao, " + nombre</pre>
   <p>Sin <code>return</code> la función devuelve <code>undefined</code>.</p>
-  <div class="speaker">Explicar parámetros, lógica, retorno. Diferencia sintaxis tradicional y flecha.</div>
+    <div class="speaker">Explicar qué son los parámetros y cómo se usa la lógica dentro de la función. Mostrar la diferencia entre la sintaxis tradicional y la de función flecha, destacando cuándo usar cada una. Recordar que sin return la función devuelve undefined y mostrar ejemplos.</div>
 </section>
 
 <section class="slide">
@@ -241,13 +296,47 @@ console.log(formatearNombre("  MÓNICA "))</pre>
   </div>
   <div class="speaker">Guiar a usar toLowerCase. Discutir variantes.</div>
 </section>
-
+<section class="slide">
+  <p class="kicker">Qué es el DOM</p>
+  <h2>DOM (Document Object Model)</h2>
+  <p>El navegador lee tu HTML y construye un árbol de objetos; JS lee y modifica ese árbol y la pantalla se actualiza.</p>
+  <div style="display:flex; gap:1rem;">
+    <div style="background:var(--surface); padding:1rem; border:1px solid var(--surface2); border-radius:10px; max-width:20ch;">
+      <pre>&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Ejemplo&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Título&lt;/h1&gt;
+    &lt;p&gt;Texto&lt;/p&gt;
+    &lt;a href="#"&gt;Enlace&lt;/a&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">html</div>
+      <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; display:flex; gap:0.5rem;">
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">head</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">body</div>
+      </div>
+      <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; display:flex; gap:0.5rem;">
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">h1</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--green);">Título</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">p</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--green);">Texto</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--blue);">a</div>
+        <div style="background:var(--surface); border:1px solid var(--surface2); border-radius:10px; padding:0.5rem; color:var(--green);">Enlace</div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker">Explicar que el DOM es una representación en memoria del documento HTML. Cada elemento es un objeto con propiedades y métodos. Cuando JS modifica ese árbol, el navegador vuelve a pintar la pantalla. Preguntar: ¿qué ventajas tiene separar estructura (HTML), presentación (CSS) y comportamiento (JS) mediante el DOM? Esperar respuestas sobre mantenibilidad y separación de preocupaciones.</div>
+</section>
 <section class="slide">
   <p class="kicker">El DOM</p>
   <h2>Acceder y modificar elementos</h2>
   <pre>const titulo = document.querySelector("h1")
 console.log(titulo.innerText)</pre>
-  <div class="speaker">Explicar querySelector devuelve primer elemento. Mostrar lectura.</div>
+    <div class="speaker">Explicar que querySelector devuelve el primer elemento que coincide con el selector, permitiendo acceder a sus propiedades y métodos. Mostrar cómo leer su contenido textual y atributos. Señalar que si no hay coincidencia devuelve null.</div>
 </section>
 
 <section class="slide">
@@ -257,7 +346,7 @@ console.log(titulo.innerText)</pre>
 titulo.style.color = "#1affff"
 titulo.classList.add("grande")</pre>
   <p><code>querySelectorAll</code> devuelve lista.</p>
-  <div class="speaker">Demostrar cambios instantáneos sin recargar.</div>
+    <div class="speaker">Demostrar cómo modificar el texto, el estilo en línea y las clases de un elemento en tiempo real, sin necesidad de recargar la página. Mostrar que los cambios se reflejan inmediatamente en la vista. Explicar que esta interactividad es la base de las aplicaciones modernas.</div>
 </section>
 
 <section class="slide">
@@ -282,7 +371,30 @@ titulo.innerText = "Frontend 101 2026"</pre>
   <p>Pregunta: ¿qué se pierde si este cambio se hace solo con CSS?</p>
   <div class="speaker">Discutir diferencia CSS vs JS. CSS no cambia contenido.</div>
 </section>
-
+<section class="slide">
+  <p class="kicker">El Paradigma</p>
+  <h2>El navegador espera</h2>
+  <div style="display:flex; gap:1rem; align-items:center;">
+    <div class="card">[Usuario hace clic]</div>
+    <span style="color: var(--blue);">→</span>
+    <div class="card">[Navegador dispara "click"]</div>
+    <span style="color: var(--blue);">→</span>
+    <div class="card">[Tu función corre]</div>
+    <span style="color: var(--blue);">→</span>
+    <div class="card">[El DOM cambia]</div>
+    <span style="color: var(--blue);">→</span>
+    <div class="card">[Navegador repinta]</div>
+  </div>
+  <div class="speaker">Explicar que el sitio web no es un programa que se ejecuta de inicio a fin y termina; el código registra funciones y termina. Cuando el usuario interactúa, el navegador llama a esas funciones. Este modelo se llama programación dirigida por eventos. Preguntar: ¿qué pasa si olvidamos registrar un listener? Esperar que respondan que no ocurre nada. Señalar que el navegador mantiene un loop de eventos.</div>
+</section>
+<section class="slide">
+  <p class="kicker">El Paradigma</p>
+  <h2>Funciones de primera clase</h2>
+  <pre>const avisar = () => console.log("Me hicieron clic")
+boton.addEventListener("click", avisar)</pre>
+  <p>Frase clave: "avisar entra a addEventListener igual que un número entra a una suma; por eso ves funciones dentro de funciones en todo JS".</p>
+  <div class="speaker">Destacar que en JS las funciones son valores que pueden guardarse en variables, pasarse como argumentos y retornarse. Contrastar con Java donde los métodos están ligados a clases y se pasa por referencia pero no se trata igual que datos primitivos. Preguntar: ¿qué ventajas ve al poder pasar una función como argumento? Esperar respuestas sobre callbacks, higher‑order functions, etc.</div>
+</section>
 <section class="slide">
   <p class="kicker">Eventos</p>
   <h2>Escuchando acciones del usuario</h2>
@@ -292,7 +404,7 @@ burger.addEventListener("click", () => {
   document.body.classList.toggle("menu-abierto")
 })</pre>
   <p>Patrón: elemento → tipo de evento → función.</p>
-  <div class="speaker">Explicar modelo de eventos y callbacks.</div>
+    <div class="speaker">Explicar el flujo de eventos: el usuario realiza una acción, el navegador dispara un evento correspondiente y ejecuta la función registrada (callback). Mostrar cómo múltiples listeners pueden responder al mismo evento y cómo el objeto event brinda información detallada. Señalar que este modelo permite crear interfaces reactivas y dinámicas.</div>
 </section>
 
 <section class="slide">
@@ -395,6 +507,7 @@ console.log(info);</pre>
   <p class="kicker">Ejercicio sintaxis avanzada</p>
   <div class="turn">
     <b>EN CLASE (5 min):</b>
+    <pre>const datos = { usuario: { perfil: { nombre: "Carlos", edad: 20 } }, hobbies: ["futbol", "lectura"] }</pre>
     <ol>
       <li>Desestructura <code>datos</code> para obtener <code>nombre</code> y segundo hobby.</li>
       <li>Escribe función que reciba arreglo de números y devuelva promedio usando rest y spread.</li>
@@ -402,7 +515,24 @@ console.log(info);</pre>
   </div>
   <div class="speaker">Guiar solución en pareja.</div>
 </section>
-
+<section class="slide">
+  <p class="kicker">Flujo HTML/CSS/JS</p>
+  <h2>Cómo trabajan juntos HTML, CSS y JS</h2>
+  <div style="display:flex; gap:1rem;">
+    <div class="card"><h4>HTML</h4><p>Estructura, el esqueleto</p></div>
+    <div class="card"><h4>CSS</h4><p>Presentación, la ropa</p></div>
+    <div class="card"><h4>JS</h4><p>Comportamiento, la redstone</p></div>
+  </div>
+  <div class="turn">
+    <b>Puente classList en 3 pasos:</b>
+    <ol>
+      <li>JS: <code>titulo.classList.add("activo")</code></li>
+      <li>CSS: <code>.activo { color: #9ece6a }</code></li>
+      <li>El navegador repinta.</li>
+    </ol>
+  </div>
+  <div class="speaker">Explicar que JS no dibuja directamente en el lienzo; su rol es modificar el DOM (añadiendo, quitando clases, cambiando atributos). CSS reacciona a esos cambios mediante reglas que coinciden con los selectores. Preguntar: ¿qué pasaría si intentáramos cambiar el color directamente con style en lugar de usar una clase? Esperar que mencionen especificidad y mantenimiento.</div>
+</section>
 <section class="slide">
   <p class="kicker">Integración con CSS</p>
   <h2>Estilos en línea y clases</h2>
@@ -415,7 +545,7 @@ titulo.classList.toggle("activo");</pre>
 </section>
 
 <section class="slide">
-  <p class="kicker">Integración con DOM</h2>
+  <p class="kicker">Integración con DOM</p>
   <h2>Creación de elementos</h2>
   <pre>const nuevoDiv = document.createElement("div");
 nuevoDiv.textContent = "Soy un div creado con JS";
@@ -424,16 +554,16 @@ document.body.appendChild(nuevoDiv);</pre>
 </section>
 
 <section class="slide">
-  <p class="kicker">Integración con formularios</h2>
+  <p class="kicker">Integración con formularios</p>
   <h2>Leer y prevenir envío</h2>
-  <pre>const input = document.querySelector("input[type='email']");
+<pre>const input = document.querySelector("input[type='email']");
 console.log(input.value);
-
+const formulario = document.querySelector("form");
 formulario.addEventListener("submit", function(event) {
   event.preventDefault();
   const datos = new FormData(formulario);
   console.log(datos.get("nombre"));
-});</pre>
+}</pre>
   <div class="speaker">Recordar preventDefault para evitar recargo.</div>
 </section>
 
@@ -482,7 +612,7 @@ formulario.addEventListener("submit", function(event) {
     <li>MDN — Introducción a eventos</li>
     <li>javascript.info — La consola</li>
   </ul>
-  <p><a href="../Indice.md">Índice</a> · <a href="../s3-anatomia-landing/README.md">← Anterior: S3</a> · <a href="../s5-typescript/README.md">Siguiente: S5 TypeScript →</a></p>
+  <p><a href="../Indice.md">Índice</a> · <a href="../sesiones/s3-anatomia-landing/README.md">← Anterior: S3</a> · <a href="../sesiones/s5-typescript/README.md">Siguiente: S5 TypeScript →</a></p>
   <div class="speaker">Invitar a explorar enlaces y practicar ejercicios.</div>
 </section>
 
