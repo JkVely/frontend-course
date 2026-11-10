@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S9 — Cómo se implementa el diseño con Tailwind v4</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 3 · Disección técnica · Sesión 9</p>
+  <h1>Cómo se implementa el diseño con <b>Tailwind v4</b></h1>
+  <p>Esta sesión no es "clases de Tailwind de memoria". Es entender el mecanismo: utilidades que se escriben directo en el HTML, cómo se configuran los tokens de color, y por qué el curso eligió Tailwind v4 (con Lightning CSS, sin autoprefixer).</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Alguien ha escrito CSS en un archivo aparte y luego tenido que buscar la clase en medio de 500 líneas?" Anotar. Esa es la motivación de Tailwind: los estilos van donde el elemento. Nivel de entrada: saben CSS básico de S2. Nivel de salida: entienden utilidades, variantes responsive, tokens, y por qué v4 no necesita archivo de configuración JS.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar qué es CSS utilitario y en qué se diferencia del CSS tradicional.</li>
+    <li>Leer una clase de Tailwind (<code>flex flex-col gap-4</code>) y saber qué hace.</li>
+    <li>Usar variantes responsive (<code>md:</code>, <code>lg:</code>) para mobile-first.</li>
+    <li>Explicar por qué Tailwind v4 no usa <code>tailwind.config.js</code> ni autoprefixer en este curso.</li>
+    <li>Leer el archivo <code>global.css</code> del sitio y reconocer los tokens de diseño.</li>
+  </ol>
+  <div class="speaker">Resaltar que hoy no van a construir una página entera: van a leer el diseño ya hecho en glud.org y entender cómo está implementado con Tailwind v4.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">CSS tradicional vs utilitario</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>CSS tradicional</h4>
+      <pre>.btn-primary {
+  background: #1affff;
+  color: #111;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+}</pre>
+      <p>Nombras la clase, escribes las reglas en un archivo aparte, y esperas acordarte del nombre cuando la uses.</p>
+    </div>
+    <div class="card">
+      <h4>Tailwind utilitario</h4>
+      <pre>&lt;button class="bg-cyan text-support-eerie px-4 py-4 rounded-lg"&gt;</pre>
+      <p>Escribes las reglas directamente en el elemento. No hay archivo aparte donde buscar "qué hace btn-primary".</p>
+    </div>
+  </div>
+  <div class="analogy"><b>Lego:</b> el CSS tradicional es como armar un set siguiendo el manual paso a paso. Tailwind es tener todas las piezas sueltas en la mesa y armar lo que necesites con ellas. Más piezas visibles, pero más control directo.</div>
+  <div class="speaker">Mostrar ambos ejemplos uno al lado del otro. El punto no es cuál es "mejor" en abstracto: es que Tailwind acopla diseño y estructura en un solo lugar, lo que acelera cambios y evita CSS muerto acumulado en archivos aparte.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tailwind v4: lo que cambia</h2>
+  <h2>No hay <code>tailwind.config.js</code> ni autoprefixer</h2>
+  <table>
+    <tr><th>Tailwind v3</th><th>Tailwind v4 (este curso)</th></tr>
+    <tr><td>Config en <code>tailwind.config.js</code></td><td>Tokens en <code>@theme</code> dentro de CSS (<code>global.css</code>)</td></tr>
+    <tr><td>Postcss + autoprefixer para compatibilidad</td><td>Lightning CSS integrado; sin autoprefixer (redundante, verificado A/B)</td></tr>
+    <tr><td>Colores en objeto JS</td><td>Variables CSS nativas (<code>--cyan</code>, <code>--purple</code>)</td></tr>
+  </table>
+  <div class="industry"><b>La industria de hoy:</b> Tailwind v4 es la versión actual del estándar de CSS utilitario. El equipo del GLUD verificó A/B que autoprefixer no aporta nada con Lightning CSS, por lo que lo eliminaron del stack. Menos dependencias, menos cosas que se rompen.</div>
+  <div class="speaker">Explicar que v4 lee los tokens directamente de CSS, no de un archivo JS. Mostrar en el repositorio que no existe <code>tailwind.config.js</code> activo (o que está muerto) y que los colores viven en <code>global.css</code> bajo <code>@layer base { :root { --cyan: ... } }</code>. Conectar con S6 (pnpm) y S7 (Astro): el stack está intencionalmente ligero.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Tokens de diseño del sitio</h2>
+  <h2>Los colores no son capricho: viven en variables CSS</h2>
+  <pre>@layer base {
+  :root {
+    --cyan: #1affff;
+    --purple: #7d1aff;
+    --purple-bright: #b78bff;
+    --orange: #fe9b1a;
+    --pink: #ff5280;
+    --bg-black: #1c1e1e;
+    --white: #ededed;
+    --support-grey: #8e95a1;
+    --support-eerie: #111827;
+    /* ... más tokens */
+  }
+}</pre>
+  <p>Cuando el diseño dice "usa cian", el código usa <code>var(--cyan)</code> o la utilidad de Tailwind mapeada a esa variable. Cambiar el token cambia todo el sitio.</p>
+  <div class="speaker">Conectar con S2: los tokens son la materialización de la paleta que se enseña ahí. Mostrar cómo <code>global.css</code> define el tema y cómo los componentes lo usan. Señalar que no hay colores hardcodeados sueltos en los componentes (salvo deuda identificada en el estudio de cumplimiento).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Responsive: mobile-first con variantes</h2>
+  <h2>Diseñas para el celular primero</h2>
+  <pre>&lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"&gt;</pre>
+  <ul>
+    <li><code>grid-cols-1</code>: aplica siempre (base móvil).</li>
+    <td><code>md:grid-cols-2</code>: solo a partir de pantallas medianas.</td></li>
+    <li><code>lg:grid-cols-3</code>: solo a partir de pantallas grandes.</td>
+    <td>El móvil nunca carga estilos de escritorio que no necesita.</td></li>
+  </ul>
+  <div class="analogy"><b>Empaque:</b> diseñas la caja para que quepa en la mochila (móvil). Si el usuario tiene una maleta grande (escritorio), le agregas más compartimentos. Nunca al revés.</div>
+  <div class="speaker">Explicar el prefijo <code>md:</code>, <code>lg:</code> como "a partir de este ancho". Mobile-first significa que lo que escribes sin prefijo es para móviles, y agregas capas para pantallas más grandes. Conectar con S3 (mobile-first es principio de diseño, ahora es implementación).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Abrir un componente real del sitio (ej: <code>src/components/CourseCard.astro</code>).</li>
+      <li>Leer sus clases de Tailwind y traducir una a una: "esto es flex, esto es gap-4, esto es md:flex-col".</li>
+      <li>Probar un cambio: cambiar <code>bg-black</code> por <code>bg-support-gunmetal</code> en una tarjeta y reconstruir (<code>corepack pnpm build</code>).</li>
+      <li>Observar el cambio en <code>corepack pnpm preview</code>.</li>
+    </ol>
+  </div>
+  <div class="speaker">Apoyar a quien no encuentre el archivo o no sepa qué cambiar. El objetivo: que vean que cambiar un diseño es cambiar una clase, no buscar en 500 líneas de CSS. Si alguien ya terminó, que ajuste también la versión móvil del mismo componente y compare ambos breakpoints.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>Lo que se llevan</h2>
+  <p>Tailwind v4 no es un lenguaje nuevo: es una forma de escribir CSS donde las utilidades van en el HTML, los tokens viven en variables CSS, y el responsive es mobile-first por defecto.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>el diseño no vive en un archivo CSS aparte; vive en las clases de cada elemento, con tokens nombrados que cualquier miembro del equipo puede leer.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S10 — cómo se siente interactuar: animaciones. Ahora que saben cómo se viste el sitio (Tailwind), van a ver cómo se mueve (animejs, swiper).</div>
+  <div class="speaker">Cierre rápido. Recordar que en S10 verán animejs y swiper, las dos librerías de movimiento del sitio. Lanzar la pregunta: "Si Tailwind es la ropa del sitio, ¿qué son las animaciones en la analogía?" (respuesta: el lenguaje corporal, cómo se mueve y reacciona).</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S9: cómo se implementa el diseño con Tailwind v4</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

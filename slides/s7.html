@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S7 — Por qué Astro y no React o Next</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 3 · Disección técnica · Sesión 7</p>
+  <h1>¿Por qué Astro y <b>no React o Next?</b></h1>
+  <p>Esta sesión no es "Astro es mejor que React". Es entender que cada herramienta tiene un caso de uso, y por qué para el sitio del GLUD la elección correcta fue Astro. Criterio antes que moda.</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Han oído hablar de React, Next.js, Vue? ¿Saben para qué se usa cada uno?" Anotar. Luego: "¿Por qué creen que un sitio como glud.org —que no es una aplicación, es una página informativa— necesita React?" Nivel de entrada: habrán oído nombres. Nivel de salida: saben qué hace cada herramienta y por qué Astro encaja en un sitio estático de contenido.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar qué hace React, qué hace Next.js y en qué se diferencian de Astro.</li>
+    <li>Entender "islas de interactividad" y por qué enviarlo todo como JS es un problema en sitios de contenido.</li>
+    <li>Justificar por qué glud.org usa Astro + SSG para su caso de uso.</li>
+    <li>Leer la estructura básica de un proyecto Astro (pages, layouts, components).</li>
+  </ol>
+  <div class="speaker">Recorrer objetivos. Resaltar que hoy no van a escribir componentes React: van a entender el mapa de herramientas para no repetir el error de "usar React porque todo el mundo lo usa".</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El panorama de herramientas</p>
+  <h2>Tres herramientas, tres respuestas distintas</h2>
+  <table>
+    <tr><th></th><th><b>React</b><br>Librería de UI</th><th><b>Next.js</b><br>Framework sobre React</th><th><b>Astro</b><br>Framework para sitios de contenido</th></tr>
+    <tr><td>¿Qué pinta?</td><td>Componentes en el navegador (JS)</td><td>Componentes en servidor o navegador</td><td>HTML en el servidor, JS solo donde haga falta</td></tr>
+    <tr><td>JS por defecto</td><td>Todo el sitio es JS</td><td>Mucho JS, aunque se pueda optimizar</td><td>Cero JS por defecto ("islands")</td></tr>
+    <tr><td>Ideal para</td><td>Dashboards, apps complejas, redes sociales</td><td>Apps con SEO, comercio, paneles de usuario</td><td>Landing, blogs, docs, sitios informativos</td></tr>
+    <tr><td>Carga inicial</td><td>Pesada (descarga JS antes de ver contenido)</td><td>Media-alta</td><td>Ligera (solo HTML y CSS inicialmente)</td></tr>
+  </table>
+  <div class="analogy"><b>Construcción:</b> React es como comprar una casa prefabricada completa con cableado y tuberías visibles; Next.js es esa misma casa pero con posibilidad de personalizar la entrega; Astro es construir la casa con materiales precocinados y solo instalar electricidad en las habitaciones que la necesitan.</div>
+  <div class="speaker">Leer columna por columna. El punto central: React no es un "framework web" completo, es una librería de componentes. Next.js le añade servidor y rutas. Astro es distinto: asume que la mayoría de una web es contenido estático y solo activa JavaScript donde tú lo pides explícitamente.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El problema del "todo JS"</h2>
+  <h2>El navegador tiene que descargar y ejecutar todo</h2>
+  <ul>
+    <li>En un sitio hecho 100% con React, el visitante descarga un paquete de JavaScript grande antes de ver algo útil.</li>
+    <li>Eso se llama <b>hidratación</b>: el navegador toma el HTML y "reanuda" la interactividad con JS.</li>
+    <li>En un teléfono medio y una red regular de la universidad, eso se nota: la página se ve, pero los botones no responden hasta que termina el JS.</li>
+    <li>Para una landing informativa como glud.org, esa carga es innecesaria.</li>
+  </div>
+  <div class="industry"><b>La industria de hoy:</b> muchas empresas empezaron con React para todo y ahora migran partes a Astro o Next.js por rendimiento. No es que React sea "malo": es que usarlo para una página de información es como usar un camión de mudanza para llevar una carta.</div>
+  <div class="speaker">Explicar hidratación con palabras simples: el servidor envía el HTML pintado, pero para que sea "vivo" (botones que reaccionan), el navegador debe descargar el JS y "conectarlo" al HTML. Ese proceso cuesta tiempo y batería. En S10 (animaciones) verán cómo Astro maneja esto con islands.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">La solución de Astro</p>
+  <h2>Islas de interactividad</h2>
+  <p>Astro genera <b>HTML estático puro</b> por defecto. El JavaScript solo existe en "islas" que tú marcas explícitamente:</p>
+  <pre>&lt;Button client:visible /&gt;    &lt;-- se activa cuando entra en la pantalla
+&lt;Menu client:idle /&gt;           &lt;-- se activa cuando el navegador queda libre
+&lt;Counter client:load /&gt;        &lt;-- se activa al cargar la página
+&lt;Card /&gt;                         &lt;-- solo HTML, cero JS</pre>
+  <p>Una isla sin <code>client:*</code> no envía JavaScript al visitante. Cero.</p>
+  <div class="analogy"><b>Casa:</b> la mayoría de las habitaciones son solo paredes y muebles (HTML). Solo la cocina y el baño tienen tuberías y cables (JavaScript). No cableas toda la casa para usar el fregadero de la cocina.</div>
+  <div class="speaker">Mostrar el código y explicar cada directiva <code>client:*</code>. El mensaje: tú decides qué es interactivo. Todo lo demás es HTML veloz. Conectar con S0: esto es por qué glud.org carga ~8 KB de JS propio, no megabytes.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">¿Y el sitio del GLUD?</h2>
+  <h2>glud.org usa Astro + SSG</h2>
+  <table>
+    <tr><th>Pregunta de producto</th><th>Respuesta de glud.org</th><th>Por qué Astro encaja</th></tr>
+    <tr><td>¿Es una app o una página informativa?</td><td>Página informativa</td><td>Astro está hecho para eso</td></tr>
+    <tr><td>¿Necesita login, carrito o datos por usuario?</td><td>No</td><td>No necesita React con estado de usuario</td></tr>
+    <tr><td>¿Qué importa del visitante?</td><td>Carga instantánea en cualquier teléfono</td><td>Cero JS por defecto + HTML pre-cocido</td></tr>
+    <tr><td>¿Quién lo mantiene?</td><td>Estudiantes con poca infraestructura</td><td>Despliegue sencillo en Netlify (archivos estáticos)</td></tr>
+  </table>
+  <div class="speaker">Conectar con S0 (SSG vs SSR). Aquí se cierra el círculo: S0 dijo "glud.org es estático por decisión de producto"; S7 explica la herramienta que hace eso posible sin sacrificar las islas interactivas donde hacen falta (menú hamburguesa, copiar correo, contadores).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Anatomía de un proyecto Astro</p>
+  <h2>Dónde vive cada cosa</h2>
+  <table>
+    <tr><th>Carpeta</th><th>Contenido</th><th>Ejemplo en glud.org</th></tr>
+    <tr><td><b>src/pages/</b></td><td>Cada archivo = una ruta del sitio</td><td><code>index.astro</code>, <code>cursos.astro</code>, <code>aboutus.astro</code></td></tr>
+    <tr><td><b>src/layouts/</b></td><td>Estructura repetida (header, footer)</td><td><code>Base.astro</code></td></tr>
+    <tr><td><b>src/components/</b></td><td>Pezas reutilizables</td><td><code>Header.astro</code>, <code>Footer.astro</code>, <code>CourseCard.astro</code></td></tr>
+    <tr><td><b>src/data/</b></td><td>Contenido tipado (TypeScript)</td><td><code>activities.ts</code>, <code>projects.ts</code></td></tr>
+  </table>
+  <div class="speaker">Esta es la hoja de ruta para S8-S11: cada sesión destripa una de estas carpetas sobre el código real. Mostrar en el repositorio del grupo cómo se ven estas carpetas hoy. No enseñar código Astro profundo aún: solo el mapa.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Abrir el repo clonado de glud.org y listar <code>src/pages/</code>.</li>
+      <li>Contar cuántas rutas tiene el sitio.</li>
+      <li>Identificar cuál es el layout compartido (<code>src/layouts/Base.astro</code>).</li>
+      <li>Buscar un componente que use <code>client:</code> (isla de interactividad).</li>
+    </ol>
+  </div>
+  <div class="speaker">Si alguien no encuentra componentes con <code>client:</code>, es porque el menú y el copy de correo los maneja con script inline (ver S4). Eso también es una isla, solo que escrita a mano. El objetivo: que salgan de la sesión sabiendo navegar la estructura de Astro sin miedo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>La regla del curso</h2>
+  <p>No usamos una herramienta porque es popular. La usamos porque resuelve el problema del usuario con el menor costo.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>React y Next son para aplicaciones; Astro es para sitios de contenido. glud.org es un sitio de contenido.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S8 — de dónde sale la agenda y los cursos. Ahora que saben la fábrica (Astro), van a ver de dónde sale la materia prima (los datos).</div>
+  <div class="speaker">Cierre rápido. Conectar con el estudio de cumplimiento escrito: el sitio cumple con el criterio de "herramienta correcta para el caso". Preguntar al grupo: "¿Alguien pensaría en usar React para glud.org después de esta sesión? ¿Por qué sí o por qué no?"</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S7: por qué Astro y no React o Next</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

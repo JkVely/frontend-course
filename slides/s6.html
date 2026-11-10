@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S6 — pnpm: por qué no usamos npm</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 2 · Cimientos técnicos · Sesión 6</p>
+  <h1>pnpm: <b>por qué no usamos npm</b></h1>
+  <p>El curso eligió pnpm deliberadamente. Esta sesión no es "comando contra comando": es entender el ecosistema de dependencias para que, al ver un <code>package.json</code> o un <code>pnpm-lock.yaml</code>, sepas exactamente qué hay escrito ahí y por qué.</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Qué pasó la última vez que clonaste un proyecto y no funcionó al instalar dependencias?" Anotar respuestas: versiones distintas, fallos de red, node_modules gigante. Esa es la motivación de la sesión. Nivel de entrada: saben que existen las librerías. Nivel de salida: entienden el lockfile, el store de pnpm, por qué el curso prohíbe npm en este equipo, y los scripts del package.json.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar qué es un gestor de paquetes y para qué sirve.</li>
+    <li>Diferenciar <code>package.json</code>, <code>package-lock.json</code> (o <code>pnpm-lock.yaml</code>) y <code>node_modules/</code>.</li>
+    <li>Explicar por qué el curso usa pnpm vía corepack y prohíbe npm.</li>
+    <li>Leer scripts de <code>package.json</code> y ejecutarlos con <code>corepack pnpm run</code>.</li>
+    <li>Instalar, eliminar y actualizar una dependencia con pnpm.</li>
+  </ol>
+  <div class="speaker">Recorrer cada objetivo rápidamente. El punto clave de este bloque: no se trata de saber todos los comandos, de entender qué archivos son fuente de verdad y cuáles son artefactos generados.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El ecosistema de dependencias</p>
+  <h2>Tres archivos, tres papeles</h2>
+  <table>
+    <tr><th>Archivo</th><th>Qué es</th><th>¿Se edita a mano?</th><th>¿Se sube a Git?</th></tr>
+    <tr><td><b>package.json</b></td><td>Manifiesto: nombre, versión, scripts y dependencias que tú eliges</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td><b>pnpm-lock.yaml</b></td><td>Lockfile: versiones exactas resueltas de cada paquete y sus dependencias</td><td>No</td><td>Sí (fuente de verdad)</td></tr>
+    <tr><td><b>node_modules/</b></td><td>Código descargado de todos los paquetes</td><td>No</td><td>No (se ignora con .gitignore)</td></tr>
+  </table>
+  <div class="analogy"><b>Análisis:</b> package.json es la lista de compras que escribiste. pnpm-lock.yaml es el ticket de compra con precios y cantidades exactas del día que compraste. node_modules es la despensa: la vas a usar, pero no la llevas de mudanza porque se vuelve a llenar con el ticket.</div>
+  <div class="speaker">Enfatizar: el lockfile es fuente de verdad, no package.json. Si dos personas instalan desde el mismo lockfile, obtienen idéntico código. Sin lockfile, cada quien puede terminar con versiones distintas y bugs que "en mi PC sí funciona". Regla del curso: nunca borrar el lockfile a menos que sepa exactamente por qué.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">¿Por qué pnpm y no npm?</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>pnpm (este curso)</h4>
+      <ul style="font-size:.95em">
+        <li>Guarda cada versión de cada paquete una sola vez en un <b>store central</b></li>
+        <li>node_modules son enlaces simbólicos (hard links): más ligero y rápido</li>
+        <li>Instalaciones deterministas y más seguras</li>
+        <li>Compatible con el ecosistema de Node/Astro</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>npm (prohibido aquí)</h4>
+      <ul style="font-size:.95em">
+        <li>Copia paquetes en cada proyecto: node_modules más pesado</li>
+        <li>En este equipo, npm ha corrompido lockfiles ("Lock compromised")</li>
+        <li>Menos determinista en instalaciones repetidas</li>
+      </ul>
+    </div>
+  </div>
+  <div class="industry"><b>La industria de hoy:</b> pnpm es el estándar creciente en proyectos modernos (Vite, Astro, Turborepo lo usan). No es una preferencia personal del profesor: es una decisión técnica con consecuencias en velocidad de instalación, peso en disco y reproducibilidad.</div>
+  <div class="speaker">Contar la historia real del equipo: una vez npm rompió el lockfile de un proyecto del grupo y se perdió tiempo reconstruyéndolo. Por eso la regla dura: "pnpm vía corepack, NUNCA npm". Explicar corepack: es el gestor que trae Node para activar pnpm sin instalarlo aparte. No se instala pnpm con npm.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cómo funciona pnpm por dentro</p>
+  <h2>El store y los enlaces</h2>
+  <ul>
+    <li>Cuando instalas un paquete, pnpm lo descarga una vez al <b>store local</b> (~<code>~/.local/share/pnpm/store</code> en Linux).</li>
+    <li>En el proyecto, <code>node_modules/</code> contiene <b>enlaces</b> a ese store, no copias.</li>
+    <li>Si dos proyectos usan React 18.2, React se descarga una sola vez en tu computador.</li>
+    <li>Estructura de node_modules más limpia: no anida dependencias innecesarias (salvo que el paquete lo exija).</li>
+  </ul>
+  <div class="analogy"><b>Biblioteca:</b> npm compra un libro para cada alumno (costo de espacio alto). pnpm compra un libro y lo pone en la biblioteca central; cada alumno recibe una tarjeta que apunta a ese libro (enlace simbólico). Mismo contenido, mucho menos espacio usado.</div>
+  <div class="speaker">Mostrar en vivo (si hay conexión y tiempo): <code>corepack pnpm store path</code> para ver dónde vive el store, y <code>ls -la node_modules</code> para notar que muchos elementos son enlaces, no carpetas normales. Esto demuestra por qué pnpm instala más rápido y pesa menos en disco.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Scripts del proyecto</p>
+  <h2>Leer y ejecutar scripts</h2>
+  <pre>{
+  "name": "glud-website",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "astro": "^5.0.0",
+    "prettier": "^3.0.0"
+  }
+}</pre>
+  <p>Los scripts son atajos. En lugar de escribir el comando completo, ejecutas:</p>
+  <pre>corepack pnpm run dev
+corepack pnpm run build</pre>
+  <p>Y si es un script de pnpm propio, puedes omitir <code>run</code>: <code>corepack pnpm dev</code>.</p>
+  <div class="speaker">Explicar que los scripts centralizan comandos para que todo el equipo use los mismos parámetros. Mostrar que <code>astro dev</code> levanta el servidor de desarrollo y <code>astro build</code> genera los archivos estáticos. Conectar con S0: este es el mismo comando que usaron para levantar el sitio en la sesión 0.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Instalar, eliminar, actualizar</p>
+  <h2>Los comandos que van a usar todo el semestre</h2>
+  <table>
+    <tr><th>Acción</th><th>Comando con pnpm</th><th>Qué hace</th></tr>
+    <tr><td>Instalar dependencias del proyecto</td><td><code>corepack pnpm install</code></td><td>Lee el lockfile y llena node_modules</td></tr>
+    <tr><td>Agregar una librería</td><td><code>corepack pnpm add nombre-paquete</code></td><td>Instala y actualiza package.json + lockfile</td></tr>
+    <tr><td>Agregar como herramienta de desarrollo</td><td><code>corepack pnpm add -D nombre-paquete</code></td><td>Lo guarda bajo devDependencies</td></tr>
+    <tr><td>Eliminar una librería</td><td><code>corepack pnpm remove nombre-paquete</code></td><td>La borra de package.json, lockfile y node_modules</td></tr>
+    <tr><td>Actualizar todo</td><td><code>corepack pnpm update</code></td><td>Respeta rangos de versión y reescribe el lockfile</td></tr>
+  </table>
+  <div class="speaker">Regla de oro del curso: nunca editar <code>pnpm-lock.yaml</code> a mano. Siempre se modifica mediante estos comandos. Si alguien agregó una dependencia a package.json "a ojo", debe correr <code>pnpm install</code> para que el lockfile se reconcilie. En clase, mostrar un ejemplo real: instalar <code>uuid</code> y ver cómo cambian package.json y el lockfile.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Clonen el sitio del GLUD si aún no lo tienen: <code>git clone ...</code></li>
+      <li>Instalen con <code>corepack pnpm install</code>.</li>
+      <li>Levanten con <code>corepack pnpm dev</code> y confirmen <code>localhost:4321</code>.</li>
+      <li>Instalen un paquete de prueba: <code>corepack pnpm add chalk</code>.</li>
+      <li>Observen qué cambió en package.json y en pnpm-lock.yaml.</li>
+      <li>Eliminenlo: <code>corepack pnpm remove chalk</code>.</li>
+    </ol>
+  </div>
+  <div class="speaker">Apoyar a quien se atasque en la instalación (node, corepack, permisos). El objetivo no es que dominen chalk, sino que vean el ciclo completo: instalar → observar cambios → eliminar. Si alguien ya tiene todo instalado, que ayude a su compañero (niveles de reto como mentores de mesa, como dice el README del curso).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Lo que NO hacen con pnpm</h2>
+  <h2>Reglas duras del curso</h2>
+  <ul>
+    <li>No instalar nada con <code>npm install</code>.</li>
+    <td>Si ven un tutorial que dice <code>npm install ...</code>, traduzcanlo mentalmente a <code>corepack pnpm add ...</code>.</td></li>
+    <li>No hacer <code>npm init</code> para crear proyectos nuevos.</li>
+    <td>El curso usa el repositorio del GLUD como base; no se crean proyectos desde cero en este bloque.</td></li>
+    <li>No subir <code>node_modules/</code> a Git.</li>
+    <td>Está en <code>.gitignore</code>. Si suben esa carpeta, el MR no se acepta.</td></li>
+    <li>No borrar <code>pnpm-lock.yaml</code> "porque pesa".</li>
+    <td>Es el archivo que garantiza que todos tengan lo mismo.</td></li>
+  </ul>
+  <div class="speaker">Recordar: estas reglas no son capricho. Vienen de la experiencia del grupo con npm rompiendo lockfiles. Quien respete estas reglas no tendrá el problema de "en mi PC funciona y en la de mi compañero no". Cerrar esta slide conectando con S7: pnpm es el piso que permite que Astro funcione de forma predecible.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>Volvamos al inicio</h2>
+  <p>Ahora saben por qué, al escribir <code>glud.org</code>, el navegador descarga archivos que alguien más preparó con herramientas específicas: <b>pnpm eligió qué librerías bajar, el lockfile las fijó, y Astro las convirtió en HTML estático</b>.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>el gestor de paquetes no es un detalle de instalación: es quien decide qué código corre en tu proyecto y si es reproducible para el resto del equipo.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S7 — por qué Astro y no React o Next. Ya saben cómo se instalan las dependencias; ahora eligen la fábrica que las usa.</div>
+  <div class="speaker">Cierre breve. Recordar que en la próxima sesión dejan de hablar de herramientas generales y empiezan a destripar el framework real del sitio: Astro. Lanzar la pregunta: "Si pnpm es el almacén de materiales, ¿qué es Astro en la analogía de la construcción?" (respuesta: el sistema de ensamblado que convierte materiales en casas, o sea, en páginas web).</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S6 pnpm: por qué no usamos npm</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S12 — Qué más existe: React, Three.js y el ecosistema</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 4 · Cierre · Sesión 12</p>
+  <h1>Qué más existe: <b>React, Three.js y el ecosistema</b></h1>
+  <p>Han terminado de destripar glud.org con Astro. Esta sesión abre el mapa: qué hay más allá, para qué sirve cada herramienta del ecosistema moderno, y cómo decidir cuándo aprenderla sin caer en "usar todo porque está de moda".</p>
+  <div class="speaker">PREGUNTA GUÍA: "Además de Astro, ¿qué herramientas o nombres han oído en el mundo del frontend?" Anotar sin juzgar: React, Vue, Next, Three.js, Tailwind, Vite, Zustand, etc. Nivel de entrada: han oído nombres sueltos. Nivel de salida: saben qué hace cada categoría de herramienta y cuándo (y cuándo no) aprenderla.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar para qué sirve React y cuándo tiene sentido usarlo.</li>
+    <li>Explicar para qué sirve Three.js y cuándo tiene sentido usarlo.</li>
+    <li>Ubicar en el mapa: frameworks, librerías de UI, manejo de estado, build tools, herramientas de prueba.</li>
+    <li>Decidir, con criterio, si una herramienta nueva vale la pena para un proyecto concreto.</li>
+  </ol>
+  <div class="speaker">Resaltar: esta sesión no enseña a usar React ni Three.js. Enseña a reconocerlos y a decidir si aplican. El curso termina con criterio, no con una lista de tecnologías memorizadas.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El ecosistema en categorías</p>
+  <h2>Mapa de herramientas modernas</h2>
+  <table>
+    <tr><th>Categoría</th><th>Ejemplos</th><th>Para qué sirve</th></tr>
+    <tr><td>Frameworks de sitio</td><td>Astro, Next.js, Nuxt, SvelteKit</td><td>Generar páginas y rutas (SSG, SSR o híbrido)</td></tr>
+    <tr><td>Librerías de UI</td><td>React, Vue, Svelte, Solid</td><td>Construir componentes interactivos</td></tr>
+    <tr><td>Gráficos 3D</td><td>Three.js, Babylon.js</td><td>Dibujar en 3D en el navegador (WebGL)</td></tr>
+    <tr><td>Herramientas de build</td><td>Vite, esbuild, Rollup, Turbopack</td><td>Empaquetar y optimizar código para producción</td></tr>
+    <tr><td>Manejo de estado</td><td>Zustand, Redux, Jotai, React Query</td><td>Guardar y sincronizar datos en la aplicación</td></tr>
+    <tr><td>Estilos</td><td>Tailwind, CSS Modules, Styled Components</td><td>Definir apariencia de componentes</td></tr>
+    <tr><td>Pruebas</td><td>Vitest, Playwright, Cypress, Lighthouse</td><td>Verificar que el código funciona y no rompe</td></tr>
+  </table>
+  <div class="speaker">Leer cada categoría. El punto: el estudiante que termine el curso conoce el mapa, no porque haya usado todo, sino porque sabe dónde buscar y para qué sirve cada cosa cuando lo necesite en un proyecto real.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">React: la librería de UI más usada</p>
+  <h2>¿Qué hace y cuándo tiene sentido?</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Qué hace</h4>
+      <ul style="font-size:.95em">
+        <li>Crea componentes que se actualizan solos cuando cambian sus datos</li>
+        <li>Usa un DOM virtual para no volver a pintar todo en cada cambio</li>
+        <li>Tiene el ecosistema más grande de librerías listas</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Cuándo tiene sentido</h4>
+      <ul style="font-size:.95em">
+        <li>Dashboards, paneles de administración, redes sociales</li>
+        <li>Sitios con mucha interacción y estado de usuario (login, carrito, chat)</li>
+        <li>Cuando necesitas ecosistema y contratación fácil</li>
+      </ul>
+    </div>
+  </div>
+  <div class="industry"><b>La industria de hoy:</b> React es el estándar para aplicaciones web complejas. Pero usarlo para una página informativa estática es como usar un tractor para ir a comprar el pan: funciona, pero es excesivo y lento para el caso.</div>
+  <div class="speaker">Conectar con S7: React es para aplicaciones, Astro para sitios de contenido. Mostrar ejemplos concretos: Instagram o un banco online (React tiene sentido); glud.org o una landing de evento (React es excesivo).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Three.js: gráficos 3D en el navegador</p>
+  <h2>WebGL sin escribir WebGL a mano</h2>
+  <ul>
+    <li>Three.js permite crear escenas 3D, cámaras, luces y objetos que corren en el navegador mediante WebGL.</li>
+    <td>Se usa para visualizaciones, configuradores de productos, mundos inmersivos, arte digital.</td></li>
+    <li>No es para páginas informativas: es pesado, requiere tarjeta gráfica y su accesibilidad es limitada.</li>
+    <td>Tiene sentido en portafolios de artistas, sitios de productos con vista 3D, o experiencias inmersivas.</td></li>
+  </ul>
+  <div class="analogy"><b>Escultura:</b> Three.js es como tener una impresora 3D en el navegador. Impresiona, pero no la usas para imprimir una carta.</div>
+  <div class="speaker">Mostrar ejemplos reales de Three.js (sitios de portafolio, visualizaciones de datos 3D) y preguntar: "¿glud.org necesita algo en 3D? ¿Por qué no?" La respuesta esperada: no, porque su propósito es informar, no impresionar visualmente. Conectar con el criterio del curso: herramienta según el caso de uso.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cómo elegir sin caer en la moda</h2>
+  <h2>Un filtro de cuatro preguntas</h2>
+  <ol>
+    <li>¿Qué problema tiene el usuario que resolver?</li>
+    <td>Si la respuesta es "ver información", un SSG ligero alcanza.</td></li>
+    <li>¿Necesita estado de usuario (login, carrito, chat)?</li>
+    <td>Si no, no necesitas React con manejo de estado complejo.</td></li>
+    <li>¿Cuánto pesa la herramienta para el visitante?</td>
+    <td>Cada librería extra es descarga y batería del teléfono.</td></li>
+    <li>¿Quién lo va a mantener y por cuánto tiempo?</td>
+    <td>Una herramienta de moda que nadie del equipo conoce es deuda futura.</td></li>
+  </ol>
+  <div class="speaker">Recorrer las cuatro preguntas aplicándolas a un caso imaginario del grupo (ej: "¿construimos el sistema de inscripción de cursos con React o seguimos con LimeSurvey?"). El objetivo: que salgan con un método de decisión, no con una respuesta cerrada para todo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Elegir un proyecto imaginario del GLUD (ej: un visor de campus en 3D, un panel de inscripción de cursos, una landing de evento).</li>
+      <li>Responder las cuatro preguntas del filtro para ese proyecto.</li>
+      <li>Elegir una herramienta del mapa y justificar por qué.</li>
+      <li>Presentar en 1 minuto: proyecto, herramienta elegida, y la razón de producto (no de moda).</li>
+    </ol>
+  </div>
+  <div class="speaker">El profesor actúa como juez de "criterio vs moda". Si alguien dice "React porque todo el mundo lo usa", se le pide que responda la pregunta 3 (peso para el visitante) y 4 (quién lo mantiene). El objetivo es que la justificación sea de producto, no de tendencia.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>El curso termina con criterio, no con una pila de tecnologías</h2>
+  <p>Han aprendido cómo llega una página al navegador (S0), cómo piensa un usuario (S1-S3), cómo funciona el código debajo (S4-S5), cómo está construido el sitio real (S6-S11), y ahora dónde está el mapa de todo lo demás (S12).</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>la mejor tecnología es la que entiendes por debajo, y la usas solo cuando el caso la justifica.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S13 — construye lo que diseñaste. Implementan su sección de noticias en wireframe, con flujo real de Git (issue, rama, MR a dev). Todo el curso se cierra publicando algo real.</div>
+  <div class="speaker">Cierre del bloque teórico. Recordar que S13 es la sesión final y la más importante: todo lo aprendido se aplica en una implementación real con MR al repositorio del grupo. Lanzar la pregunta: "¿Con qué sección de noticias se quedan para implementar en S13?" (las diseñaron en S3).</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S12: qué más existe: React, Three.js y el ecosistema</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

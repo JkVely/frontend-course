@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S11 — Cómo sabes que es bueno: Lighthouse</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 3 · Disección técnica · Sesión 11</p>
+  <h1>Cómo sabes que es bueno: <b>Lighthouse</b></h1>
+  <p>Dejar de opinar y empezar a medir. Esta sesión enseña a usar Lighthouse para auditar una página real en cuatro ejes: rendimiento, accesibilidad, buenas prácticas y SEO. El objetivo del grupo es 100/100/100/100 en todas las páginas.</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Cómo saben si una web es buena? ¿Por qué se ve bonita, por qué carga rápido, o por qué alguien ciego puede usarla?" Anotar las tres respuestas: son exactamente los cuatro ejes de Lighthouse. Nivel de entrada: han oído hablar de "velocidad" o "accesibilidad" de forma vaga. Nivel de salida: saben ejecutar Lighthouse, leer su reporte y convertir un hallazgo en un cambio concreto.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Ejecutar Lighthouse en Brave headless contra una URL local o en producción.</li>
+    <li>Interpretar las cuatro categorías: Performance, Accesibilidad, Buenas prácticas, SEO.</li>
+    <li>Leer las métricas clave (LCP, FCP, CLS, TBT, SI) y saber qué mide cada una.</li>
+    <li>Convertir un hallazgo de Lighthouse en una acción de mejora con número antes/después.</li>
+    <li>Entender por qué 100/100/100/100 es el objetivo permanente del grupo, no una meta opcional.</li>
+  </ol>
+  <div class="speaker">Resaltar: Lighthouse no da opiniones, da mediciones. Un puntaje bajo no es "mal diseño", es "esto es medible y se puede mejorar". Conectar con el curso: esto es lo que da criterio objetivo para no discutir a "gusto".</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Las cuatro categorías</p>
+  <h2>Qué mide cada una</h2>
+  <table>
+    <tr><th>Categoría</th><th>Qué evalúa</th><th>Ejemplo de hallazgo</th></tr>
+    <tr><td><b>Performance</b></td><td>Qué tan rápido se ve y se puede usar la página</td><td>Imagen sin optimizar que retrasa el pintado (LCP alto)</td></tr>
+    <tr><td><b>Accesibilidad</b></td><td>Si la página es usable para todas las personas</td><td>Imagen sin <code>alt</code>, contraste bajo, foco invisible</td></tr>
+    <tr><td><b>Buenas prácticas</b></td><td>Salud técnica y seguridad de la página</td><td>Console errors, librerías con vulnerabilidades conocidas</td></tr>
+    <tr><td><b>SEO</b></td><td>Qué tan bien entienden los buscadores la página</td><td>Falta <code>meta description</code> o title duplicado</td></tr>
+  </table>
+  <div class="analogy"><b>Revisión médica:</b> Lighthouse es como un chequeo completo: te mide la presión, el peso, la visión y el análisis de sangre. Cada número apunta a algo concreto que se puede tratar.</div>
+  <div class="speaker">Leer la tabla fila por fila. El mensaje: no hay una "nota general", hay cuatro notas independientes. Un sitio puede tener 100 en SEO y 40 en Accesibilidad, y eso significa que los buscadores lo encuentran pero una persona con discapacidad no puede usarlo.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Métricas de rendimiento</h2>
+  <h2>Las cinco que importan</h2>
+  <table>
+    <tr><th>Métrica</th><th>Qué mide</th><th>Pregunta que responde</th></tr>
+    <tr><td><b>FCP</b></td><td>First Contentful Paint</td><td>¿Cuándo se pinta el primer contenido?</td></tr>
+    <tr><td><b>LCP</b></td><td>Largest Contentful Paint</td><td>¿Cuándo se ve el contenido principal?</td></tr>
+    <tr><td><b>SI</b></td><td>Speed Index</td><td>¿Qué tan rápido se ve completa la parte visible?</td></tr>
+    <tr><td><b>TBT</b></td><td>Total Blocking Time</td><td>¿Cuánto tiempo el hilo principal está bloqueado?</td></tr>
+    <tr><td><b>CLS</b></td><td>Cumulative Layout Shift</td><td>¿Los elementos se mueven sorpresivamente?</td></tr>
+  </table>
+  <div class="speaker">Explicar cada métrica con una frase de una línea (la de la tabla). Ejemplo concreto: una imagen grande que empuja el texto hacia abajo mientras carga = CLS alto. Un script pesado que bloquea el clic = TBT alto. Conectar con S0 (agua que se va llenando) y S7 (Astro entrega HTML rápido, lo que ayuda a FCP y LCP).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cómo se ejecuta Lighthouse en este curso</h2>
+  <h2>Brave headless + lighthouse@12 vía pnpm dlx</h2>
+  <pre>corepack pnpm dlx lighthouse@12 https://localhost:4321 --view</pre>
+  <ul>
+    <li>Se usa <b>Brave headless</b> con puerto de depuración remota (<code>--remote-debugging-port=9222</code>) y user-data-dir propia.</li>
+    <td>npx está roto en este equipo, por eso se usa pnpm dlx.</td></li>
+    <li>Se mide sobre el sitio levantado localmente (<code>corepack pnpm dev</code> o <code>preview</code>) y también en producción (<code>glud.org</code>).</td>
+    <td>El objetivo: comparar local vs producción y encontrar dónde se pierde calidad.</td></li>
+  </ul>
+  <div class="speaker">Demostración EN VIVO: levantar el sitio, ejecutar Lighthouse contra localhost, abrir el reporte HTML y recorrer las cuatro categorías. Pedir a los estudiantes que ejecuten el comando ellos mismos. No hay slides con "capturas de pantalla del reporte": el reporte lo genera cada quien en su computador.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">De un hallazgo a una acción</h2>
+  <h2>El método antes/después</h2>
+  <ol>
+    <li>Ejecutar Lighthouse y anotar la métrica o accesibilidad fallida.</li>
+    <td>Ejemplo: "Contraste 3.2:1 en el chip de organizador (falla AA, se necesita 4.5:1)".</td></li>
+    <li>Hacer el cambio concreto con número.</td>
+    <td>Ejemplo: cambiar color de <code>var(--purple)</code> a <code>var(--purple-bright)</code> → 6.56:1.</td></li>
+    <li>Ejecutar Lighthouse otra vez y comparar el número.</td>
+    <td>Si el puntaje subió, el cambio se queda. Si no, se revierte.</td></li>
+  </ol>
+  <div class="speaker">Este es el corazón pedagógico de la sesión: no se mejora "porque sí", se mejora porque un número lo justifica. Mostrar un ejemplo real (el contraste del chip, medido en el estudio de cumplimiento: 2.79:1 → 6.56:1). Conectar con el taller del 20 de octubre: las chicas van a hacer exactamente esto con dos lanes.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Levantar el sitio local: <code>corepack pnpm dev</code>.</li>
+      <li>Ejecutar Lighthouse contra <code>https://localhost:4321</code>.</li>
+      <li>Anotar el puntaje de las 4 categorías y la métrica más baja.</li>
+      <li>Elegir un hallazgo de accesibilidad (falta de alt, contraste, foco) y proponer el cambio concreto.</li>
+    </ol>
+  </div>
+  <div class="speaker">Apoyar a quien no tenga Brave configurado o el puerto de depuración en uso. El resultado no es "arreglar todo": es ejecutar una auditoría completa y poder explicar un hallazgo con su número. Quienes terminen antes, que auditen una segunda página (ej: /cursos o /actividades) y comparen puntajes.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>100/100/100/100 es el estándar, no la excepción</h2>
+  <p>El grupo no celebra "un sitio bonito". Celebra un sitio que carga rápido, que cualquiera puede usar, que no tiene errores técnicos y que los buscadores entienden. Eso se mide con Lighthouse.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>no opinemos si la web es buena; midámosla, y mejoremos lo que el número dice.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S12 — qué más existe: React, Three.js y el ecosistema. Ahora que saben medir, van a ver el mapa de herramientas que hay más allá de este curso.</div>
+  <div class="speaker">Cierre rápido. Recordar que Lighthouse se ejecuta antes de cada MR importante en el flujo del grupo (como parte de la definición de "listo"). Preguntar: "¿Quién se anima a auditar su propia página personal o un proyecto del grupo después de esta sesión?"</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S11: cómo sabes que es bueno: Lighthouse</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

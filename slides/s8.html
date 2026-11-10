@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S8 — De dónde sale la agenda y los cursos</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 3 · Disección técnica · Sesión 8</p>
+  <h1>De dónde sale la agenda y los cursos</h1>
+  <p>Todo el contenido que ves en glud.org (agenda de la SLUD, horario de cursos, proyectos, ponentes) no está escrito a mano en cada página HTML. Vive en archivos de datos tipados con TypeScript que Astro lee al generar el sitio.</p>
+  <div class="speaker">PREGUNTA GUÍA: "Si quieren cambiar la fecha de un evento, ¿tienen que editar el HTML de la página? ¿O hay un archivo separado con las fechas?" Nivel de entrada: han visto las páginas con contenido. Nivel de salida: saben que el contenido vive en <code>src/data/*.ts</code>, entienden por qué TypeScript lo protege, y saben cómo se inyecta en las páginas.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar la diferencia entre contenido duro (en el HTML) y contenido dinámico de un SSG (en archivos de datos).</li>
+    <li>Leer un archivo de datos del sitio (<code>activities.ts</code>, <code>coursesData.ts</code>) e identificar su forma.</li>
+    <li>Explicar por qué esos archivos usan TypeScript y qué protegen.</li>
+    <li>Rastrear cómo un dato de esos archivos llega a una tarjeta renderizada en la página.</li>
+  </ol>
+  <div class="speaker">Resaltar: esta sesión es el puente entre "diseño" (S2-S3) y "datos reales". El contenido ya no es lorem ipsum; es información que alguien va a tener que mantener.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Contenido duro vs contenido de datos</h2>
+  <div class="grid2">
+    <div class="card">
+      <h4>Contenido duro (estático)</h4>
+      <ul style="font-size:.95em">
+        <li>Escrito directamente en el <code>.astro</code></li>
+        <li>Para cambiarlo, se edita la página y se vuelve a publicar</li>
+        <li>Ejemplo: el título de la home, el lema del footer</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Contenido de datos (SSG)</h4>
+      <ul style="font-size:.95em">
+        <li>Vive en <code>src/data/*.ts</code> (no en el HTML)</li>
+        <li>Para cambiarlo, se edita el archivo de datos y se vuelve a generar</li>
+        <li>Ejemplo: cada curso con nombre, fecha, instructor, cupo</li>
+      </ul>
+    </div>
+  </div>
+  <div class="analogy"><b>Menú de restaurante:</b> el contenido duro es el marco del menú (el marco de madera nunca cambia). El contenido de datos son los platos del día: se escriben en una pizarra aparte y el mesero los lee para cada comensal. Cambiar la pizarra no implica reconstruir el marco.</div>
+  <div class="speaker">Explicar que en un SSG el "contenido dinámico" no es que el servidor consulte una base de datos en cada visita: es que, al momento de generar el sitio (build), Astro lee los archivos de datos y los incrusta en el HTML. Resultado: la velocidad del estático con la mantenibilidad del contenido separado.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Dónde vive cada cosa</h2>
+  <table>
+    <tr><th>Archivo de datos</th><th>Contenido</th><th>Página que lo usa</th></tr>
+    <tr><td><code>src/data/activities.ts</code></td><td>Agenda de la SLUD 2026: charlas, talleres, ponentes, horarios</td><td><code>/actividades</code>, <code>/slud</code></td></tr>
+    <tr><td><code>src/data/events.ts</code></td><td>Eventos destacados (SLUD, FLISOL)</td><td><code>/events</code></td></tr>
+    <tr><td><code>src/data/projects.ts</code></td><td>Subproyectos del GLUD: ArtGlud, GLUD Website, Hypermedia, etc.</td><td><code>/projects</code></td></tr>
+    <tr><td><code>src/data/sponsors.ts</code></td><td>Patrocinadores y sus logos</td><td>Home (marquee), <code>/SludSponsors</code></td></tr>
+    <tr><td><code>src/data/slud-history.ts</code></td><td>Histórico de ediciones de la SLUD (años, temáticas, posters)</td><td><code>/slud</code>, <code>/slud/[year]/actividades</code></td></tr>
+    <tr><td><code>src/components/courses/data/coursesData.ts</code></td><td>Cursos GNUBIES: nombre, imagen, instructor, cupo, enlace de inscripción</td><td><code>/cursos</code></td></tr>
+  </table>
+  <div class="speaker">Recorrer la tabla fila por fila. Mostrar en el repo real cómo se ve uno de esos archivos (ej: <code>activities.ts</code>) para que vean la estructura concreta. No enseñar a editar aún: solo localizar y reconocer.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Por qué TypeScript para los datos</h2>
+  <h2>Los contratos de S5 aplicados al contenido</h2>
+  <pre>interface Actividad {
+  titulo: string
+  ponente: string
+  hora: string
+  dia: string
+  tipo: "charlas" | "talleres" | "instalaciones"
+}</pre>
+  <p>Si alguien escribe <code>tipo: "conferencia"</code> (no previsto), TypeScript lo marca antes de generar el sitio. Si olvida <code>hora</code>, también.</p>
+  <p>En JavaScript puro ese error llegaría al visitante: una tarjeta vacía o un "undefined" en la pantalla.</p>
+  <div class="speaker">Conectar con S5: interfaces, union types, strict null checks. Aquí se ve el valor real de TS: no es teoría, es evitar que la agenda de la SLUD se muestre rota porque alguien escribió mal un campo. Mostrar un ejemplo real de error que TS atrape en <code>activities.ts</code> si es posible.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">De los datos a la página</h2>
+  <h2>El flujo: dato → componente → HTML</h2>
+  <ol>
+    <li><code>astro build</code> lee <code>src/data/activities.ts</code>.</li>
+    <td>Astro importa los datos y los pasa como propiedades a los componentes de Astro.</td></li>
+    <li>Cada actividad se renderiza como una tarjeta (<code>ActivityCard</code>).</td>
+    <td>El componente recibe <code>titulo</code>, <code>ponente</code>, etc., y los pinta en HTML.</td></li>
+    <li>El resultado final es HTML estático con los datos ya dentro.</td>
+    <td>El visitante recibe la página lista, sin que el servidor consulte nada en tiempo de ejecución.</td></li>
+  </ol>
+  <pre>&lt;ActivityCard
+  titulo={actividad.titulo}
+  ponente={actividad.ponente}
+  hora={actividad.hora}
+/&gt;</pre>
+  <div class="speaker">Recorrer los 4 pasos lentamente. Es el núcleo mental de un SSG: datos en archivos, componentes que los consumen, HTML generado una sola vez. Conectar con S7 (Astro genera HTML) y con S0 (el sitio es estático).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cursos: el caso de LimeSurvey</h2>
+  <h2>No todo vive en el repo</h2>
+  <p>Los cursos GNUBIES se muestran en <code>/cursos</code>, pero la inscripción no ocurre en el sitio. Vive en <b>LimeSurvey</b> (<code>lime.glud.org</code>), una plataforma externa.</p>
+  <ul>
+    <li>La tarjeta de cada curso muestra: nombre, instructor, imagen y un botón "Inscribirse".</li>
+    <td>Ese botón es un enlace externo a LimeSurvey con el curso preseleccionado.</td></li>
+    <li>LimeSurvey tiene <code>X-Frame-Options: SAMEORIGIN</code>, por tanto <b>nunca se embebe en un iframe</b>.</td>
+    <td>Siempre se abre en pestaña nueva con <code>target="_blank" rel="noopener noreferrer"</code>.</td></li>
+  </ul>
+  <div class="industry"><b>La industria de hoy:</b> los sitios modernos no lo hacen todo ellos. Usan servicios especializados para inscripciones, pagos, formularios o encuestas, y se integran con enlaces. La pregunta clave no es "¿lo construimos nosotros?", es "¿quién lo hace mejor y cómo lo conectamos de forma segura?".</div>
+  <div class="speaker">Mostrar en vivo la página /cursos, hacer clic en "Inscribirse" y observar que se abre una pestaña externa. Explicar por qué no se puede meter LimeSurvey en un iframe (cabecera de seguridad del servidor de LimeSurvey) y por qué <code>rel="noopener noreferrer"</code> es obligatorio al abrir enlaces externos en pestaña nueva (seguridad contra tabnabbing).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Abrir <code>src/data/activities.ts</code> y leer una actividad completa.</li>
+      <li>Buscar esa misma actividad en la página /actividades del sitio levantado localmente.</li>
+      <li>Proponer un cambio de texto (ej: corregir una hora) en el archivo .ts.</li>
+      <li>Ejecutar <code>corepack pnpm build</code> y verificar que el cambio aparece en el HTML generado.</li>
+    </ol>
+  </div>
+  <div class="speaker">Este es el momento "entiendo de dónde sale el contenido". Apoyar a quien tenga problemas con el build. El resultado clave: ven que editar un archivo de datos y reconstruir actualiza el sitio, sin tocar HTML a mano.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>El contenido es datos, no maqueta</h2>
+  <p>En este sitio, cambiar una fecha de evento significa editar un archivo de datos, no abrir el HTML de la página. Eso separa quién escribe contenido de quién maqueta, y TypeScript evita que un dato mal escrito rompa la vista.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>el contenido vive en archivos tipados; las páginas solo lo muestran. Eso es lo que permite un SSG rápido y mantenible.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S9 — cómo se implementa el diseño con Tailwind v4. Ahora que saben de dónde sale el contenido, van a ver cómo se viste.</div>
+  <div class="speaker">Cierre rápido. Recordar que el próximo bloque (S9-S11) es el más técnico de implementación: Tailwind, animaciones, Lighthouse. Sesión 8 sienta la base de que el contenido no está "pegado" en las páginas.</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S8: de dónde sale la agenda y los cursos</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

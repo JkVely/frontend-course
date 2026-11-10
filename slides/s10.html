@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S10 — Cómo se siente interactuar: animaciones</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 3 · Disección técnica · Sesión 10</p>
+  <h1>Cómo se siente interactuar: <b>animaciones</b></h1>
+  <p>Una página no solo se ve: se siente. Esta sesión cubre las dos librerías de movimiento del sitio (animejs y swiper), los estados de interacción (hover, focus, loading) y la regla de oro de accesibilidad: <code>prefers-reduced-motion</code>.</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Qué diferencia hay entre una web que se siente 'viva' y una que se siente muerta?" Anotar: transiciones suaves, feedback al hacer clic, elementos que aparecen al hacer scroll. Nivel de entrada: han visto animaciones en webs. Nivel de salida: saben cómo se implementan en glud.org, cuándo usarlas y cuándo desactivarlas por accesibilidad.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Explicar para qué sirve animejs y para qué sirve swiper en el sitio.</li>
+    <li>Identificar estados de interacción (reposo, hover, focus, active, loading, error) en un componente real.</li>
+    <li>Explicar por qué las animaciones deben respetar <code>prefers-reduced-motion</code>.</li>
+    <li>Leer el código de animación del menú hamburguesa y del carrusel de sponsors.</li>
+  </ol>
+  <div class="speaker">Resaltar que esta sesión no es "hacer todo bonito": es entender el contrato entre movimiento y accesibilidad. Una animación que no se puede desactivar es una barrera, no una mejora.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Las dos librerías de movimiento</p>
+  <h2>animejs y swiper</h2>
+  <table>
+    <tr><th>Librería</th><th>Para qué se usa en glud.org</th><th>Dónde está</th></tr>
+    <tr><td><b>animejs</b></td><td>Animaciones de entrada del landing, orb gradientes que se mueven, formas decorativas rotando</td><td><code>landing-animations.ts</code>, <code>header-animations.ts</code>, <code>aboutus-animations.ts</code></td></tr>
+    <tr><td><b>swiper</b></td><td>Carrusel de sponsors en la home y carrusel de proyectos</td><td><code>SponsorsSection.astro</code>, <code>ProjectsSection.astro</code></td></tr>
+  </table>
+  <div class="analogy"><b>Música:</b> animejs es la partitura que le dice a cada elemento cuándo moverse y cómo. Swiper es el tocadiscos que deja que el usuario deslice una lista de elementos con el dedo.</div>
+  <div class="speaker">Mostrar en vivo: la home tiene orbs que flotan (animejs) y el marquesina de sponsors que se mueve solo (swiper). Explicar que swiper también da navegación táctil en móvil, no solo "bonito".</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Los 7 estados de interacción</h2>
+  <h2>Todo elemento interactivo tiene estados</h2>
+  <table>
+    <tr><th>Estado</th><th>Qué comunica</th><th>Ejemplo en glud.org</th></tr>
+    <tr><td>Reposo</td><td>Cómo está cuando no haces nada</td><td>Botón normal, enlace sin tocar</td></tr>
+    <tr><td>Hover</td><td>"Estoy sobre este elemento, puedo hacer clic"</td><td>Nav link que cambia a cian y subraya</td></tr>
+    <tr><td>Focus</td><td>"Este elemento está seleccionado por teclado"</td><td>Pestañas de actividades con outline cian</td></tr>
+    <tr><td>Active</td><td>"Estoy haciendo clic ahora mismo"</td><td>Botón que se hunde un poco al hacer clic</td></tr>
+    <tr><td>Loading</td><td>"Está pasando algo, espera"</td><td>Envío de correo en contacto (pendiente de sistema visual claro)</td></tr>
+    <tr><td>Error</td><td>"Algo falló, esto es lo que pasó"</td><td>Formulario de contacto con <code>aria-invalid</code></td></tr>
+    <tr><td>Disabled</td><td>"No se puede interactuar con esto ahora"</td><td>Botón desactivado después de enviar</td></tr>
+  </table>
+  <div class="speaker">Conectar con S3 (7 estados documentados). Señalar que focus y loading son los más olvidados en sitios reales. En glud.org, focus está definido en algunos componentes pero no en todos (deuda identificada en el estudio de cumplimiento).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Accesibilidad del movimiento</p>
+  <h2><code>prefers-reduced-motion</code>: desactivar animaciones cuando el usuario lo pide</h2>
+  <p>Algunos usuarios tienen trastornos vestibulares: el movimiento en pantalla les genera mareos o malestar. Su navegador lo indica con esta preferencia, y el sitio debe respetarla.</p>
+  <pre>@media (prefers-reduced-motion: reduce) {
+  .sponsors-track { animation: none; }
+  .gradient-orb { animation: none; }
+}</pre>
+  <div class="industry"><b>La industria de hoy:</b> respetar <code>prefers-reduced-motion</code> es requisito de accesibilidad, no lujo. Los equipos de producto lo exigen porque excluir usuarios por animaciones innecesarias es una decisión de diseño, no un accidente técnico.</div>
+  <div class="speaker">Explicar que en glud.org algunas animaciones ya respetan esta regla (carrusel de sponsors) pero otras no (landing, header, aboutus con animejs — deuda identificada en el estudio de cumplimiento). Mostrar cómo probarlo: en el sistema operativo, activar "Reducir movimiento" y recargar la página.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El menú hamburguesa como caso real</h2>
+  <h2>Animación + accesibilidad juntas</h2>
+  <ul>
+    <li>Se abre como un panel inferior (bottom-sheet) con deslizamiento (animejs).</li>
+    <td>El botón hamburguesa usa <code>aria-expanded</code> para decir si está abierto o cerrado.</td></li>
+    <li>Al abrir, el foco se queda atrapado dentro del menú (focus trap).</td>
+    <td>Al presionar Escape, se vuelve a cerrar y el foco regresa al botón.</td></li>
+    <li>Los targets táctiles son grandes para usar con el pulgar.</td>
+    <td>El panel se cierra solo al seleccionar una opción.</td></li>
+  </ul>
+  <div class="speaker">Mostrar en vivo: abrir el menú en móvil, navegar con Tab (ver que el foco no sale del panel), presionar Escape, cerrar al hacer clic. Este es el ejemplo más completo del sitio de "interacción bien hecha": movimiento + estados + accesibilidad. Conectar con S4 (JS del menú) y S3 (estados de interacción).</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (10 min):</b>
+    <ol>
+      <li>Activar "Reducir movimiento" en el sistema operativo.</li>
+      <li>Recorrer el sitio levantado localmente y anotar qué animaciones se detienen y cuáles siguen moviéndose.</li>
+      <li>Abrir el menú hamburguesa en móvil y navegar con Tab: ¿el foco se ve? ¿Escape lo cierra?</li>
+      <li>Elegir un botón y nombrar en voz alta sus estados: reposo, hover, focus, active.</li>
+    </ol>
+  </div>
+  <div class="speaker">El punto clave: los estudiantes descubren qué animaciones faltan por respetar reduced-motion (esa es exactamente la deuda P2 del plan de mejora). No necesitan corregir nada hoy: solo identificar con criterio.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre</p>
+  <h2>El movimiento tiene contrato con el usuario</h2>
+  <p>Las animaciones no son decoración: son comunicación. Dicen "esto cambió", "esto está cargando", "esto no se puede tocar". Y deben poder apagarse si el usuario lo necesita.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>una interfaz se siente bien cuando responde con estados claros y no obliga a nadie a ver movimiento que no quiere.</b></p>
+  <div class="analogy"><b>Próxima sesión:</b> S11 — cómo sabes que es bueno: Lighthouse. Ahora que saben cómo se ve y cómo se siente el sitio, van a medir si funciona bien para todos.</div>
+  <div class="speaker">Cierre rápido. Preguntar al grupo: "¿Cuál de los 7 estados creen que falta más seguido en las webs que usan día a día?" (la respuesta esperada: focus o loading). Conectar con S11, donde medirán si el sitio cumple con velocidad y accesibilidad.</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S10: cómo se siente interactuar: animaciones</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>

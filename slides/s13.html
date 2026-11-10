@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S13 — Construye lo que diseñaste</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --fg: #c0caf5;
+    --muted: #9aa5ce;
+    --blue: #7aa2f7;
+    --purple: #bb9af7;
+    --green: #9ece6a;
+    --orange: #ff9e64;
+    --red: #f7768e;
+    --surface: #24283b;
+    --surface2: #2f3549;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: system-ui, sans-serif; overflow: hidden; }
+  .slide { display: none; height: 100vh; padding: 6vh 7vw 9vh; flex-direction: column; justify-content: center; }
+  .slide.active { display: flex; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); line-height: 1.12; margin-bottom: 1.6rem; max-width: 24ch; }
+  h1 b { color: var(--blue); font-weight: inherit; }
+  h2 { font-size: clamp(1.4rem, 3.2vw, 2.3rem); color: var(--purple); margin-bottom: 1.3rem; }
+  h3 { font-size: clamp(1.05rem, 1.9vw, 1.4rem); color: var(--fg); margin: 1.2rem 0 .5rem; }
+  ul, ol { font-size: clamp(1rem, 1.9vw, 1.35rem); line-height: 1.7; padding-left: 1.3em; max-width: 64ch; }
+  li { margin-bottom: .45em; }
+  li::marker { color: var(--blue); }
+  p { font-size: clamp(1rem, 1.9vw, 1.32rem); color: var(--muted); max-width: 62ch; line-height: 1.65; }
+  p b { color: var(--fg); }
+  table { border-collapse: collapse; font-size: clamp(.9rem, 1.6vw, 1.18rem); margin-top: .5rem; max-width: 100%; }
+  th, td { border: 1px solid var(--surface2); padding: .55em .95em; text-align: left; vertical-align: top; }
+  th { color: var(--blue); background: var(--surface); }
+  td b { color: var(--fg); }
+  code { background: var(--surface); padding: .12em .45em; border-radius: 5px; font-size: .92em; color: var(--green); }
+  pre { background: var(--surface); padding: 1.1rem 1.4rem; border-radius: 10px; font-size: clamp(.78rem, 1.4vw, 1rem); line-height: 1.55; overflow-x: auto; color: var(--muted); max-width: 74ch; margin-top: .8rem; border: 1px solid var(--surface2); white-space: pre; }
+  .kicker { color: var(--purple); letter-spacing: .18em; text-transform: uppercase; font-size: .8rem; margin-bottom: 1.1rem; }
+  .analogy { border-left: 4px solid var(--green); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .analogy b { color: var(--green); }
+  .industry { border-left: 4px solid var(--orange); background: var(--surface); padding: 1rem 1.3rem; border-radius: 0 10px 10px 0; max-width: 68ch; margin-top: 1.3rem; font-size: clamp(.95rem, 1.7vw, 1.22rem); line-height: 1.6; }
+  .industry b { color: var(--orange); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; max-width: 100%; }
+  .card { background: var(--surface); border: 1px solid var(--surface2); border-radius: 10px; padding: 1rem 1.2rem; font-size: clamp(.9rem, 1.6vw, 1.15rem); line-height: 1.55; }
+  .card h4 { color: var(--blue); font-size: 1.05em; margin-bottom: .45rem; }
+  .turn { background: linear-gradient(90deg, rgba(255,158,100,.13), var(--surface)); border-left: 4px solid var(--orange); border-radius: 0 10px 10px 0; padding: 1.05rem 1.4rem; margin-top: 1.2rem; }
+  .turn b { color: var(--orange); }
+  .turn ol { font-size: clamp(.92rem, 1.6vw, 1.15rem); line-height: 1.65; padding-left: 1.2em; }
+  .speaker {
+    display: none;
+    position: fixed;
+    left: 7vw; right: 7vw; bottom: 3.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--purple);
+    border-radius: 10px;
+    padding: .9rem 1.2rem;
+    font-size: clamp(.85rem, 1.6vw, 1.05rem);
+    line-height: 1.55;
+    color: var(--fg);
+    max-height: 38vh;
+    overflow-y: auto;
+    z-index: 30;
+    white-space: pre-wrap;
+  }
+  .speaker.show { display: block; }
+  .speaker b { color: var(--purple); }
+  .footer { position: fixed; bottom: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 12px 28px; font-size: .82rem; color: var(--muted); z-index: 20; background: rgba(26,27,38,.92); }
+  .progress { height: 3px; background: var(--surface); position: fixed; top: 0; left: 0; right: 0; z-index: 40; }
+  .bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--blue), var(--purple)); transition: width .25s ease; }
+  .hint { opacity: .85; }
+  html { background: var(--bg); }
+  html body { min-height: 100dvh; }
+  section.slide { height: 100dvh; min-height: 0; overflow-x: hidden; overflow-y: auto; justify-content: flex-start; padding: clamp(4.5rem, 9vh, 6.5rem) clamp(1.25rem, 7vw, 7rem) clamp(5.5rem, 11vh, 7.5rem); scrollbar-width: thin; scrollbar-color: var(--surface2) transparent; }
+  .slide > * { width: min(100%, 78rem); }
+  section.slide.active { animation: reveal .35s ease both; }
+  h1, h2 { max-width: 30ch; }
+  .slide table { width: min(100%, 78rem); overflow-x: auto; display: block; }
+  .slide pre { max-height: 48vh; }
+  body > .footer { min-height: 3.25rem; padding: .7rem clamp(1rem, 4vw, 2rem); gap: 1rem; }
+  @keyframes reveal { from { opacity: .35; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 700px) {
+    .slide { padding: 4.25rem 1rem 5.5rem; }
+    h1 { font-size: clamp(2rem, 10vw, 3rem); }
+    h2 { font-size: clamp(1.55rem, 7vw, 2.15rem); }
+    .grid2 { grid-template-columns: 1fr; }
+    .speaker { left: 1rem; right: 1rem; bottom: 3.8rem; max-height: 42vh; }
+    .footer { font-size: .72rem; }
+    .footer .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .slide.active { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<section class="slide active">
+  <p class="kicker">Bloque 4 · Cierre · Sesión 13</p>
+  <h1>Construye lo que <b>diseñaste</b></h1>
+  <p>La sesión final del curso. Implementan la sección de noticias/blog que diseñaron en wireframe en S3, con el flujo real del grupo: issue, rama <code>feat/*</code>, commits semánticos y Merge Request a <code>dev</code>. No es un ejercicio de papel: es su primer código en producción del GLUD.</p>
+  <div class="speaker">PREGUNTA GUÍA: "¿Recuerdan el wireframe de la sección de noticias que diseñaron en S3? Hoy lo convierten en código real." Nivel de entrada: tienen el wireframe de S3 y saben navegar el repo de Astro. Nivel de salida: tienen un MR abierto a dev con una sección implementada y justificada.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Objetivos de la sesión</p>
+  <h2>Al terminar vas a poder:</h2>
+  <ol>
+    <li>Implementar una sección de noticias en Astro respetando el wireframe de S3.</li>
+    <li>Seguir el flujo de git del curso: issue → rama <code>feat/*</code> desde <code>dev</code> → commits semánticos → MR a <code>dev</code>.</li>
+    <li>Aplicar los criterios de S1-S11: jerarquía, contraste, estados de interacción, mobile-first, contenido de datos.</li>
+    <li>Justificar cada decisión de diseño por escrito (clics, jerarquía, estados, sacrificios en móvil).</li>
+  </ol>
+  <div class="speaker">Resaltar: S13 es el proyecto final. No hay examen; se evalúa el MR y la justificación escrita. Conectar con la guía del estudiante: asistencia ≥10/14 + proyecto final S13 = aprobado.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El hilo conductor</p>
+  <h2>De S3 a S13</h2>
+  <table>
+    <tr><th>Sesión</th><th>Qué hicieron</th><th>Qué se usa hoy</th></tr>
+    <tr><td><b>S3</b></td><td>Wireframe de la sección noticias: llegada desde nav, lista y detalle, versión mobile primero + desktop, acción principal marcada</td><td>El diseño que implementan</td></tr>
+    <tr><td><b>S7-S11</b></td><td>Astro, Tailwind v4, animejs/swiper, Lighthouse, contenido de datos</td><td>Las herramientas para construirlo</td></tr>
+    <tr><td><b>S12</b></td><td>Mapa del ecosistema: cuándo usar qué herramienta</td><td>El criterio para no sobre-ingeniowerlo</td></tr>
+    <tr><td><b>S13</b></td><td>Implementar, justificar, publicar como MR real</td><td>El cierre del curso</td></tr>
+  </table>
+  <div class="speaker">Mostrar el hilo: todo el curso fue una pendiente hacia esta sesión. S3 les pidió diseñar; hoy les pide construir. No hay materiales nuevos que aprender: solo aplicar lo ya visto.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">El flujo real del grupo</p>
+  <h2>Cómo se publica algo en glud.org</h2>
+  <ol>
+    <li>Se abre un <b>issue</b> en el repositorio de glud-website.</td>
+    <td>Se crea una rama <code>feat/</code> desde <code>dev</code> (nunca desde <code>main</code>).</td></li>
+    <li>Se trabajan los cambios con <code>corepack pnpm dev</code> en local.</td>
+    <td>Se hacen commits semánticos en español: <code>feat(seccion-noticias): tarjeta de noticia</code>.</td></li>
+    <li>Se sube la rama y se abre un <b>Merge Request a <code>dev</code></b>.</td>
+    <td>Otra persona revisa el código, pide cambios si hace falta, y aprueba.</td></li>
+    <li>Al mergear a <code>dev</code> (y luego a <code>main</code>), Netlify despliega automáticamente.</td>
+    <td>El cambio está en glud.org para todo el mundo.</td></li>
+  </ol>
+  <div class="speaker">Este es el flujo que usan en producción. En S13 lo practican por primera vez. Enfatizar: nunca se commit directo a main; todo pasa por revisión de otro.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">La sección de noticias: requisitos</h2>
+  <h2>Qué debe tener la implementación</h2>
+  <ul>
+    <li>Llegada desde la navegación: el usuario llega desde el nav a la sección.</td>
+    <td><b>Lista de noticias</b> con título, resumen y fecha (dato de <code>src/data/*.ts</code> o archivo nuevo).</td></li>
+    <li><b>Vista de detalle</b>: al hacer clic en una noticia, se abre su página completa.</td>
+    <td><b>Mobile-first</b>: se diseña y prueba primero en pantalla pequeña.</td></li>
+    <li><b>Estados de interacción</b>: hover en enlaces, foco visible por teclado, estado activo.</td>
+    <td><b>Justificación escrita</b>: cuántos clics desde home, qué estados definió, qué sacrificó en móvil.</td></li>
+  </ul>
+  <div class="speaker">Conectar con S1 (regla de los 3 clics como orientación), S2 (contraste AA), S3 (hero/CTA/estados), S8 (contenido de datos), S9 (Tailwind v4), S10 (estados y movimiento), S11 (Lighthouse). La sección no necesita ser perfecta: necesita estar bien pensada, justificada y publicada.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Rúbrica de evaluación</p>
+  <h2>Cómo se califica el proyecto final</h2>
+  <table>
+    <tr><th>Criterio</th><th>Qué se mira</th></tr>
+    <tr><td><b>Funciona</b></td><td>Build en verde, preview levanta, navegación y detalle funcionan</td></tr>
+    <tr><td><b>Se entiende</b></td><td>El MR explica qué se hizo y por qué, sin jerga vacía</td></tr>
+    <tr><td><b>Justificado</b></td><td>Cada decisión de diseño tiene su razón escrita (clics, jerarquía, estados)</td></tr>
+    <tr><td><b>Entregado</b></td><td>MR abierto a <code>dev</code> antes del cierre del curso</td></tr>
+  </table>
+  <div class="speaker">Esta es la misma rúbrica de la guía del estudiante (S0-S13). No hay notas numéricas: cumple o no cumple cada criterio. Un MR que funcione pero sin justificación escrita está incompleto; una justificación hermosa sin código publicado también.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Ejercicio guiado</p>
+  <div class="turn">
+    <b>EN CLASE (resto de la sesión):</b>
+    <ol>
+      <li>Crear el issue en el repositorio de glud-website describiendo la sección a implementar.</td>
+      <li>Crear la rama <code>feat/seccion-noticias-&lt;nombre&gt;</code> desde <code>dev</code>.</td>
+      <li>Implementar la lista y el detalle en Astro + Tailwind v4.</td>
+      <li>Ejecutar <code>corepack pnpm build</code> y verificar en preview.</td>
+      <li>Ejecutar Lighthouse y anotar puntajes.</td>
+      <td>Subir la rama y abrir MR a <code>dev</code> con la plantilla del grupo (Qué / Por qué / Cómo probar / Checklist).</td></li>
+    </ol>
+  </div>
+  <div class="speaker">El profesor apoya como mentor de mesa, no escribe código por ellos. El objetivo es que cada estudiante (o pareja) salga con su MR abierto. Si alguien no termina en la sesión, el MR puede abrirse como "work in progress" y terminarse después, pero debe existir antes de cerrar el curso.</div>
+</section>
+
+<section class="slide">
+  <p class="kicker">Cierre del curso</p>
+  <h2>Lo que se llevan</h2>
+  <p>Han recorrido 13 sesiones: cómo funciona la web, cómo piensa el usuario, cómo se diseña, cómo se programa, cómo se construye un sitio real con Astro, cómo se mide con Lighthouse, y ahora cómo se publica algo propio en un repositorio de verdad.</p>
+  <p style="margin-top:1rem">Una frase para llevarse: <b>el mejor framework es el que entiendes por debajo. Empieza por el fondo.</b></p>
+  <div class="analogy"><b>Fin del curso:</b> este es el principio, no el fin. Tienen un sitio clonado, un entorno funcionando, un flujo de git y un cuerpo de disección real (glud.org). El siguiente paso es seguir publicando mejoras, una a la vez.</div>
+  <div class="speaker">Cierre emocional y práctico: cada quien tiene un MR suyo en el repositorio del grupo. Eso es más de lo que la mayoría de estudiantes puede decir después de un curso. Recordar el lema del Hexoneira / GLUD: "Coding the dream, engineering the reality".</div>
+</section>
+
+<div class="speaker" id="bottom"></div>
+
+<div class="footer">
+  <span>Frontend 101 · GLUD · S13: construye lo que diseñaste</span>
+  <span id="counter"></span>
+  <span class="hint">Flechas: navegar · N: notas del presentador</span>
+</div>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const panel = document.getElementById("bottom");
+  let i = 0, notes = false;
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    panel.classList.remove("show");
+    panel.textContent = "";
+    notes = false;
+    document.getElementById("bar").style.width = ((i + 1) / slides.length) * 100 + "%";
+    document.getElementById("counter").textContent = (i + 1) + " / " + slides.length;
+    updateNotes();
+  }
+  function updateNotes() {
+    const note = slides[i].querySelector(".speaker");
+    const has = !!note;
+    panel.classList.toggle("show", has && notes);
+    if (has && notes) {
+      panel.innerHTML = "<b>Notas del presentador:</b><br>" + note.innerHTML;
+    }
+  }
+  document.addEventListener("keydown", e => {
+    if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") show(i + 1);
+    if (e.key === "ArrowLeft" || e.key === "PageUp") show(i - 1);
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+    if (e.key.toLowerCase() === "n") { notes = !notes; updateNotes(); }
+  });
+  document.addEventListener("click", e => show(i + (e.clientX > innerWidth / 2 ? 1 : -1)));
+  show(0);
+</script>
+
+</body>
+</html>
